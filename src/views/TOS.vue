@@ -1,12 +1,11 @@
 <template>
     <div id="main-content">
-        <h1>Terms of Service for The Chatterbox</h1>
-        <b>BY JOINING THE CHATTERBOX, YOU HAVE READ, AGREED TO, AND WILL FOLLOW THE FOLLOWING.</b>
+        <h1>Terms of Service for The Chatterbox Vue</h1>
+        <b>BY JOINING THE CHATTERBOX VUE, YOU HAVE READ, AGREED TO, AND WILL FOLLOW THE FOLLOWING.</b>
         <br>
-        <b>Last updated: April 11, 2023</b>
         <div class="code-of-conduct">
             <h2>Code of Conduct </h2>
-            <p>The Code of Conduct for The Chatterbox is as follows</p>
+            <p>The Code of Conduct for The Chatterbox Vue is as follows</p>
             <ul>
                 <li>No cyberbullying </li>
                 <li>No promotion/selling/encouragement of illegal activities/goods</li>
@@ -27,7 +26,7 @@
         </div>
         <br>
         <div class="terms-of-service">
-            <h2>Other terms of service </h2>
+            <h2>Other terms of service</h2>
             <p>Other terms of service you must follow</p>
             <ul>
                 <li>No impersonation of other users to trick/deceive</li>
@@ -45,11 +44,11 @@
         </div>
         <br>
         <div class="copyright">
-            <h2>Copyright </h2>
-            <p>The copyright rules of The Chatterbox </p>
-            <h3>The Chatterbox is an open-source project protected by an MIT License. The full copyright license is shown below.</h3>
+            <h2>Copyright</h2>
+            <p>The copyright rules of The Chatterbox Vue</p>
+            <h3>The Chatterbox Vue is an open-source project protected by an MIT License. The full copyright license is shown below.</h3>
             <code>MIT License <br>
-                <span>Copyright (c) 2022-2023 The Chatterbox</span>
+                <span>Copyright (c) 2023 The Chatterbox Social Media and Shedeur Bhatkal</span>
                 <br>
                 <br>
                 <span>Permission is hereby granted, free of charge, to any person obtaining a copy</span>
@@ -88,7 +87,7 @@
         <br>
         <div class="data">
             <h2>Data protection </h2>
-            <b>DATA THE CHATTERBOX COLLECTS ABOUT YOU: </b>
+            <b>DATA THE CHATTERBOX VUE COLLECTS ABOUT YOU:</b>
             <ul>
                 <li>User information (encrypted password, email, username, etc.)</li>
                 <li>People you follow </li>
@@ -104,3 +103,14 @@
         <b>ANY AND ALL INCIDENTS WHERE THE TERMS OF SERVICE ABOVE ARE BROKEN MAY RESULT IN YOUR CONTENT ON THE PLATFORM BEING PERMANENTLY DELETED.</b>
     </div>
 </template>
+<style scoped>
+#main-content {
+    padding: 2em;
+}
+p {
+    font-size: 1.2rem;
+}
+code {
+    font-size: 1.2rem;
+}
+</style>

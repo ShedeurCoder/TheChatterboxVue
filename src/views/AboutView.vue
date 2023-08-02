@@ -1,6 +1,6 @@
 <template>
   <div class="about">
-    <a style="float: right; color: white;" href='/tos'>Terms of Service</a>
+    <a style="float: right; color: white;" href='/tos' target="_blank">Terms of Service</a>
     <div class="about-header">
       <img src='../assets/images/logo.png'>
       <h1>The Chatterbox</h1>

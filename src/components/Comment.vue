@@ -1,28 +1,38 @@
 <script setup>
-import { RouterLink } from 'vue-router'
 import useAuth from '@/composables/useAuth'
 import usePostPage from '@/composables/usePostPage'
+import { ref } from 'vue'
 const { likeComment, unlikeComment, deleteComment } = usePostPage()
 const { userData } = useAuth()
-defineProps({
-    post: Object
+const props = defineProps({
+    post: Object,
+    postComments: Number
 })
+
+const date = new Date(props.post.createdAt.seconds * 1000)
+const readableDate = ref(date.toString().split(' ').splice(1, 3).join(' '))
+
+if (readableDate.value == Date().toString().split(' ').splice(1, 3).join(' ')) {
+    readableDate.value = date.toString().split(' ').splice(4, 1).join(' ').split(':').splice(0, 2).join(':')
+
+    const [hourString, minute] = readableDate.value.split(":");
+    const hour = +hourString % 24;
+    readableDate.value = 'Today at ' + (hour % 12 || 12) + ":" + minute + (hour < 12 ? " AM" : " PM")
+}
 </script>
 <template>
     <div class='post-wrapper'>
         <div class="post-header">
-            <small>{{ Date(post.createdAt).split(' ').splice(1, 3).join(' ') }}</small>
+            <small>{{ readableDate }}</small>
             <RouterLink :to="`/@${post.username}`" style='text-decoration: none;'>
                 <h2>@{{ post.username }}</h2>
             </RouterLink>
         </div>
-        <RouterLink :to="`/post/${post.id}`" class="post-body-link">
-            <div class="post-body">
-                {{ post.message }}
-            </div>
-        </RouterLink>
+        <div class="post-body">
+            {{ post.message }}
+        </div>
         <div class="post-footer">
-            <button @click="deleteComment(post.id)" v-if="userData?.username === post.username" class="delete"><i class="fas fa-trash"></i></button>
+            <button @click="deleteComment(post.id, post.postId, postComments)" v-if="userData?.username === post.username || userData?.admin" class="delete"><i class="fas fa-trash"></i></button>
 
             <button v-if="userData && post.likes.includes(userData?.username)" class="like" @click="unlikeComment(post, userData.username)"><i class="fas fa-heart liked"></i>&nbsp;{{ post.likes.length }}</button>
             <button v-else-if="userData && !post.likes.includes(userData?.username)" class="like" @click="likeComment(post, userData.username)"><i class="fas fa-heart"></i>&nbsp;{{ post.likes.length }}</button>

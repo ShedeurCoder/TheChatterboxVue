@@ -55,7 +55,7 @@ dialog {
   background: #303030;
   color: white;
   border: none;
-  border-radius: 20px;
+  border-radius: 5px;
 }
 dialog::backdrop {
   background: rgba(0, 0, 0, 0.9);

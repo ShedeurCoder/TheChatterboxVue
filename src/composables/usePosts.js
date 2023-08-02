@@ -12,7 +12,8 @@ export default function usePosts() {
                     username,
                     createdAt: new Date(),
                     message,
-                    likes: []
+                    likes: [],
+                    comments: 0
                 }
                 await addDoc(dbPostsRef, post)
                 postMessage.value = 'Sent!'

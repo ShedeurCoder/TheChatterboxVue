@@ -2,16 +2,28 @@
 import { RouterLink } from 'vue-router'
 import useAuth from '@/composables/useAuth'
 import usePosts from '@/composables/usePosts'
+import { ref } from 'vue'
 const { likePost, unlike, deletePost } = usePosts()
 const { userData } = useAuth()
-defineProps({
+const props = defineProps({
     post: Object
 })
+
+const date = new Date(props.post.createdAt.seconds * 1000)
+const readableDate = ref(date.toString().split(' ').splice(1, 3).join(' '))
+
+if (readableDate.value == Date().toString().split(' ').splice(1, 3).join(' ')) {
+    readableDate.value = date.toString().split(' ').splice(4, 1).join(' ').split(':').splice(0, 2).join(':')
+
+    const [hourString, minute] = readableDate.value.split(":");
+    const hour = +hourString % 24;
+    readableDate.value = 'Today at ' + (hour % 12 || 12) + ":" + minute + (hour < 12 ? " AM" : " PM")
+}
 </script>
 <template>
     <div class='post-wrapper'>
         <div class="post-header">
-            <small>{{ Date(post.createdAt).split(' ').splice(1, 3).join(' ') }}</small>
+            <small>{{ readableDate }}</small>
             <RouterLink :to="`/@${post.username}`" style='text-decoration: none;'>
                 <h2>@{{ post.username }}</h2>
             </RouterLink>
@@ -22,8 +34,9 @@ defineProps({
             </div>
         </RouterLink>
         <div class="post-footer">
-            <button @click="deletePost(post.id)" v-if="userData?.username === post.username" class="delete"><i class="fas fa-trash"></i></button>
+            <button @click="deletePost(post.id)" v-if="userData?.username === post.username || userData?.admin" class="delete"><i class="fas fa-trash"></i></button>
 
+            <span class="comments"><i class="fas fa-comment-alt"></i> {{ post?.comments }}</span>
             <button v-if="userData && post.likes.includes(userData?.username)" class="like" @click="unlike(post, userData.username)"><i class="fas fa-heart liked"></i>&nbsp;{{ post.likes.length }}</button>
             <button v-else-if="userData && !post.likes.includes(userData?.username)" class="like" @click="likePost(post, userData.username)"><i class="fas fa-heart"></i>&nbsp;{{ post.likes.length }}</button>
             <button v-else class="like"><i class="fas fa-heart"></i>&nbsp;{{ post.likes.length }}</button>
@@ -31,6 +44,13 @@ defineProps({
     </div>
 </template>
 <style scoped>
+    .comments {
+        float: right;
+        font-size: 1.4rem;
+        font-weight: bold;
+        color: rgb(218, 218, 218);
+        margin-left: 0.75em;
+    }
     .post-wrapper {
         width: 80%;
         max-width: 70ch;

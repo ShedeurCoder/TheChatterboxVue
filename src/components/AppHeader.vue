@@ -30,12 +30,12 @@ const postFormData = ref('')
                 <h2>Create post</h2>
                 <button class='close-modal' onclick="document.getElementById('postModal').close()">&times;</button>
             </div>
-            <form class="sign-in-form">
+            <form class="sign-in-form" onsubmit="document.getElementById('postModal').close()" @submit.prevent="makePost(postFormData, userData.username); postFormData = ''">
                 <div class="form-group">
                     <label for="message">Message:</label>
-                    <textarea id="message" v-model="postFormData" placeholder='Whats up?'></textarea>
+                    <textarea id="message" v-model="postFormData" placeholder='Whats up?' required rows="3"></textarea>
                 </div>
-                <button type='button' @click.prevent="makePost(postFormData, userData.username); postFormData = ''" onclick="document.getElementById('postModal').close()" class='login-signup'>Post</button>
+                <button type='submit' class='login-signup'>Post</button>
             </form>
         </dialog>
         
@@ -45,21 +45,21 @@ const postFormData = ref('')
                 <h2>Sign up</h2>
                 <button class='close-modal' onclick="document.getElementById('signUpModal').close()">&times;</button>
             </div>
-            <form class="sign-in-form">
+            <form class="sign-in-form" @submit.prevent="signUp(formData.email, formData.password, formData.username)">
                 <div class="form-group">
                     <label for="email">Email:</label>
-                    <input type="email" id="email" v-model="formData.email" placeholder='Email'>
+                    <input type="email" id="email" v-model="formData.email" placeholder='Email' required>
                 </div>
                 <div class="form-group">
                     <label for="password">Password:</label>
-                    <input type="password" id="password" v-model="formData.password" placeholder='Password'>
+                    <input type="password" id="password" v-model="formData.password" placeholder='Password' required minlength="6">
                 </div>
                 <div class="form-group">
-                    <label for="username">Username:</label>
-                    <input type="text" id="username" v-model="formData.username" placeholder='Username' maxlength="25" pattern="[a-z0-9_]{2,}">
+                    <label for="username">Username: (a-z, 0-9, and underscores only)</label>
+                    <input type="text" id="username" v-model="formData.username" placeholder='Username' required maxlength="25" pattern="[a-z0-9_]{2,}">
                 </div>
                 <small><b>By making an account, I agree and will follow the <a href='/tos' target="_blank">terms of service</a></b></small><br>
-                <button type='button' @click.prevent="signUp(formData.email, formData.password, formData.username)" class='login-signup'>Sign up</button>
+                <button type='submit' class='login-signup'>Sign up</button>
             </form>
         </dialog>
 
@@ -70,16 +70,16 @@ const postFormData = ref('')
                 <h2>Login</h2>
                 <button class='close-modal' onclick="document.getElementById('signInModal').close()">&times;</button>
             </div>
-            <form class="sign-in-form">
+            <form class="sign-in-form" @submit.prevent="login(formData.email, formData.password)">
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" id="email" v-model="formData.email" placeholder='Email'>
+                    <input type="email" id="email" v-model="formData.email" placeholder='Email' required>
                 </div>
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" v-model="formData.password" placeholder='Password'>
+                    <input type="password" id="password" v-model="formData.password" placeholder='Password' required minlength="6">
                 </div>
-                <button type='button' @click.prevent="login(formData.email, formData.password)" class="login-signup">Login</button>
+                <button type='submit' class="login-signup">Login</button>
             </form>
         </dialog>
     </header>

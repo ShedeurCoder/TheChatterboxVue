@@ -63,7 +63,8 @@ export default function useAuth() {
                 bio: '',
                 displayName: username,
                 followers: [],
-                following: []
+                following: [],
+                admin: false
             }
 
             const newDoc = doc(db, "users", user.uid)

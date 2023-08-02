@@ -17,13 +17,21 @@ The Chatterbox Vue started development on July 23, 2023 and was first released o
 # Change log
 
 ## v1.0.1
-**Changes**
+- Added comment counter
+- Added time for dates today
 - Minor bug fixes
 
 <details>
   <summary><h2>1.0 (current major version)</h2></summary>
 
-  ### v1.0.1
+  ## v1.0.1
+  - Added comment counter
+  - Added time for dates today
+  - Minor bug fixes
+
+  <hr>
+
+  ### v1.0.01
   - Minor bug fixes
 
   <hr>

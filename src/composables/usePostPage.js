@@ -27,9 +27,12 @@ export default function useProfile() {
         }
     }
 
-    async function createComment(message, username, postId) {
+    async function createComment(message, username, postId, postComments) {
         try {
             if (username && postId) {
+                await updateDoc(doc(db, "posts", postId), {
+                    comments: (postComments || 0) + 1
+                });
                 const comment = {
                     username,
                     createdAt: new Date(),
@@ -86,8 +89,11 @@ export default function useProfile() {
         }
     }
 
-    async function deleteComment(id) {
+    async function deleteComment(id, postId, postComments) {
         try {
+            await updateDoc(doc(db, "posts", postId), {
+                comments: postComments - 1
+            });
             const comment = doc(dbCommentsRef, id)
             await deleteDoc(comment)
         } catch(e) {

@@ -32,7 +32,7 @@
         </div>
         <div class="user-list">
             <div class="user-container-container" v-for="(user) in profileData?.followers" :key='`followers${user.id}`'>
-                <a :href='`/user/${user}`'>
+                <a :href='`/@${user}`'>
                     <div class="user-container">
                         <h2>@{{ user }}</h2>
                     </div>
