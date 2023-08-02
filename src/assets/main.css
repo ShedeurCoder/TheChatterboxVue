@@ -1,0 +1,153 @@
+body {
+  background: #343a40;
+  color: #f1f1f1;
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+#app {
+  display: grid;
+  grid-template-rows: 90% 10%;
+  height: 100dvh;
+}
+
+button {
+  cursor: pointer;
+}
+
+
+/* NAV */
+
+header {
+  grid-row-start: 2;
+  height: 100%;
+}
+
+nav {
+  background: #000;
+  text-align: center;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.nav-link {
+  font-size: 1.75rem;
+  color: rgb(255, 255, 255, 0.9);
+  transition: color 0.1s;
+}
+
+.nav-link:hover {
+  color: #fff;
+}
+
+nav img {
+  width: 50%;
+  margin-top: -2rem;
+  display: none;
+}
+
+
+dialog {
+  width: 90dvw;
+  max-width: 60ch;
+  background: #303030;
+  color: white;
+  border: none;
+  border-radius: 20px;
+}
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.9);
+}
+.modal-header {
+  display: grid;
+  grid-template-columns: 90% 10%;
+}
+.modal-header button {
+  background: none;
+  font-size: 1.5rem;
+  border: none;
+  color: red;
+  cursor: pointer;
+}
+.form-group {
+    margin: 2em 1em;
+}
+.form-group label {
+    font-size: 1.3rem;
+    margin-bottom: 0.5em;
+}
+.form-group * {
+    display: block;
+}
+.form-group input {
+    width: 90%;
+    font-size: 1.2rem;
+    padding: 0.3em;
+}
+
+
+/* PROFILES */
+
+.profile-header {
+  background-color: #303030;
+  text-align: center;
+  margin-inline: 1em;
+  padding: 1.5em;
+}
+
+.profile-header h1 {
+  font-size: 2.3rem;
+}
+
+.profile-header h2 {
+  font-size: 1.8rem;
+}
+
+.profile-header p {
+  font-size: 1.6rem;
+}
+
+.profile-header span {
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.divider {
+  margin-inline: 0.3em;
+  user-select: none;
+}
+
+p {
+  word-wrap: break-word;
+  white-space: pre-line;
+}
+
+@media only screen and (min-width: 800px) {
+  #app {
+    grid-template-columns: 10% 90%;
+    grid-template-rows: none;
+  }
+
+  header {
+    height: 100dvh;
+    position: fixed;
+    z-index: 99;
+    left: 0;
+    top: 0;
+    width: 10%;
+  }
+
+  main {
+    grid-column-start: 2;
+  }
+
+  nav {
+    flex-direction: column;
+  }
+
+  nav img {
+    display: inline;
+  }
+}
