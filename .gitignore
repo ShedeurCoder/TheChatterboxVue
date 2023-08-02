@@ -3,4 +3,3 @@ src/firebase.js
 .vscode/
 .netlify/
 dist/
-_redirects
