@@ -27,7 +27,7 @@ export default function useProfile() {
         }
     }
 
-    async function createComment(message, username, postId, postComments) {
+    async function createComment(message, username, postId, postComments, pfp) {
         try {
             if (username && postId) {
                 await updateDoc(doc(db, "posts", postId), {
@@ -38,7 +38,8 @@ export default function useProfile() {
                     createdAt: new Date(),
                     message,
                     likes: [],
-                    postId
+                    postId,
+                    pfp
                 }
                 await addDoc(dbCommentsRef, comment)
             } else {

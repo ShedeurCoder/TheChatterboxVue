@@ -1,6 +1,6 @@
 import { ref, onUnmounted, onMounted } from 'vue'
-import { query, where, onSnapshot, updateDoc, doc, orderBy } from 'firebase/firestore'
-import { db, dbUsersRef, dbPostsRef } from '../firebase'
+import { query, where, onSnapshot, updateDoc, doc, orderBy, getDocs } from 'firebase/firestore'
+import { db, dbUsersRef, dbPostsRef, dbCommentsRef } from '../firebase'
 import { useRoute, onBeforeRouteUpdate } from 'vue-router'
 
 export default function useProfile() {
@@ -78,6 +78,34 @@ export default function useProfile() {
         }
     }
 
+    async function editPfp(id, public_id, username) {
+        try {
+            await updateDoc(doc(db, "users", id), {
+                pfp: public_id
+            });
+
+            // change posts
+            const queryData = query(dbPostsRef, where('username', '==', username))
+            const posts = await getDocs(queryData)
+            posts.docs.forEach((document) => {
+                updateDoc(doc(db, "posts", document.id), {
+                    pfp: public_id
+                })
+            })
+
+            // change comments
+            const queryData2 = query(dbCommentsRef, where('username', '==', username))
+            const comments = await getDocs(queryData2)
+            comments.docs.forEach((document) => {
+                updateDoc(doc(db, "comments", document.id), {
+                    pfp: public_id
+                })
+            })
+        } catch(e) {
+            console.error(e)
+        }
+    }
+
     async function unfollow(following, user) {
         try {
             await updateDoc(doc(db, "users", following.id), {
@@ -104,6 +132,8 @@ export default function useProfile() {
 
     onBeforeRouteUpdate((to) => {
         const username = to.params.username
+        unsubscribeFromProfile.value()
+        unsubscribeFromProfilePosts.value()
         getUserPosts(username)
         getUserProfile(username)
     })
@@ -114,6 +144,7 @@ export default function useProfile() {
         unfollow,
         editProfile,
         editMessage,
-        profilePosts
+        profilePosts,
+        editPfp
     }
 }

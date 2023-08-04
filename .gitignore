@@ -3,3 +3,5 @@ src/firebase.js
 .vscode/
 .netlify/
 dist/
+.eslintrc.cjs
+.prettierrc.json

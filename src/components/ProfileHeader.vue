@@ -1,18 +1,37 @@
 <script setup>
-    import useProfile from "@/composables/useProfile";
-    import useAuth from '@/composables/useAuth'
-    import { ref } from 'vue'
-    const { profileData, follow, unfollow, editProfile, editMessage } = useProfile()
-    const { userData } = useAuth()
+import useProfile from "@/composables/useProfile";
+import useAuth from '@/composables/useAuth'
+import { ref } from 'vue'
+import { RouterLink } from 'vue-router' 
+const { profileData, follow, unfollow, editProfile, editMessage, editPfp } = useProfile()
+const { userData } = useAuth()
 
-    const formData = ref({
-        displayName: null,
-        bio: null
-    })
+const formData = ref({
+    displayName: null,
+    bio: null
+})
+
+const widget = window.cloudinary.createUploadWidget(
+  {cloud_name: 'dmftho0cx', upload_preset: 'chatterbox-vue'},
+  (err, result) => {
+    if (!err && result && result.event === 'success') {
+      editPfp(userData.value.id, result.info.public_id, userData.value.username)
+    }
+  }
+)
+
+function openUploadWidget() {
+  widget.open()
+}
 </script>
 <template>
     <div class="profile-header">
-        <h1 class="profile-name">{{ profileData?.displayName }}</h1>
+        <button v-if="userData && userData?.username === profileData?.username" @click="openUploadWidget()" class="edit-pfp">
+            <img class="pfp" :src="`https://res.cloudinary.com/dmftho0cx/image/upload/${profileData?.pfp || 'defaultProfile_u6mqts'}`">
+            <i class='fas fa-edit'></i>
+        </button>
+        <img class="pfp" :src="`https://res.cloudinary.com/dmftho0cx/image/upload/${profileData?.pfp || 'defaultProfile_u6mqts'}`" v-else>
+        <h1 class="profile-name">{{ profileData?.displayName || 'User does not exist' }}</h1>
         <h2 class="profile-username">@{{ profileData?.username }}</h2>
         <p class="profile-bio">{{ profileData?.bio }}</p>
         <div class="followers-following">
@@ -20,8 +39,8 @@
             <span class="divider">|</span>
             <span class="following" onclick="document.getElementById('following-modal').showModal()">{{ profileData?.following.length }} following</span>
         </div>
-        <button @click='follow(profileData, userData)' v-if="userData && userData?.username !== profileData?.username && !profileData?.followers.includes(userData?.username)" class="follow-button">Follow</button>
-        <button @click="unfollow(profileData, userData)" v-else-if="userData && userData?.username !== profileData?.username && profileData?.followers.includes(userData?.username)" class="unfollow-button">Unfollow</button>
+        <button @click='follow(profileData, userData)' v-if="userData && profileData && userData?.username !== profileData?.username && !profileData?.followers.includes(userData?.username)" class="follow-button">Follow</button>
+        <button @click="unfollow(profileData, userData)" v-else-if="userData && profileData && userData?.username !== profileData?.username && profileData?.followers.includes(userData?.username)" class="unfollow-button">Unfollow</button>
         <button onclick="document.getElementById('edit-profile-modal').showModal()" v-else-if="userData && userData?.username === profileData?.username" class="edit-profile">Edit profile</button>
     </div>
 
@@ -32,11 +51,11 @@
         </div>
         <div class="user-list">
             <div class="user-container-container" v-for="(user) in profileData?.followers" :key='`followers${user.id}`'>
-                <a :href='`/@${user}`'>
+                <RouterLink :to='`/@${user}`' onclick="document.getElementById('followers-modal').close()">
                     <div class="user-container">
                         <h2>@{{ user }}</h2>
                     </div>
-                </a>
+                </RouterLink>
             </div>
         </div>
     </dialog>
@@ -48,11 +67,11 @@
         </div>
         <div class="user-list">
             <div class="user-container-container" v-for="(user) in profileData?.following" :key='`following${user.id}`'>
-                <a :href='`/@${user}`'>
+                <RouterLink :to='`/@${user}`' onclick="document.getElementById('following-modal').close()">
                     <div class="user-container">
                         <h2>@{{ user }}</h2>
                     </div>
-                </a>
+                </RouterLink>
             </div>
         </div>
     </dialog>
@@ -80,7 +99,7 @@
             </form>
     </dialog>
 </template>
-<style>
+<style scoped>
     .follow-button {
         font-size: 1.5rem;
         background: #007bff;
@@ -154,5 +173,29 @@
     }
     .display-none {
         display: none;
+    }
+    .pfp {
+        height: 150px;
+        width: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+    .edit-pfp {
+        border-radius: 50%;
+        border: none;
+        background: none;
+        position: relative;
+    }
+    .fa-edit {
+        z-index: 99;
+        color: white;
+        display: none;
+        position: absolute;
+        bottom: 5px;
+        right: 5px;
+        font-size: 1.3rem
+    }
+    .edit-pfp:hover .fa-edit {
+        display: inline;
     }
 </style>

@@ -1,6 +1,9 @@
+<script setup>
+import { RouterLink } from 'vue-router'
+</script>
 <template>
   <div class="about">
-    <a style="float: right; color: white;" href='/tos' target="_blank">Terms of Service</a>
+    <RouterLink style="float: right; color: white;" to='/tos'>Terms of Service</RouterLink>
     <div class="about-header">
       <img src='../assets/images/logo.png'>
       <h1>The Chatterbox</h1>

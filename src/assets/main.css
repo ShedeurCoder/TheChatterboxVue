@@ -56,6 +56,7 @@ dialog {
   color: white;
   border: none;
   border-radius: 5px;
+  max-height: 85dvh;
 }
 dialog::backdrop {
   background: rgba(0, 0, 0, 0.9);
@@ -72,19 +73,26 @@ dialog::backdrop {
   cursor: pointer;
 }
 .form-group {
-    margin: 2em 1em;
+  margin: 2em 1em;
 }
 .form-group label {
-    font-size: 1.3rem;
-    margin-bottom: 0.5em;
+  font-size: 1.3rem;
+  margin-bottom: 0.5em;
 }
 .form-group * {
-    display: block;
+  display: block;
 }
 .form-group input {
-    width: 90%;
-    font-size: 1.2rem;
-    padding: 0.3em;
+  width: 90%;
+  font-size: 1.2rem;
+  padding: 0.3em;
+}
+
+.form-group textarea {
+  font-family: inherit;
+  font-size: 1.3rem;
+  width: 100%;
+  resize: vertical;
 }
 
 

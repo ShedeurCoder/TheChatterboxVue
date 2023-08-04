@@ -30,7 +30,7 @@ const postFormData = ref('')
                 <h2>Create post</h2>
                 <button class='close-modal' onclick="document.getElementById('postModal').close()">&times;</button>
             </div>
-            <form class="sign-in-form" onsubmit="document.getElementById('postModal').close()" @submit.prevent="makePost(postFormData, userData.username); postFormData = ''">
+            <form class="sign-in-form" onsubmit="document.getElementById('postModal').close()" @submit.prevent="makePost(postFormData, userData.username, userData.pfp); postFormData = ''">
                 <div class="form-group">
                     <label for="message">Message:</label>
                     <textarea id="message" v-model="postFormData" placeholder='Whats up?' required rows="3"></textarea>

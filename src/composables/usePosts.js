@@ -5,7 +5,7 @@ import { dbPostsRef, db, dbCommentsRef } from '../firebase'
 export default function usePosts() {
     const postMessage = ref('')
 
-    async function makePost(message, username) {
+    async function makePost(message, username, pfp) {
         try {
             if (username) {
                 const post = {
@@ -13,7 +13,8 @@ export default function usePosts() {
                     createdAt: new Date(),
                     message,
                     likes: [],
-                    comments: 0
+                    comments: 0,
+                    pfp
                 }
                 await addDoc(dbPostsRef, post)
                 postMessage.value = 'Sent!'
@@ -47,7 +48,7 @@ export default function usePosts() {
     }
 
     async function deletePost(id) {
-        try {
+        try {   
             const queryData = query(dbCommentsRef, where('postId', '==', id))
             const comments = await getDocs(queryData)
             comments.forEach(async (document) => {

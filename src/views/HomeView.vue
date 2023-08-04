@@ -2,6 +2,7 @@
 import PostComponent from '@/components/PostComponent.vue'
 import useHomePosts from '@/composables/useHomePosts'
 import useAuth from '@/composables/useAuth'
+import { RouterLink } from 'vue-router'
 const { userData } = useAuth()
 const { posts, getPosts } = useHomePosts()
 </script>
@@ -15,7 +16,7 @@ const { posts, getPosts } = useHomePosts()
     <PostComponent :post="post" v-for='post in posts' :key='post.id'/>
   </div>
   <div class="no-user" v-else-if="userData && !(userData.following.length > 0)">
-    <h2>Follow people to see posts. Maybe follow <a href="/@shad">@shad</a> or <a href="/@thechatterbox">@thechatterbox</a>.</h2>
+    <h2>Follow people to see posts. Maybe follow <RouterLink to="/@shad" class="nav-link">@shad</RouterLink> or <RouterLink to="/@thechatterbox" class="nav-link">@thechatterbox</RouterLink>.</h2>
   </div>
   <div class="no-user" v-else-if="!userData">
     <h2>Sign in to see posts from people you're following</h2>

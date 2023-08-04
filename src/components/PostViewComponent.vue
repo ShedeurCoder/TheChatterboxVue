@@ -24,6 +24,7 @@ if (readableDate.value == Date().toString().split(' ').splice(1, 3).join(' ')) {
         <div class="post-header">
             <small>{{ readableDate }}</small>
             <RouterLink :to="`/@${postData?.username}`" class='post-user'>
+                <img class="pfp" :src="`https://res.cloudinary.com/dmftho0cx/image/upload/${postData?.pfp || 'defaultProfile_u6mqts'}`">
                 <h2>@{{ postData?.username }}</h2>
             </RouterLink>
         </div>
@@ -45,6 +46,10 @@ if (readableDate.value == Date().toString().split(' ').splice(1, 3).join(' ')) {
         font-weight: bold;
         color: rgb(218, 218, 218);
         margin-left: 0.75em;
+    }
+    .post-user {
+        display: flex;
+        align-items: center;
     }
     .post {
         background-color: #303030;
@@ -89,4 +94,16 @@ if (readableDate.value == Date().toString().split(' ').splice(1, 3).join(' ')) {
     }
     .post-footer .like {
         float: right;
-    }</style>
+    }
+    h2 {
+        display: inline;
+    }
+    .pfp {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 50%;
+        display: inline;
+        margin-right: 10px;
+    }
+</style>
