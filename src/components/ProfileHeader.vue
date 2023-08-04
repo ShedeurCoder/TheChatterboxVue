@@ -33,6 +33,9 @@ function openUploadWidget() {
         <img class="pfp" :src="`https://res.cloudinary.com/dmftho0cx/image/upload/${profileData?.pfp || 'defaultProfile_u6mqts'}`" v-else>
         <h1 class="profile-name">{{ profileData?.displayName || 'User does not exist' }}</h1>
         <h2 class="profile-username">@{{ profileData?.username }}</h2>
+        <small v-if='profileData?.owner'>Owner</small>
+        <small v-else-if='profileData?.tester'>Test account</small>
+        <small v-else-if='profileData?.admin'>Admin</small>
         <p class="profile-bio">{{ profileData?.bio }}</p>
         <div class="followers-following">
             <span class="followers" onclick="document.getElementById('followers-modal').showModal()">{{ profileData?.followers.length }} followers</span>
@@ -109,6 +112,9 @@ function openUploadWidget() {
         padding: 0.5em;
         border-radius: 5px;
         transition: 150ms;
+    }
+    .profile-bio {
+        margin: 15px;
     }
     .user-container-container {
         margin-block: 0.5em;
@@ -197,5 +203,8 @@ function openUploadWidget() {
     }
     .edit-pfp:hover .fa-edit {
         display: inline;
+    }
+    small {
+        font-size: 1.5rem;
     }
 </style>

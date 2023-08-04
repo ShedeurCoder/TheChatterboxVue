@@ -13,9 +13,9 @@ const replyInput = ref('')
     <PostViewComponent :postData="postData" :userData="userData" v-if="postData"/>
 
     <form class="reply-form" @submit.prevent="createComment(replyInput, userData.username, postData?.id, postData?.comments, userData.pfp); replyInput = ''">
-        <input type="text" v-model="replyInput" placeholder="Create a comment" v-if="userData">
+        <input type="text" v-model="replyInput" placeholder="Create a comment" v-if="userData" required>
         <input type="text" value="Login to comment" disabled v-else>
-        <button type="submit" v-if="userData">Comment</button>
+        <button type="submit" v-if="userData && postData">Comment</button>
         <button type="button" v-else>Comment</button>
     </form>
 

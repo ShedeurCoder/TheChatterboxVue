@@ -1,16 +1,13 @@
 <script setup>
 import { RouterLink } from 'vue-router'
 import useAuth from "@/composables/useAuth";
-import usePosts from '@/composables/usePosts'
 import { ref } from "vue";
 const { signUp, errorMessage, login, logOut, userData } = useAuth()
-const { makePost, postMessage } = usePosts()
 const formData = ref({
     email: '',
     password: '',
     username: ''
 })
-const postFormData = ref('')
 </script>
 <template>
     <header>
@@ -22,22 +19,8 @@ const postFormData = ref('')
             <RouterLink to="/about" class="nav-link"><i class='fas fa-info-circle'></i></RouterLink>
             <button class='login' onclick='document.getElementById("signInModal").showModal()' v-if="userData == null">Login</button>
             <button class="nav-link logout" v-else @click="logOut()"><i class="fas fa-sign-out-alt"></i></button>
+            <RouterLink v-if='userData' class="nav-link nav-pfp" :to="`/@${userData.username}`"><img class='pfp' :src="`https://res.cloudinary.com/dmftho0cx/image/upload/${userData?.pfp || 'defaultProfile_u6mqts'}`"></RouterLink>
         </nav>
-
-        <dialog id="postModal" v-if='userData'>
-            <p v-if="postMessage">{{ postMessage }}</p>
-            <div class='modal-header'>
-                <h2>Create post</h2>
-                <button class='close-modal' onclick="document.getElementById('postModal').close()">&times;</button>
-            </div>
-            <form class="sign-in-form" onsubmit="document.getElementById('postModal').close()" @submit.prevent="makePost(postFormData, userData.username, userData.pfp); postFormData = ''">
-                <div class="form-group">
-                    <label for="message">Message:</label>
-                    <textarea id="message" v-model="postFormData" placeholder='Whats up?' required rows="3"></textarea>
-                </div>
-                <button type='submit' class='login-signup'>Post</button>
-            </form>
-        </dialog>
         
         <dialog id="signUpModal" v-if='userData === null'>
             <p v-if="errorMessage">{{ errorMessage }}</p>
@@ -107,19 +90,13 @@ const postFormData = ref('')
         font-size: 1.5rem;
         cursor: pointer;
     }
-    .login-signup {
-        font-size: 1.3rem;
-        background: none;
-        border: 1px solid green;
-        color: green;
-        margin-inline: 0.3em;
-        padding: 0.5em;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: 300ms;
+    .pfp {
+        height: 60px;
+        width: 60px;
+        border-radius: 50%;
+        object-fit: cover;
     }
-    .login-signup:hover, .login-signup:focus {
-        background: green;
-        color: white;
+    .nav-pfp {
+        margin-top: 20px;
     }
 </style>

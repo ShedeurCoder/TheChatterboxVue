@@ -107,14 +107,18 @@ dialog::backdrop {
 
 .profile-header h1 {
   font-size: 2.3rem;
+  margin: 10px;
+  font-weight: 500;
 }
 
 .profile-header h2 {
   font-size: 1.8rem;
+  margin: 20px;
+  font-weight: 500;
 }
 
 .profile-header p {
-  font-size: 1.6rem;
+  font-size: 1.3rem;
 }
 
 .profile-header span {
@@ -131,10 +135,25 @@ p {
   word-wrap: break-word;
   white-space: pre-line;
 }
+.login-signup {
+    font-size: 1.3rem;
+    background: none;
+    border: 1px solid green;
+    color: green;
+    margin-inline: 0.3em;
+    padding: 0.5em;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 300ms;
+}
+.login-signup:hover, .login-signup:focus {
+    background: green;
+    color: white;
+}
 
 @media only screen and (min-width: 800px) {
   #app {
-    grid-template-columns: 10% 90%;
+    grid-template-columns: 8% 92%;
     grid-template-rows: none;
   }
 
@@ -144,7 +163,7 @@ p {
     z-index: 99;
     left: 0;
     top: 0;
-    width: 10%;
+    width: 8%;
   }
 
   main {
