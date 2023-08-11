@@ -134,6 +134,7 @@ h1 {
   border: none;
   color: white;
   font-size: 1.1rem;
+  overflow: hidden;
   border-radius: 5px;
 }
 .new-post input:focus {

@@ -119,10 +119,14 @@ const ticketForm = ref({
         font-size: 2.5rem;
     }
     .help-body {
-        display: grid;
-        grid-template-columns: 60% 40%;
         gap: 0.5em;
         margin: 0.5em;
+    }
+    @media only screen and (min-width: 800px) {
+        .help-body {
+            display: grid;
+            grid-template-columns: 60% 40%;
+        }
     }
     button[type='submit'] {
         background: none;

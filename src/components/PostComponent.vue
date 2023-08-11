@@ -61,7 +61,7 @@ if (readableDate.value == Date().toString().split(' ').splice(1, 3).join(' ')) {
     }
     .post-wrapper {
         width: 80%;
-        max-width: 70ch;
+        max-width: 80ch;
         margin: 1em auto;
         background-color: #303030;
         padding: 2em;

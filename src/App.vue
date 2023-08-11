@@ -34,7 +34,7 @@ const postFormData = ref('')
 <style scoped>
   .new-post {
     position: fixed;
-    bottom: 0;
+    bottom: 10dvh;
     right: 0;
     border: none;
     background: #007bff;
@@ -44,5 +44,10 @@ const postFormData = ref('')
   }
   .new-post i {
     font-size: 2rem;
+  }
+  @media only screen and (min-width: 800px) {
+    .new-post {
+      bottom: 0;
+    }
   }
 </style>

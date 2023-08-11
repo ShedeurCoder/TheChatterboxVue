@@ -168,6 +168,14 @@ function styleDate(timestamp) {
         object-fit: cover;
     }
     .nav-pfp {
+        display: none;
+    }
+    @media only screen and (min-width: 800px) {
+        .nav-pfp {
+            display: inline;
+        }
+    }
+    .nav-pfp {
         margin-top: 20px;
     }
     .notifs {

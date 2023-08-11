@@ -3,20 +3,12 @@ body {
   color: #f1f1f1;
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
-}
-
-#app {
-  display: grid;
-  grid-template-rows: 90% 10%;
-  height: 100dvh;
+  font-size: 10px;
 }
 
 button {
   cursor: pointer;
 }
-
-
-/* NAV */
 
 header {
   grid-row-start: 2;
@@ -26,10 +18,17 @@ header {
 nav {
   background: #000;
   text-align: center;
-  height: 100%;
+  height: 10dvh;
   display: flex;
   align-items: center;
   justify-content: space-evenly;
+  position: fixed;
+  bottom: 0;
+  width: 100dvw;
+}
+
+main {
+  margin-bottom: 11dvh;
 }
 
 .nav-link {
@@ -162,7 +161,12 @@ p {
 }
 
 @media only screen and (min-width: 800px) {
+  body {
+    font-size: initial;
+  }
+
   #app {
+    display: grid;
     grid-template-columns: 8% 92%;
     grid-template-rows: none;
   }
@@ -178,10 +182,13 @@ p {
 
   main {
     grid-column-start: 2;
+    margin-bottom: 0px;
   }
 
   nav {
     flex-direction: column;
+    height: 100%;
+    width: 8%;
   }
 
   nav img {
