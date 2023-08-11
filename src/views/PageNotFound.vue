@@ -2,7 +2,7 @@
     <img src="../assets/images/404logo.png">
     <h3>oh no its a 404! go back <a href="/">home!</a></h3>
 </template>
-<style>
+<style scoped>
 img {
     display: block;
     margin: 0 auto;

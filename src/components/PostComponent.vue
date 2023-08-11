@@ -26,7 +26,10 @@ if (readableDate.value == Date().toString().split(' ').splice(1, 3).join(' ')) {
             <small>{{ readableDate }}</small>
             <RouterLink :to="`/@${post.username}`" style='text-decoration: none;' class="post-user-link">
                 <img class="pfp" :src="`https://res.cloudinary.com/dmftho0cx/image/upload/${post?.pfp || 'defaultProfile_u6mqts'}`">
-                <h2>@{{ post.username }}</h2>
+                <h2>
+                    @{{ post.username }}
+                    <i v-if='post.verified' class='fas fa-check-circle'></i>
+                </h2>
             </RouterLink>
         </div>
         <RouterLink :to="`/post/${post.id}`" class="post-body-link">

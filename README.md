@@ -16,15 +16,36 @@ The Chatterbox Vue started development on July 23, 2023 and was first released o
 
 # Change log
 
-## v1.0.1
-- Added comment counter
-- Added time for dates today
-- Minor bug fixes
+## v1.1.0
+- Added profile pictures
+- Added notifications
+- Added ability to see likes on posts and comments
+- Added verification system
+- Added admin system
+- Added ticket/support system
+- Added user search
+- Added profile links
+- Added privacy policy
 
 <details>
-  <summary><h2>1.0 (current major version)</h2></summary>
+  <summary><h2>v1.1 (current major version)</h2></summary>
+  
+  ## v1.1.0
+  - Added profile pictures
+  - Added notifications
+  - Added ability to see likes on posts and comments
+  - Added verification system
+  - Added admin system
+  - Added ticket/support system
+  - Added user search
+  - Added profile links
+  - Added privacy policy
+</details>
 
-  ## v1.0.1
+<details>
+  <summary><h2>v1.0</h2></summary>
+
+  ### v1.0.1
   - Added comment counter
   - Added time for dates today
   - Minor bug fixes

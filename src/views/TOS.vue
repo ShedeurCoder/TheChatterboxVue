@@ -1,3 +1,4 @@
+<script setup>import { RouterLink } from 'vue-router'</script>
 <template>
     <div id="main-content">
         <h1>Terms of Service for The Chatterbox Vue</h1>
@@ -98,6 +99,7 @@
             
             <h3>Your email and what we do with it </h3>
             <p>Your email is not used by us EXCEPT for contacting. Example, if you break rules, we will contact you by email.</p>
+            <h3>For more info on you privacy, visit our <RouterLink to="/privacy">privacy policy</RouterLink></h3>
         </div>
         <br>
         <b>ANY AND ALL INCIDENTS WHERE THE TERMS OF SERVICE ABOVE ARE BROKEN MAY RESULT IN YOUR CONTENT ON THE PLATFORM BEING PERMANENTLY DELETED.</b>

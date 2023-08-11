@@ -1,9 +1,10 @@
 import { ref, onUnmounted } from 'vue'
-import { onSnapshot, query, where, orderBy } from 'firebase/firestore'
-import { dbPostsRef } from '../firebase'
+import { onSnapshot, query, where, orderBy, getDocs } from 'firebase/firestore'
+import { dbPostsRef, dbUsersRef } from '../firebase'
 
 export default function useProfile() {
     const posts = ref(null)
+    const searchResult = ref([])
     const unsubscribeFromPosts = ref(() => {})
 
     async function getPosts(following) {
@@ -26,12 +27,23 @@ export default function useProfile() {
         }
     }
 
+    async function queryUser(search) {
+        const queryData = query(dbUsersRef, where('username', '>=', search), where('username', '<=', search + '\uf8ff'))
+        const queryResult = await getDocs(queryData)
+        searchResult.value = []
+        queryResult.docs.forEach((document) => {
+            searchResult.value.push(document.data())
+        })
+    }
+
     onUnmounted(() => {
         unsubscribeFromPosts.value()
     })
 
     return {
         posts,
-        getPosts
+        getPosts,
+        queryUser,
+        searchResult
     }
 }

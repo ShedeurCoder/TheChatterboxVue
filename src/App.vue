@@ -13,7 +13,7 @@ const postFormData = ref('')
   <AppHeader/>
   <main>
     <RouterView />
-    <button class="new-post" onclick='document.getElementById("postModal").showModal()'><i class='fas fa-plus-circle'></i></button>
+    <button v-if="userData" class="new-post" onclick='document.getElementById("postModal").showModal()'><i class='fas fa-plus-circle'></i></button>
   </main>
 
   <dialog id="postModal" v-if='userData'>
@@ -22,10 +22,10 @@ const postFormData = ref('')
           <h2>Create post</h2>
           <button class='close-modal' onclick="document.getElementById('postModal').close()">&times;</button>
       </div>
-      <form class="sign-in-form" onsubmit="document.getElementById('postModal').close()" @submit.prevent="makePost(postFormData, userData.username, userData.pfp); postFormData = ''">
+      <form class="sign-in-form" onsubmit="document.getElementById('postModal').close()" @submit.prevent="makePost(postFormData, userData.username, userData.pfp, userData.verified); postFormData = ''">
           <div class="form-group">
               <label for="message">Message:</label>
-              <textarea id="message" v-model="postFormData" placeholder='Whats up?' required rows="3"></textarea>
+              <textarea id="message" v-model="postFormData" placeholder="What's up?" required rows="3"></textarea>
           </div>
           <button type='submit' class='login-signup'>Post</button>
       </form>

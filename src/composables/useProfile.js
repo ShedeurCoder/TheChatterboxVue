@@ -1,6 +1,6 @@
 import { ref, onUnmounted, onMounted } from 'vue'
-import { query, where, onSnapshot, updateDoc, doc, orderBy, getDocs } from 'firebase/firestore'
-import { db, dbUsersRef, dbPostsRef, dbCommentsRef } from '../firebase'
+import { query, where, onSnapshot, updateDoc, doc, orderBy, getDocs, addDoc } from 'firebase/firestore'
+import { db, dbUsersRef, dbPostsRef, dbCommentsRef, dbNotifsRef } from '../firebase'
 import { useRoute, onBeforeRouteUpdate } from 'vue-router'
 
 export default function useProfile() {
@@ -59,17 +59,28 @@ export default function useProfile() {
             await updateDoc(doc(db, "users", user.id), {
                 following: [...user.following, following.username]
             });
+            
+            const notif = {
+                to: following.username,
+                from: user.username,
+                url: `/@${user.username}`,
+                message: `@${user.username} just followed you!`,
+                createdAt: new Date(),
+                read: false
+            }
+            await addDoc(dbNotifsRef, notif)
         } catch(e) {
             console.error(e)
         }
     }
 
-    async function editProfile(displayName, bio, id) {
+    async function editProfile(displayName, bio, url, id) {
         try {
             editMessage.value = ''
             await updateDoc(doc(db, "users", id), {
                 bio: bio,
-                displayName: displayName
+                displayName: displayName,
+                url: url
             });
             editMessage.value = 'Updated!'
         } catch(e) {
@@ -126,8 +137,8 @@ export default function useProfile() {
     })
 
     onMounted(() => {
-        getUserPosts(username)
         getUserProfile(username)
+        getUserPosts(username)
     })
 
     onBeforeRouteUpdate((to) => {

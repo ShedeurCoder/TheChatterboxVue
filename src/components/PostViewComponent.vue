@@ -25,7 +25,10 @@ if (readableDate.value == Date().toString().split(' ').splice(1, 3).join(' ')) {
             <small>{{ readableDate }}</small>
             <RouterLink :to="`/@${postData?.username}`" class='post-user'>
                 <img class="pfp" :src="`https://res.cloudinary.com/dmftho0cx/image/upload/${postData?.pfp || 'defaultProfile_u6mqts'}`">
-                <h2>@{{ postData?.username }}</h2>
+                <h2>
+                    @{{ postData?.username }}
+                    <i v-if='postData.verified' class='fas fa-check-circle'></i>
+                </h2>
             </RouterLink>
         </div>
         <div class="post-body">
@@ -33,11 +36,44 @@ if (readableDate.value == Date().toString().split(' ').splice(1, 3).join(' ')) {
         </div>
         <div class="post-footer">
             <span class="comments"><i class="fas fa-comment-alt"></i> {{ postData?.comments }}</span>
-            <button v-if="userData && postData?.likes.includes(userData?.username)" class="like" @click="unlike(postData, userData.username)"><i class="fas fa-heart liked"></i>&nbsp;{{ postData?.likes.length }}</button>
-            <button v-else-if="userData && !postData?.likes.includes(userData?.username)" class="like" @click="likePost(postData, userData.username)"><i class="fas fa-heart"></i>&nbsp;{{ postData?.likes.length }}</button>
-            <button v-else class="like"><i class="fas fa-heart"></i>&nbsp;{{ postData?.likes.length }}</button>
+
+            <span class="like-button" v-if="userData && postData.likes.includes(userData?.username)">
+                <button class="like" @click="unlike(postData, userData.username)">
+                    <i class="fas fa-heart liked"></i>
+                </button>
+                <span onclick="document.getElementById('likes-modal').showModal()">{{ postData.likes.length }}</span>
+            </span>
+
+            <span class="like-button" v-else-if="userData && !postData.likes.includes(userData?.username)">
+                <button class="like" @click="likePost(postData, userData.username)">
+                    <i class="fas fa-heart"></i>
+                </button>
+                <span onclick="document.getElementById('likes-modal').showModal()">{{ postData.likes.length }}</span>
+            </span>
+
+            <span class="like-button" v-else>
+                <button class="like">
+                    <i class="fas fa-heart"></i>
+                </button>
+                <span onclick="document.getElementById('likes-modal').showModal()">{{ postData.likes.length }}</span>
+            </span>
         </div>
     </div>
+    <dialog id="likes-modal">
+        <div class="modal-header">
+            <h2>Likes</h2>
+            <button class='close-modal' onclick="document.getElementById('likes-modal').close()">&times;</button>
+        </div>
+        <div class="user-list">
+            <div class="user-container-container" v-for="(user) in postData?.likes" :key='`like${user}`'>
+                <RouterLink :to='`/@${user}`' onclick="document.getElementById('likes-modal').close()">
+                    <div class="user-container">
+                        <h2>@{{ user }}</h2>
+                    </div>
+                </RouterLink>
+            </div>
+        </div>
+    </dialog>
 </template>
 <style scoped>
     .comments {
@@ -82,7 +118,17 @@ if (readableDate.value == Date().toString().split(' ').splice(1, 3).join(' ')) {
         font-family: inherit;
         font-weight: bold;
     }
-    .post-footer button i:hover {
+    .post-footer .like-button span {
+        font-size: 1.3rem;
+        color: rgb(218, 218, 218);
+        font-family: inherit;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    .post-footer .like-button span:hover {
+        text-decoration: underline;
+    }
+    .post-footer button:hover {
         color: rgb(205, 12, 12)
     }
     .delete {
@@ -92,7 +138,7 @@ if (readableDate.value == Date().toString().split(' ').splice(1, 3).join(' ')) {
         margin-top: 1em;
         padding-bottom: 1.5em;
     }
-    .post-footer .like {
+    .post-footer .like-button {
         float: right;
     }
     h2 {
@@ -105,5 +151,16 @@ if (readableDate.value == Date().toString().split(' ').splice(1, 3).join(' ')) {
         border-radius: 50%;
         display: inline;
         margin-right: 10px;
+    }
+    .user-container {
+        background: #000000;
+        padding: 2em;
+        color: white;
+    }
+    .user-list {
+        text-align: center;
+    }
+    .user-container-container {
+        margin-block: 0.5em;
     }
 </style>

@@ -8,7 +8,8 @@ const { userData } = useAuth()
 
 const formData = ref({
     displayName: null,
-    bio: null
+    bio: null,
+    url: null
 })
 
 const widget = window.cloudinary.createUploadWidget(
@@ -32,11 +33,15 @@ function openUploadWidget() {
         </button>
         <img class="pfp" :src="`https://res.cloudinary.com/dmftho0cx/image/upload/${profileData?.pfp || 'defaultProfile_u6mqts'}`" v-else>
         <h1 class="profile-name">{{ profileData?.displayName || 'User does not exist' }}</h1>
-        <h2 class="profile-username">@{{ profileData?.username }}</h2>
+        <h2 class="profile-username">
+            @{{ profileData?.username }}
+            <i v-if='profileData?.verified' class='fas fa-check-circle'></i>
+        </h2>
         <small v-if='profileData?.owner'>Owner</small>
         <small v-else-if='profileData?.tester'>Test account</small>
         <small v-else-if='profileData?.admin'>Admin</small>
         <p class="profile-bio">{{ profileData?.bio }}</p>
+        <a :href='profileData?.url' target='_blank' v-if="profileData?.url"><i class="fas fa-link"></i> {{ profileData?.url }}</a>
         <div class="followers-following">
             <span class="followers" onclick="document.getElementById('followers-modal').showModal()">{{ profileData?.followers.length }} followers</span>
             <span class="divider">|</span>
@@ -84,21 +89,26 @@ function openUploadWidget() {
         <div class="display-none">
             {{ formData.displayName = formData.displayName ?? profileData?.displayName }}
             {{ formData.bio = formData.bio ?? profileData?.bio }}
+            {{ formData.url = formData.url ?? profileData?.url }}
         </div>
         <div class="modal-header">
             <h2>Edit profile</h2>
             <button class='close-modal' onclick="document.getElementById('edit-profile-modal').close()">&times;</button>
         </div>
-        <form class="sign-in-form">
+        <form class="sign-in-form" @submit.prevent="editProfile(formData.displayName, formData.bio, formData.url, userData.id)">
                 <div class="form-group">
                     <label for="displayName">Display name</label>
-                    <input type="text" id="displayName" v-model="formData.displayName" placeholder='Display name'>
+                    <input type="text" id="displayName" v-model="formData.displayName" placeholder='Display name' required>
                 </div>
                 <div class="form-group">
                     <label for="bio">Bio</label>
                     <textarea name="bio" id="bio" rows="10" v-model="formData.bio" placeholder='bio'></textarea>
                 </div>
-                <button type='button' @click.prevent="editProfile(formData.displayName, formData.bio, userData.id)" class="submit">Submit</button>
+                <div class="form-group">
+                    <label for="url">URL</label>
+                    <input name="url" type='url' id="url" v-model="formData.url" placeholder='Link'>
+                </div>
+                <button type='submit' class="submit">Submit</button>
             </form>
     </dialog>
 </template>
@@ -206,5 +216,20 @@ function openUploadWidget() {
     }
     small {
         font-size: 1.5rem;
+    }
+    a {
+        color: #007bff;
+        font-size: 1.1rem;
+        margin: 1em;
+        text-decoration: none;
+        display: block;
+    }
+    a:hover {
+        text-decoration: underline;
+        color: #094d97;
+    }
+    a i {
+        text-decoration: none;
+        color: white;
     }
 </style>

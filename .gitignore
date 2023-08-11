@@ -1,7 +1,5 @@
 node_modules/
-src/firebase.js
 .vscode/
 .netlify/
 dist/
-.eslintrc.cjs
-.prettierrc.json
+src/firebase.js

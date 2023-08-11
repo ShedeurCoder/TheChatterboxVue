@@ -1,7 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import ProfileView from '../views/ProfileView.vue'
-import PostView from '../views/PostView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -9,7 +6,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      component: () => import('../views/HomeView.vue')
     },
     {
       path: '/about',
@@ -22,14 +19,39 @@ const router = createRouter({
       component: () => import('../views/TOS.vue')
     },
     {
+      path: '/privacy',
+      name: 'privacy',
+      component: () => import('../views/Privacy.vue')
+    },
+    {
       path: '/@:username',
       name: 'user',
-      component: ProfileView
+      component: () => import('../views/ProfileView.vue')
     },
     {
       path: '/post/:post',
       name: 'post',
-      component: PostView
+      component: () => import('../views/PostView.vue')
+    },
+    {
+      path: '/help',
+      name: 'help',
+      component: () => import('../views/HelpView.vue')
+    },
+    {
+      path: '/your-tickets',
+      name: 'your-tickets',
+      component: () => import('../views/YourTickets.vue')
+    },
+    {
+      path: '/ticket/:ticket',
+      name: 'ticket-page',
+      component: () => import('../views/TicketView.vue')
+    },
+    {
+      path: '/admin',
+      name: 'adminLink',
+      component: () => import('../views/AdminView.vue')
     },
     {
       path: '/:pathName(.*)',

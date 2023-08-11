@@ -1,15 +1,31 @@
 import { ref, onUnmounted, onMounted } from 'vue'
 import { onSnapshot, doc, addDoc, query, where, orderBy, updateDoc, deleteDoc } from 'firebase/firestore'
-import { db, dbCommentsRef } from '../firebase'
-import { useRoute } from 'vue-router'
+import { db, dbCommentsRef, dbNotifsRef } from '../firebase'
+import { useRoute, onBeforeRouteUpdate } from 'vue-router'
 
-export default function useProfile() {
+export default function usePostPage() {
     const postData = ref(null)
     const unsubscribeFromPost = ref(() => {})
     const unsubscribeFromComments = ref(() => {})
     const comments = ref([])
     const route = useRoute()
     const postId = route.params.post
+
+    async function createNotif(to, from, url, message) {
+        try {
+            const notif = {
+                to,
+                from,
+                url,
+                message,
+                createdAt: new Date(),
+                read: false
+            }
+            await addDoc(dbNotifsRef, notif)
+        } catch(e) {
+            console.error(e)
+        }
+    }
 
     async function getPost(id) {
         try {
@@ -27,7 +43,7 @@ export default function useProfile() {
         }
     }
 
-    async function createComment(message, username, postId, postComments, pfp) {
+    async function createComment(message, username, postId, postComments, pfp, postUser, verified) {
         try {
             if (username && postId) {
                 await updateDoc(doc(db, "posts", postId), {
@@ -39,9 +55,13 @@ export default function useProfile() {
                     message,
                     likes: [],
                     postId,
-                    pfp
+                    pfp: pfp ?? 'defaultProfile_u6mqts',
+                    verified: verified ?? false
                 }
                 await addDoc(dbCommentsRef, comment)
+                if (postUser !== username) {
+                    await createNotif(postUser, username, `/post/${postId}`, `${username} commented on your post!`)
+                }
             } else {
                 return
             }
@@ -75,6 +95,9 @@ export default function useProfile() {
             await updateDoc(doc(db, "comments", comment.id), {
                 likes: [...comment.likes, username]
             });
+            if (comment.username !== username) {
+                await createNotif(comment.username, username, `/post/${postId}`, `${username} liked your comment!`)
+            }
         } catch(e) {
             console.error(e)
         }
@@ -108,8 +131,16 @@ export default function useProfile() {
     })
 
     onMounted(() => {
-        getComments(postId)
         getPost(postId)
+        getComments(postId)
+    })
+
+    onBeforeRouteUpdate((to) => {
+        const postId = to.params.post
+        unsubscribeFromPost.value()
+        unsubscribeFromComments.value()
+        getPost(postId)
+        getComments(postId)
     })
 
     return {
