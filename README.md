@@ -22,12 +22,12 @@ The Chatterbox Vue started development on July 23, 2023 and was first released o
 <details>
   <summary><h2>v1.1 (current major version)</h2></summary>
 
-  ## v1.1.01
+  ### v1.1.01
   - Fixed mobile layout
 
   <hr>
   
-  ## v1.1.0
+  ### v1.1.0
   - Added profile pictures
   - Added notifications
   - Added ability to see likes on posts and comments
