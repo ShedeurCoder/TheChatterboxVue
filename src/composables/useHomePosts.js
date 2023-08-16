@@ -3,15 +3,16 @@ import { onSnapshot, query, where, orderBy, getDocs } from 'firebase/firestore'
 import { dbPostsRef, dbUsersRef } from '../firebase'
 
 export default function useProfile() {
-    const posts = ref(null)
+    const posts = ref([])
     const searchResult = ref([])
     const unsubscribeFromPosts = ref(() => {})
 
     async function getPosts(following) {
         try {
             const queryData = query(dbPostsRef, where('username', 'in', following), orderBy('createdAt'))
-            const unsubscribeFromPosts = onSnapshot(queryData, (docs) => {
+            const unsubscribe = onSnapshot(queryData, (docs) => {
                 posts.value = []
+                console.log('e')
                 docs.forEach((doc) => {
                     const post = {
                         id: doc.id,
@@ -21,10 +22,15 @@ export default function useProfile() {
                 })
                 posts.value.reverse()
             })
-            unsubscribeFromPosts.value = unsubscribeFromPosts
+            unsubscribeFromPosts.value = unsubscribe
         } catch(e) {
             console.error(e)
         }
+    }
+
+    function removePosts() {
+        posts.value = []
+        unsubscribeFromPosts.value()
     }
 
     async function queryUser(search) {
@@ -44,6 +50,7 @@ export default function useProfile() {
         posts,
         getPosts,
         queryUser,
-        searchResult
+        searchResult,
+        removePosts
     }
 }

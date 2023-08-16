@@ -6,7 +6,7 @@ import usePosts from '@/composables/usePosts'
 import { RouterLink } from 'vue-router'
 import { ref } from 'vue'
 const { userData } = useAuth()
-const { posts, getPosts, queryUser, searchResult } = useHomePosts()
+const { posts, getPosts, queryUser, searchResult, removePosts } = useHomePosts()
 const searchData = ref('')
 const { makePost } = usePosts()
 const postFormData = ref('')
@@ -29,11 +29,11 @@ const postFormData = ref('')
       <RouterLink to="/privacy">Privacy Policy</RouterLink>
     </div>
   </div>
-  <div class="display-none" v-if="userData && !posts">
+  <div class="display-none" v-if="userData && userData?.following.length > 0 && posts?.length === 0">
     {{ getPosts(userData?.following) }}
   </div>
-  <div class="display-none" v-if="!userData && posts">
-    {{ posts = null }}
+  <div class="display-none" v-if="!userData && posts?.length > 0">
+    {{ removePosts() }}
   </div>
   <h1>Home</h1>
   <div class="new-post" v-if='userData'>
