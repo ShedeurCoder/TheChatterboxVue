@@ -127,7 +127,8 @@ export default function useAuth() {
                 verified: false,
                 followers: [],
                 following: [],
-                admin: false
+                admin: false,
+                saves: []
             }
 
             const newDoc = doc(db, "users", user.uid)

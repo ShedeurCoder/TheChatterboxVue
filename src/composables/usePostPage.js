@@ -10,6 +10,7 @@ export default function usePostPage() {
     const comments = ref([])
     const route = useRoute()
     const postId = route.params.post
+    const highlightedComment = ref(route.query.c)
 
     async function createNotif(to, from, url, message) {
         try {
@@ -56,11 +57,13 @@ export default function usePostPage() {
                     likes: [],
                     postId,
                     pfp: pfp ?? 'defaultProfile_u6mqts',
-                    verified: verified ?? false
+                    verified: verified ?? false,
+                    replies: [],
+                    repliesUsers: []
                 }
-                await addDoc(dbCommentsRef, comment)
+                const commentDoc = await addDoc(dbCommentsRef, comment)
                 if (postUser !== username) {
-                    await createNotif(postUser, username, `/post/${postId}`, `${username} commented on your post!`)
+                    await createNotif(postUser, username, `/post/${postId}?c=${commentDoc.id}`, `${username} commented on your post!`)
                 }
             } else {
                 return
@@ -96,7 +99,7 @@ export default function usePostPage() {
                 likes: [...comment.likes, username]
             });
             if (comment.username !== username) {
-                await createNotif(comment.username, username, `/post/${postId}`, `${username} liked your comment!`)
+                await createNotif(comment.username, username, `/post/${postId}?c=${comment.id}`, `${username} liked your comment!`)
             }
         } catch(e) {
             console.error(e)
@@ -125,6 +128,49 @@ export default function usePostPage() {
         }
     }
 
+    async function makeReply(message, user, comment) {
+        try {
+            await updateDoc(doc(db, 'comments', comment.id), {
+                replies: [...(comment.replies || []), {
+                    id: comment.replies?.length > 0 ? comment.replies.reverse()[0].id + 1 : 0,
+                    pfp: user.pfp ?? 'defaultProfile_u6mqts',
+                    username: user.username,
+                    verified: user.verified ?? false,
+                    message,
+                    createdAt: new Date()
+                }]
+            })
+
+            if (!comment.repliesUsers?.includes(user.username)) {
+                await updateDoc(doc(db, 'comments', comment.id), {
+                    repliesUsers: [...(comment.repliesUsers || []), user.username]
+                })
+            }
+
+            if (user.username !== comment.username) {
+                await createNotif(comment.username, user.username, `/post/${comment.postId}?c=${comment.id}`, `${user.username} replied to your comment!`)
+            }
+        } catch(e) {
+            console.error(e)
+        }
+    }
+
+    async function deleteReply(id, comment, username) {
+        try {
+            if (comment.replies.filter((c) => c.username === username).length === 1) {
+                await updateDoc(doc(db, 'comments', comment.id), {
+                    repliesUsers: comment.repliesUsers.filter((u) => u != username)
+                })
+            }
+
+            await updateDoc(doc(db, 'comments', comment.id), {
+                replies: comment.replies.filter((c) => c.id !== id)
+            })
+        } catch(e) {
+            console.error(e)
+        }
+    }
+
     onUnmounted(() => {
         unsubscribeFromPost.value()
         unsubscribeFromComments.value()
@@ -137,6 +183,7 @@ export default function usePostPage() {
 
     onBeforeRouteUpdate((to) => {
         const postId = to.params.post
+        highlightedComment.value = to.query.c
         unsubscribeFromPost.value()
         unsubscribeFromComments.value()
         getPost(postId)
@@ -149,6 +196,9 @@ export default function usePostPage() {
         comments,
         likeComment,
         unlikeComment,
-        deleteComment
+        deleteComment,
+        highlightedComment,
+        makeReply,
+        deleteReply
     }
 }

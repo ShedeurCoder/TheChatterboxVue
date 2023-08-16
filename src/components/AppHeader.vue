@@ -37,6 +37,8 @@ function styleDate(timestamp) {
             </button>
 
             <RouterLink :to='`/@${userData?.username}`' class="nav-link"><i class='fas fa-user'></i></RouterLink>
+            
+            <RouterLink to='/saves' class="nav-link"><i class='fas fa-bookmark'></i></RouterLink>
 
             <RouterLink to="/help" class="nav-link"><i class='fas fa-question-circle'></i></RouterLink>
 

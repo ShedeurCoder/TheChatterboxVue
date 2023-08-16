@@ -1,4 +1,4 @@
-<h1 align='center'>The Chatterbox Source code</h1>
+<h1 align='center'>The Chatterbox Vue Source code</h1>
 
 <img src='/public/TheChatterbox.png' alt='TCB Logo'>
 
@@ -16,11 +16,22 @@ The Chatterbox Vue started development on July 23, 2023 and was first released o
 
 # Change log
 
-## v1.1.01
-- Fixed mobile layout
+## v1.2.0
+- Added comment replies
+- Added saves
+- Made comment notifications highlight the comment
 
 <details>
-  <summary><h2>v1.1 (current major version)</h2></summary>
+  <summary><h2>v1.2 (current major version)</h2></summary>
+  
+  ### v1.2.0
+  - Added comment replies
+  - Added saves
+  - Made comment notifications highlight the comment
+</details>
+
+<details>
+  <summary><h2>v1.1</h2></summary>
 
   ### v1.1.01
   - Fixed mobile layout

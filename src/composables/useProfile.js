@@ -112,6 +112,30 @@ export default function useProfile() {
                     pfp: public_id
                 })
             })
+
+            // change replies
+            const queryData3 = query(dbCommentsRef, where('repliesUsers', 'array-contains', username))
+            const commentsWithReplies = await getDocs(queryData3)
+            commentsWithReplies.docs.forEach((document) => {
+                let finalReplies = []
+                document.data().replies.forEach(reply => {
+                    if (reply.username === username) {
+                        finalReplies = [...finalReplies, {
+                            username: reply.username,
+                            verified: reply.verified,
+                            message: reply.message,
+                            id: reply.id,
+                            createdAt: reply.createdAt,
+                            pfp: public_id
+                        }]
+                    } else {
+                        finalReplies = [...finalReplies, reply]
+                    }
+                })
+                updateDoc(doc(db, "comments", document.id), {
+                    replies: finalReplies
+                })
+            })
         } catch(e) {
             console.error(e)
         }

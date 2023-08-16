@@ -5,7 +5,7 @@ import usePostPage from '@/composables/usePostPage'
 import useAuth from '@/composables/useAuth'
 import PostViewComponent from '@/components/PostViewComponent.vue'
 const { userData } = useAuth()
-const { postData, createComment, comments } = usePostPage()
+const { postData, createComment, comments, highlightedComment } = usePostPage()
 
 const replyInput = ref('')
 </script>
@@ -13,14 +13,15 @@ const replyInput = ref('')
     <PostViewComponent :postData="postData" :userData="userData" v-if="postData"/>
 
     <form class="reply-form" @submit.prevent="createComment(replyInput, userData.username, postData?.id, postData?.comments, userData.pfp, postData?.username, userData?.verified); replyInput = ''">
-        <input type="text" v-model="replyInput" placeholder="Create a comment" v-if="userData" required>
+        <input type="text" v-model="replyInput" placeholder="Create a comment" v-if="userData" required maxlength="500">
         <input type="text" value="Login to comment" disabled v-else>
         <button type="submit" v-if="userData && postData">Comment</button>
         <button type="button" v-else>Comment</button>
     </form>
 
     <div class='profile-posts'>
-        <Comment :post="comment" v-for='comment in comments' :key='comment.id' :postComments='postData?.comments'/>
+        <Comment :post="comment" v-for='comment in comments.filter((c) => c.id === highlightedComment)' :key='comment.id' :postComments='postData?.comments' :highlighted="true"/>
+        <Comment :post="comment" v-for='comment in comments.filter((c) => c.id !== highlightedComment)' :key='comment.id' :postComments='postData?.comments'/>
     </div>
 </template>
 <style scoped>

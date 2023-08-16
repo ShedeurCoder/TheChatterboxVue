@@ -11,7 +11,6 @@ const searchData = ref('')
 const { makePost } = usePosts()
 const postFormData = ref('')
 </script>
-
 <template>
   <div class="right-bar">
     <div class="search-user">
@@ -33,10 +32,13 @@ const postFormData = ref('')
   <div class="display-none" v-if="userData && !posts">
     {{ getPosts(userData?.following) }}
   </div>
+  <div class="display-none" v-if="!userData && posts">
+    {{ posts = null }}
+  </div>
   <h1>Home</h1>
   <div class="new-post" v-if='userData'>
     <form @submit.prevent="makePost(postFormData, userData.username, userData.pfp, userData.verified); postFormData = ''">
-      <input type="text" id="home-post-input" placeholder="Talk about something" v-model="postFormData" autocomplete='off' required>
+      <input type="text" id="home-post-input" placeholder="Talk about something" v-model="postFormData" autocomplete='off' required maxlength="1000">
       <button type="submit">Post</button>
     </form>
   </div>

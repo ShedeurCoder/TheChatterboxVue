@@ -2,7 +2,7 @@
 import { RouterLink } from 'vue-router'
 import usePosts from '@/composables/usePosts'
 import { ref } from 'vue'
-const { likePost, unlike } = usePosts()
+const { likePost, unlike, save, unsave } = usePosts()
 const props = defineProps({
     postData: Object,
     userData: Object
@@ -35,6 +35,18 @@ if (readableDate.value == Date().toString().split(' ').splice(1, 3).join(' ')) {
             <p class="post-message">{{ postData?.message }}</p>
         </div>
         <div class="post-footer">
+            <button class="bookmark" v-if="userData?.saves?.includes(postData?.id)" @click="unsave(postData?.id, userData)">
+                <i class="fas fa-bookmark liked"></i>
+            </button>
+
+            <button class="bookmark" v-else-if="userData" @click="save(postData?.id, userData)">
+                <i class="fas fa-bookmark"></i>
+            </button>
+
+            <button class="bookmark" v-else>
+                <i class="fas fa-bookmark"></i>
+            </button>
+
             <span class="comments"><i class="fas fa-comment-alt"></i> {{ postData?.comments }}</span>
 
             <span class="like-button" v-if="userData && postData.likes.includes(userData?.username)">
@@ -76,6 +88,10 @@ if (readableDate.value == Date().toString().split(' ').splice(1, 3).join(' ')) {
     </dialog>
 </template>
 <style scoped>
+    .bookmark {
+        float: right;
+        margin-left: 0.75em;
+    }
     .comments {
         float: right;
         font-size: 1.4rem;

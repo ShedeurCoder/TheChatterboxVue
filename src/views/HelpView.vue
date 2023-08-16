@@ -53,6 +53,9 @@ const ticketForm = ref({
                 <div class="display-none" v-if="ticketForm.type === 'Verification request' && ticketForm.details !== ''">
                     {{ ticketForm.details = '' }}
                 </div>
+                <div class="display-none" v-if="ticketForm.type === 'Verification request' && ticketForm.name !== ''">
+                    {{ ticketForm.name = '' }}
+                </div>
             </fieldset>
         </form>
         <div class="help-links">

@@ -13,7 +13,7 @@ const formData = ref({
 })
 
 const widget = window.cloudinary.createUploadWidget(
-  {cloud_name: 'dmftho0cx', upload_preset: 'chatterbox-vue'},
+  {cloud_name: 'dmftho0cx', upload_preset: 'chatterbox-vue', sources: ['local', 'url']},
   (err, result) => {
     if (!err && result && result.event === 'success') {
       editPfp(userData.value.id, result.info.public_id, userData.value.username)
@@ -113,6 +113,9 @@ function openUploadWidget() {
     </dialog>
 </template>
 <style scoped>
+    .user-container h2 {
+        font-size: 1.3rem;
+    }
     .follow-button {
         font-size: 1.5rem;
         background: #007bff;
@@ -125,9 +128,6 @@ function openUploadWidget() {
     }
     .profile-bio {
         margin: 15px;
-    }
-    .user-container-container {
-        margin-block: 0.5em;
     }
     .follow-button:hover {
         background: #026ee1;
