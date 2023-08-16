@@ -12,7 +12,6 @@ export default function useProfile() {
             const queryData = query(dbPostsRef, where('username', 'in', following), orderBy('createdAt'))
             const unsubscribe = onSnapshot(queryData, (docs) => {
                 posts.value = []
-                console.log('e')
                 docs.forEach((doc) => {
                     const post = {
                         id: doc.id,
