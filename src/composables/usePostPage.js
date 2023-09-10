@@ -1,9 +1,10 @@
 import { ref, onUnmounted, onMounted } from 'vue'
-import { onSnapshot, doc, addDoc, query, where, orderBy, updateDoc, deleteDoc } from 'firebase/firestore'
-import { db, dbCommentsRef, dbNotifsRef } from '../firebase'
+import { onSnapshot, doc, addDoc, query, where, orderBy, updateDoc, deleteDoc, getDocs } from 'firebase/firestore'
+import { db, dbCommentsRef, dbNotifsRef, dbUsersRef } from '../firebase'
 import { useRoute, onBeforeRouteUpdate } from 'vue-router'
 
 export default function usePostPage() {
+    const atPattern = /(@)+[A-Za-z0-9_]{1,}/gim
     const postData = ref(null)
     const unsubscribeFromPost = ref(() => {})
     const unsubscribeFromComments = ref(() => {})
@@ -11,6 +12,20 @@ export default function usePostPage() {
     const route = useRoute()
     const postId = route.params.post
     const highlightedComment = ref(route.query.c)
+
+    async function checkUserExists(username) {
+        try {
+            const queryData = query(dbUsersRef, where('username', '==', username))
+            const user = await getDocs(queryData)
+            if (user.docs[0]) {
+                return true
+            } else {
+                return false
+            }
+        } catch(e) {
+            console.error(e)
+        }
+    }
 
     async function createNotif(to, from, url, message) {
         try {
@@ -65,9 +80,40 @@ export default function usePostPage() {
                 if (postUser !== username) {
                     await createNotif(postUser, username, `/post/${postId}?c=${commentDoc.id}`, `${username} commented on your post!`)
                 }
+                const matches = message.match(atPattern)
+                if (matches) {
+                    for (var i = 0; i < matches.length; i++) {
+                        if (matches[i].replace('@', '') !== username && checkUserExists(matches[i].replace('@', ''))) {
+                            await createNotif(matches[i].replace('@', ''), username, `/post/${postId}?c=${commentDoc.id}`, `@${username} mentioned you in their comment!`)
+                        }
+                    }
+                }
             } else {
                 return
             }
+        } catch(e) {
+            console.error(e)
+        }
+    }
+
+    async function pin(comment, post, user) {
+        try {
+            await updateDoc(doc(db, "posts", post.id), {
+                pinned: comment.id
+            });
+            if (comment.username !== user.username) {
+                await createNotif(comment.username, user.username, `/post/${post.id}?c=${comment.id}`, `${user.username} pinned your comment!`)
+            }
+        } catch(e) {
+            console.error(e)
+        }
+    }
+
+    async function unpin(post) {
+        try {
+            await updateDoc(doc(db, "posts", post.id), {
+                pinned: ''
+            })
         } catch(e) {
             console.error(e)
         }
@@ -150,6 +196,15 @@ export default function usePostPage() {
             if (user.username !== comment.username) {
                 await createNotif(comment.username, user.username, `/post/${comment.postId}?c=${comment.id}`, `${user.username} replied to your comment!`)
             }
+
+            const matches = message.match(atPattern)
+            if (matches) {
+                for (var i = 0; i < matches.length; i++) {
+                    if (matches[i].replace('@', '') !== user.username && checkUserExists(matches[i].replace('@', ''))) {
+                        await createNotif(matches[i].replace('@', ''), user.username, `/post/${comment.postId}?c=${comment.id}`, `@${user.username} mentioned you in their reply!`)
+                    }
+                }
+            }
         } catch(e) {
             console.error(e)
         }
@@ -199,6 +254,8 @@ export default function usePostPage() {
         deleteComment,
         highlightedComment,
         makeReply,
-        deleteReply
+        deleteReply,
+        pin,
+        unpin
     }
 }

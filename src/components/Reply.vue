@@ -1,29 +1,20 @@
 <script setup>
 import useAuth from '@/composables/useAuth'
 import usePostPage from '@/composables/usePostPage'
-import { ref } from 'vue'
+import useRandom from '@/composables/useRandom'
 import { RouterLink } from 'vue-router'
+const { styleDate } = useRandom()
 const { deleteReply } = usePostPage()
 const { userData } = useAuth()
 const props = defineProps({
     reply: Object,
     comment: Object
 })
-const date = new Date(props.reply.createdAt.seconds * 1000)
-const readableDate = ref(date.toString().split(' ').splice(1, 3).join(' '))
-
-if (readableDate.value == Date().toString().split(' ').splice(1, 3).join(' ')) {
-    readableDate.value = date.toString().split(' ').splice(4, 1).join(' ').split(':').splice(0, 2).join(':')
-
-    const [hourString, minute] = readableDate.value.split(":");
-    const hour = +hourString % 24;
-    readableDate.value = 'Today at ' + (hour % 12 || 12) + ":" + minute + (hour < 12 ? " AM" : " PM")
-}
 </script>
 <template>
     <div class='comment-wrapper'>
         <div class="comment-header">
-            <small>{{ readableDate }}</small>
+            <small>{{ styleDate(reply.createdAt) }}</small>
             <RouterLink :to="`/@${reply.username}`" style='text-decoration: none;' class="comment-user-link">
                 <img class="pfp" :src="`https://res.cloudinary.com/dmftho0cx/image/upload/${reply?.pfp || 'defaultProfile_u6mqts'}`">
                 <h2>
@@ -33,7 +24,7 @@ if (readableDate.value == Date().toString().split(' ').splice(1, 3).join(' ')) {
             </RouterLink>
         </div>
         <div class="comment-body">
-            <p>{{ reply.message }}</p>
+            <p data-onparse="createAt()" :id='`reply${reply.id}`'>{{ reply.message }}</p>
         </div>
         <div class="comment-footer">
             <button type="button" v-if='userData?.username === reply.username || userData?.admin' 

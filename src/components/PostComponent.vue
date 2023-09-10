@@ -2,28 +2,20 @@
 import { RouterLink } from 'vue-router'
 import useAuth from '@/composables/useAuth'
 import usePosts from '@/composables/usePosts'
-import { ref } from 'vue'
+import useRandom from '@/composables/useRandom'
 const { likePost, unlike, deletePost } = usePosts()
+const { styleDate } = useRandom()
 const { userData } = useAuth()
 const props = defineProps({
-    post: Object
+    post: Object,
+    pinned: Boolean
 })
-
-const date = new Date(props.post.createdAt.seconds * 1000)
-const readableDate = ref(date.toString().split(' ').splice(1, 3).join(' '))
-
-if (readableDate.value == Date().toString().split(' ').splice(1, 3).join(' ')) {
-    readableDate.value = date.toString().split(' ').splice(4, 1).join(' ').split(':').splice(0, 2).join(':')
-
-    const [hourString, minute] = readableDate.value.split(":");
-    const hour = +hourString % 24;
-    readableDate.value = 'Today at ' + (hour % 12 || 12) + ":" + minute + (hour < 12 ? " AM" : " PM")
-}
 </script>
 <template>
     <div class='post-wrapper'>
+        <h1 class="pinned" v-if="pinned"><i class="fas fa-thumbtack"></i> Pinned post</h1>
         <div class="post-header">
-            <small>{{ readableDate }}</small>
+            <small>{{ styleDate(post.createdAt) }}</small>
             <RouterLink :to="`/@${post.username}`" style='text-decoration: none;' class="post-user-link">
                 <img class="pfp" :src="`https://res.cloudinary.com/dmftho0cx/image/upload/${post?.pfp || 'defaultProfile_u6mqts'}`">
                 <h2>
@@ -118,5 +110,11 @@ if (readableDate.value == Date().toString().split(' ').splice(1, 3).join(' ')) {
         border-radius: 50%;
         display: inline;
         margin-right: 10px;
+    }
+    .pinned {
+        font-size: 1.2rem;
+    }
+    .fa-thumbtack {
+        margin-right: 0.3em;
     }
 </style>

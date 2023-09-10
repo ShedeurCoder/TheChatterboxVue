@@ -25,7 +25,7 @@ const postFormData = ref('')
       <form class="sign-in-form" onsubmit="document.getElementById('postModal').close()" @submit.prevent="makePost(postFormData, userData.username, userData.pfp, userData.verified); postFormData = ''">
           <div class="form-group">
               <label for="message">Message:</label>
-              <textarea id="message" v-model="postFormData" placeholder="What's up?" required rows="10" maxlength="1000"></textarea>
+              <textarea id="message" v-model="postFormData" placeholder="What's up?" required rows="7" maxlength="1000"></textarea>
           </div>
           <button type='submit' class='login-signup'>Post</button>
       </form>

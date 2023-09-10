@@ -9,22 +9,22 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
+      name: 'The Chatterbox Vue',
       component: Home
     },
     {
       path: '/about',
-      name: 'about',
+      name: 'About - TCBV',
       component: About
     },
     {
       path: '/tos',
-      name: 'tos',
+      name: 'Terms of Service - TCBV',
       component: () => import('../views/TOS.vue')
     },
     {
       path: '/privacy',
-      name: 'privacy',
+      name: 'Privacy - TCBV',
       component: () => import('../views/Privacy.vue')
     },
     {
@@ -34,40 +34,50 @@ const router = createRouter({
     },
     {
       path: '/post/:post',
-      name: 'post',
+      name: 'Post on TCBV',
       component: Post
     },
     {
       path: '/saves',
-      name: 'saves',
+      name: 'Your saves - TCBV',
       component: () => import('../views/SavesView.vue')
     },
     {
       path: '/help',
-      name: 'help',
+      name: 'Help - TCBV',
       component: () => import('../views/HelpView.vue')
     },
     {
       path: '/your-tickets',
-      name: 'your-tickets',
+      name: 'Your Tickets - TCBV',
       component: () => import('../views/YourTickets.vue')
     },
     {
       path: '/ticket/:ticket',
-      name: 'ticket-page',
+      name: 'Ticket on TCBV',
       component: () => import('../views/TicketView.vue')
     },
     {
       path: '/admin',
-      name: 'adminLink',
+      name: 'Admin Dashboard - TCBV',
       component: () => import('../views/AdminView.vue')
     },
     {
       path: '/:pathName(.*)',
-      name: 'notFound',
+      name: '404!',
       component: () => import('../views/PageNotFound.vue')
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  if (to.params?.username) {
+    document.title = `@${to.params.username} on TCBV`
+    next()
+  } else {
+    document.title = to.name
+    next()
+  }
+});
 
 export default router

@@ -1,28 +1,25 @@
 <script setup>
 import { RouterLink } from 'vue-router'
 import usePosts from '@/composables/usePosts'
-import { ref } from 'vue'
+import useAuth from '@/composables/useAuth'
+import useRandom from '@/composables/useRandom'
+const { styleDate } = useRandom()
 const { likePost, unlike, save, unsave } = usePosts()
+const { pinPost, unpinPost } = useAuth()
 const props = defineProps({
     postData: Object,
     userData: Object
 })
 
-const date = new Date(props.postData.createdAt.seconds * 1000)
-const readableDate = ref(date.toString().split(' ').splice(1, 3).join(' '))
-
-if (readableDate.value == Date().toString().split(' ').splice(1, 3).join(' ')) {
-    readableDate.value = date.toString().split(' ').splice(4, 1).join(' ').split(':').splice(0, 2).join(':')
-
-    const [hourString, minute] = readableDate.value.split(":");
-    const hour = +hourString % 24;
-    readableDate.value = 'Today at ' + (hour % 12 || 12) + ":" + minute + (hour < 12 ? " AM" : " PM")
+if (props.postData.username !== undefined) {
+    document.title = `@${props.postData.username} on TCBV: "${props.postData.message}"`
 }
 </script>
+
 <template>
     <div class="post">
         <div class="post-header">
-            <small>{{ readableDate }}</small>
+            <small>{{ styleDate(postData?.createdAt) }}</small>
             <RouterLink :to="`/@${postData?.username}`" class='post-user'>
                 <img class="pfp" :src="`https://res.cloudinary.com/dmftho0cx/image/upload/${postData?.pfp || 'defaultProfile_u6mqts'}`">
                 <h2>
@@ -32,11 +29,21 @@ if (readableDate.value == Date().toString().split(' ').splice(1, 3).join(' ')) {
             </RouterLink>
         </div>
         <div class="post-body">
-            <p class="post-message">{{ postData?.message }}</p>
+            <p class="post-message" id="post-message" data-onparse="createAt()">{{ postData?.message }}</p>
         </div>
         <div class="post-footer">
+            <button v-if="userData && userData?.username === postData?.username && postData?.id === userData.pinned" 
+            class="pin pinned" @click='unpinPost(userData)'>
+                <i class="fas fa-thumbtack"></i>
+            </button>
+
+            <button v-if="userData && userData?.username === postData?.username && postData?.id !== userData?.pinned" 
+            class="pin" @click='pinPost(postData, userData)'>
+                <i class="fas fa-thumbtack"></i>
+            </button>
+
             <button class="bookmark" v-if="userData?.saves?.includes(postData?.id)" @click="unsave(postData?.id, userData)">
-                <i class="fas fa-bookmark liked"></i>
+                <i class="fas fa-bookmark saved"></i>
             </button>
 
             <button class="bookmark" v-else-if="userData" @click="save(postData?.id, userData)">
@@ -88,6 +95,10 @@ if (readableDate.value == Date().toString().split(' ').splice(1, 3).join(' ')) {
     </dialog>
 </template>
 <style scoped>
+    .pin {
+        float: right;
+        margin-left: 0.5em;
+    }
     .bookmark {
         float: right;
         margin-left: 0.75em;
@@ -144,8 +155,14 @@ if (readableDate.value == Date().toString().split(' ').splice(1, 3).join(' ')) {
     .post-footer .like-button span:hover {
         text-decoration: underline;
     }
-    .post-footer button:hover {
+    .bookmark:hover .fa-bookmark {
+        color: #0099ff;
+    }
+    .post-footer .like-button button:hover {
         color: rgb(205, 12, 12)
+    }
+    .saved {
+        color: #0077ff;
     }
     .delete {
         float: left;
@@ -178,5 +195,11 @@ if (readableDate.value == Date().toString().split(' ').splice(1, 3).join(' ')) {
     }
     .user-container-container {
         margin-block: 0.5em;
+    }
+    .pin.pinned .fas.fa-thumbtack {
+        color: white;
+    }
+    .pin:hover {
+        color: white;
     }
 </style>

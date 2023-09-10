@@ -177,6 +177,26 @@ export default function useAuth() {
         }
     }
 
+    async function pinPost(post, user) {
+        try {
+            await updateDoc(doc(db, "users", user.id), {
+                pinned: post.id
+            })
+        } catch(e) {
+            console.error(e)
+        }
+    }
+
+    async function unpinPost(user) {
+        try {
+            await updateDoc(doc(db, 'users', user.id), {
+                pinned: null
+            })
+        } catch(e) {
+            console.error(e)
+        }
+    }
+
     onAuthStateChanged(auth, (user) => {
         if (user) {
             findUser(user.email)
@@ -191,6 +211,8 @@ export default function useAuth() {
         }
     })
     return {
-        signUp, errorMessage, login, logOut, userData, readNotifs, unreadNotifs, readNotif, deleteNotif
+        signUp, errorMessage, login, logOut, userData, readNotifs, unreadNotifs, readNotif, deleteNotif,
+        pinPost,
+        unpinPost
     }
 }

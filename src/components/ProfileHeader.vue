@@ -1,10 +1,15 @@
 <script setup>
 import useProfile from "@/composables/useProfile";
 import useAuth from '@/composables/useAuth'
+import useRandom from '@/composables/useRandom'
 import { ref } from 'vue'
 import { RouterLink } from 'vue-router' 
-const { profileData, follow, unfollow, editProfile, editMessage, editPfp } = useProfile()
+const { follow, unfollow, editProfile, editMessage, editPfp } = useProfile()
 const { userData } = useAuth()
+useRandom()
+const props = defineProps({
+    profileData: Object
+})
 
 const formData = ref({
     displayName: null,
@@ -40,7 +45,7 @@ function openUploadWidget() {
         <small v-if='profileData?.owner'>Owner</small>
         <small v-else-if='profileData?.tester'>Test account</small>
         <small v-else-if='profileData?.admin'>Admin</small>
-        <p class="profile-bio">{{ profileData?.bio }}</p>
+        <p class="profile-bio" data-onparse="createAt()" id="profile-bio" v-if="profileData">{{ profileData?.bio }}</p>
         <a :href='profileData?.url' target='_blank' v-if="profileData?.url"><i class="fas fa-link"></i> {{ profileData?.url }}</a>
         <div class="followers-following">
             <span class="followers" onclick="document.getElementById('followers-modal').showModal()">{{ profileData?.followers.length }} followers</span>

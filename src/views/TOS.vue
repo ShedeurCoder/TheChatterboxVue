@@ -49,7 +49,7 @@
             <p>The copyright rules of The Chatterbox Vue</p>
             <h3>The Chatterbox Vue is an open-source project protected by an MIT License. The full copyright license is shown below.</h3>
             <code>MIT License <br>
-                <span>Copyright (c) 2023 The Chatterbox Social Media and Shedeur Bhatkal</span>
+                <span>Copyright (c) 2023 Chibs Incorporated and Shedeur Bhatkal</span>
                 <br>
                 <br>
                 <span>Permission is hereby granted, free of charge, to any person obtaining a copy</span>

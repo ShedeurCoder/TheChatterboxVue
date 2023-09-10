@@ -1,36 +1,29 @@
 <script setup>
 import useAuth from '@/composables/useAuth'
 import usePostPage from '@/composables/usePostPage'
+import useRandom from '@/composables/useRandom'
 import { ref } from 'vue'
 import Reply from '@/components/Reply.vue'
-const { likeComment, unlikeComment, deleteComment, makeReply } = usePostPage()
+const { likeComment, unlikeComment, deleteComment, makeReply, pin, unpin } = usePostPage()
+const { styleDate } = useRandom()
 const { userData } = useAuth()
 const props = defineProps({
     post: Object,
-    postComments: Number,
-    highlighted: Boolean
+    postData: Object,
+    highlighted: Boolean,
+    pinned: Boolean
 })
-
-const date = new Date(props.post.createdAt.seconds * 1000)
-const readableDate = ref(date.toString().split(' ').splice(1, 3).join(' '))
-
-if (readableDate.value == Date().toString().split(' ').splice(1, 3).join(' ')) {
-    readableDate.value = date.toString().split(' ').splice(4, 1).join(' ').split(':').splice(0, 2).join(':')
-
-    const [hourString, minute] = readableDate.value.split(":");
-    const hour = +hourString % 24;
-    readableDate.value = 'Today at ' + (hour % 12 || 12) + ":" + minute + (hour < 12 ? " AM" : " PM")
-}
 
 const replyFormInput = ref(null)
 const showReplies = ref(false)
 </script>
 <template>
     <div class="comment-wrapper-wrapper">
-        <div :class='`post-wrapper ${highlighted ? "highlighted" : ""}`'>
-            <h3 class="highlighted-comment-header" v-if='highlighted'>Highlighted comment</h3>
+        <div :class='`post-wrapper ${highlighted ? "highlighted" : ""} ${pinned ? "pinnedMessage" : ""}`'>
+            <h3 class="pinned-comment-header" v-if='pinned'><i class="fas fa-thumbtack"></i> Pinned comment</h3>
+            <h3 class="highlighted-comment-header" v-else-if='highlighted'>Highlighted comment</h3>
             <div class="post-header">
-                <small>{{ readableDate }}</small>
+                <small>{{ styleDate(post.createdAt) }}</small>
                 <RouterLink :to="`/@${post.username}`" style='text-decoration: none;' class="post-user-link">
                     <img class="pfp" :src="`https://res.cloudinary.com/dmftho0cx/image/upload/${post?.pfp || 'defaultProfile_u6mqts'}`">
                     <h2>
@@ -40,10 +33,18 @@ const showReplies = ref(false)
                 </RouterLink>
             </div>
             <div class="post-body">
-                <p>{{ post.message }}</p>
+                <p data-onparse="createAt()" :id='`comment${post.id}`'>{{ post.message }}</p>
             </div>
             <div class="post-footer">
-                <button @click="deleteComment(post.id, post.postId, postComments)" v-if="userData?.username === post.username || userData?.admin" class="delete"><i class="fas fa-trash"></i></button>
+                <button @click="deleteComment(post.id, post.postId, postData?.comments)" v-if="userData?.username === post.username || userData?.admin" class="delete"><i class="fas fa-trash"></i></button>
+
+                <button v-if="userData && userData?.username === postData?.username && post?.id === postData?.pinned" class="pin pinned" @click='unpin(postData)'>
+                    <i class="fas fa-thumbtack"></i>
+                </button>
+
+                <button v-if="userData && userData?.username === postData?.username && post?.id !== postData?.pinned" class="pin" @click='pin(post, postData, userData)'>
+                    <i class="fas fa-thumbtack"></i>
+                </button>
 
                 <button class="show-replies" v-if="userData"
                 :onclick="`document.getElementById('${post.id}ReplyForm').style.display == 'grid' ? 
@@ -119,6 +120,10 @@ const showReplies = ref(false)
     </div>
 </template>
 <style scoped>
+    .pin {
+        float: right;
+        margin-left: 0.3em;
+    }
     .replies {
         text-align: center;
     }
@@ -174,6 +179,17 @@ const showReplies = ref(false)
         font-weight: 500;
         margin: 0em;
         margin-bottom: 0.5em;
+    }
+    .pinned-comment-header {
+        display: inline-block;
+        font-size: 1.2rem;
+        padding: 0.5em;
+        font-weight: 500;
+        margin: 0em;
+        margin-bottom: 0.5em;
+    }
+    .pinned-comment-header i {
+        margin-right: 0.2em;
     }
     .highlighted {
         outline: 2px solid white;
@@ -239,7 +255,10 @@ const showReplies = ref(false)
         font-family: inherit;
         font-weight: bold;
     }
-    .post-footer button:hover {
+    .pin.pinned .fas.fa-thumbtack {
+        color: white;
+    }
+    .like-button button:hover, .delete:hover {
         color: rgb(205, 12, 12)
     }
     .delete {
@@ -261,6 +280,9 @@ const showReplies = ref(false)
         margin-right: 10px;
     }
     .show-replies:hover i, .show-replies:hover span {
+        color: white;
+    }
+    .pin:hover {
         color: white;
     }
 </style>

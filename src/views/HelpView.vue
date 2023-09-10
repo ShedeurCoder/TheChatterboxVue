@@ -62,11 +62,15 @@ const ticketForm = ref({
             <RouterLink class="help-link" to="/admin" v-if="userData?.admin">Admin dashboard</RouterLink>
             <RouterLink class="help-link" to="/your-tickets">See your tickets</RouterLink>
             <a class="help-link" href="mailto:officialthechatterbox@gmail.com" target='_blank'>Email us</a>
+            <button class="help-link" onclick="toggleComicSans()">Comic Sans Toggle</button>
         </div>
     </section>
     <h2 v-else>Please sign in</h2>
 </template>
 <style scoped>
+    button {
+        border: none;
+    }
     .help-links {
         text-align: center;
     }
@@ -79,6 +83,10 @@ const ticketForm = ref({
         border-radius: 10px;
         display: block;
         margin: 1em 2em;
+    }
+    button.help-link {
+        display: block;
+        width: calc(100% - 4em);
     }
     select {
         font-size: 1.1rem;

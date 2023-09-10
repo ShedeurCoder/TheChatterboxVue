@@ -1,0 +1,29 @@
+function getId(id) {
+    return document.getElementById(id)
+}
+
+function createAt(id) {
+    const atPattern = /(@)+[A-Za-z0-9_]{1,}/gim
+    let replacedText = getId(id).innerHTML.replace(atPattern, (c) => {
+        return `<a href="/${c.toLowerCase()}" class='at-link'>${c}</a>`
+    });
+    getId(id).innerHTML = replacedText
+}
+
+if (localStorage.comicsans) {
+    checkComicSans()
+}
+
+function checkComicSans() {
+    if (JSON.parse(localStorage.comicsans)) {
+        document.body.style.fontFamily = 'Comic Sans MS'
+    } else {
+        document.body.style.fontFamily = 'Arial, Helvetica, sans-serif'
+    }
+}
+
+function toggleComicSans() {
+    const comicSans = localStorage.comicsans
+    localStorage.comicsans = comicSans ? !JSON.parse(comicSans) : true
+    checkComicSans()
+}

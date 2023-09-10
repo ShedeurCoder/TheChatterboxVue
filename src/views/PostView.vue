@@ -20,8 +20,9 @@ const replyInput = ref('')
     </form>
 
     <div class='profile-posts'>
-        <Comment :post="comment" v-for='comment in comments.filter((c) => c.id === highlightedComment)' :key='comment.id' :postComments='postData?.comments' :highlighted="true"/>
-        <Comment :post="comment" v-for='comment in comments.filter((c) => c.id !== highlightedComment)' :key='comment.id' :postComments='postData?.comments'/>
+        <Comment :post="comment" v-for='comment in comments.filter((c) => c.id === postData?.pinned)' :postData="postData" :key='comment.id' :pinned="true"/>
+        <Comment :post="comment" v-for='comment in comments.filter((c) => c.id === highlightedComment && c.id !== postData?.pinned)' :postData="postData" :key='comment.id' :highlighted="true"/>
+        <Comment :post="comment" v-for='comment in comments.filter((c) => c.id !== highlightedComment && c.id !== postData?.pinned)' :postData="postData" :key='comment.id' />
     </div>
 </template>
 <style scoped>

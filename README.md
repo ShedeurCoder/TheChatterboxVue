@@ -16,13 +16,25 @@ The Chatterbox Vue started development on July 23, 2023 and was first released o
 
 # Change log
 
-## v1.2.0
-- Added comment replies
-- Added saves
-- Made comment notifications highlight the comment
+## v1.3.0
+- @-ing someone will link to them and will notify them
+- Pinned posts to profile
+- Pinned comments to posts
+- Comic sans font toggle
 
 <details>
-  <summary><h2>v1.2 (current major version)</h2></summary>
+  <summary><h2>v1.3 (current major version)</h2></summary>
+
+  ### v1.3.0
+  - @-ing someone will link to them and will notify them
+  - Pinned posts to profile
+  - Pinned comments to posts
+  - Comic sans font toggle
+
+</details>
+
+<details>
+  <summary><h2>v1.2</h2></summary>
   
   ### v1.2.0
   - Added comment replies

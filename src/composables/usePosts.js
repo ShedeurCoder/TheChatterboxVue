@@ -3,8 +3,23 @@ import { addDoc, updateDoc, doc, deleteDoc, query, getDocs, where, getDoc } from
 import { dbPostsRef, db, dbCommentsRef, dbNotifsRef, dbUsersRef } from '../firebase'
 
 export default function usePosts() {
+    const atPattern = /(@)+[A-Za-z0-9_]{1,}/gim
     const postMessage = ref('')
     const savedPosts = ref([])
+
+    async function checkUserExists(username) {
+        try {
+            const queryData = query(dbUsersRef, where('username', '==', username))
+            const user = await getDocs(queryData)
+            if (user.docs[0]) {
+                return true
+            } else {
+                return false
+            }
+        } catch(e) {
+            console.error(e)
+        }
+    }
 
     async function createNotif(to, from, url, message) {
         try {
@@ -32,10 +47,19 @@ export default function usePosts() {
                     message,
                     likes: [],
                     comments: 0,
-                    pfp: pfp ?? 'defaultProfile_u6mqts'
+                    pfp: pfp ?? 'defaultProfile_u6mqts',
+                    pinned: null
                 }
-                await addDoc(dbPostsRef, post)
+                const finalPost = await addDoc(dbPostsRef, post)
                 postMessage.value = 'Sent!'
+                const matches = message.match(atPattern)
+                if (matches) {
+                    for (var i = 0; i < matches.length; i++) {
+                        if (matches[i].replace('@', '') !== username && checkUserExists(matches[i].replace('@', ''))) {
+                            await createNotif(matches[i].replace('@', ''), username, `/post/${finalPost.id}`, `@${username} mentioned you in their post!`)
+                        }
+                    }
+                }
             } else {
                 postMessage.value = 'Sign in to make a post'
             }

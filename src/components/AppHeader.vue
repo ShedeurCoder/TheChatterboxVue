@@ -2,27 +2,14 @@
 import { RouterLink } from 'vue-router'
 import useAuth from "@/composables/useAuth";
 import { ref } from "vue";
+import useRandom from '@/composables/useRandom'
+const { styleDate } = useRandom()
 const { signUp, errorMessage, login, logOut, userData, readNotifs, unreadNotifs, readNotif, deleteNotif } = useAuth()
 const formData = ref({
     email: '',
     password: '',
     username: ''
 })
-
-function styleDate(timestamp) {
-    const date = new Date(timestamp.seconds * 1000)
-    let readableDate = date.toString().split(' ').splice(1, 3).join(' ')
-
-    if (readableDate == Date().toString().split(' ').splice(1, 3).join(' ')) {
-        readableDate = date.toString().split(' ').splice(4, 1).join(' ').split(':').splice(0, 2).join(':')
-
-        const [hourString, minute] = readableDate.split(":");
-        const hour = +hourString % 24;
-        readableDate = 'Today at ' + (hour % 12 || 12) + ":" + minute + (hour < 12 ? " AM" : " PM")
-    }
-
-    return readableDate
-}
 </script>
 <template>
     <header>
