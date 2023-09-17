@@ -1,28 +1,20 @@
 import { onMounted } from 'vue'
 export default function useRandom() {
+    
+    function turnToParse() {
+        const parsedElement = document.querySelector('[data-onparse]')
+        if (parsedElement) {
+            const atPattern = /(@)+[A-Za-z0-9_]{1,}/gim
+            console.log(parsedElement.innerText)
+            const replacedText = parsedElement.innerText.replace(atPattern, (c) => {
+                return `<a href="/${c.toLowerCase()}" class='at-link'>${c}</a>`
+            });
+            parsedElement.innerHTML = replacedText
+        }
+    }
+
     onMounted(() => {
-        /*
-            CODE BY: https://stackoverflow.com/users/3897775/rounin
-        */
-        let parseEvent = new Event('parse')
-        const initialiseParseableElements = () => {
-            let elementsWithParseEventListener = document.querySelectorAll('[data-onparse]');
-            elementsWithParseEventListener.forEach((elementWithParseEventListener) => {
-                elementWithParseEventListener.addEventListener('parse', updateParseEventTarget, false);
-                elementWithParseEventListener.dataset.onparsed = elementWithParseEventListener.dataset.onparse;
-                elementWithParseEventListener.removeAttribute('data-onparse');
-                elementWithParseEventListener.dispatchEvent(parseEvent);
-            })
-        }
-        const updateParseEventTarget = (e) => {
-            switch (e.target.dataset.onparsed) {
-                case ('createAt()') : createAt(e.target.id)
-            }
-        }
-        initialiseParseableElements();
-        setTimeout(() => {
-            initialiseParseableElements();
-        }, 3000);
+        turnToParse()
     })
 
     function styleDate(timestamp) {
@@ -41,6 +33,7 @@ export default function useRandom() {
     }
 
     return {
-        styleDate
+        styleDate,
+        turnToParse
     }
 }

@@ -1,15 +1,20 @@
 <script setup>
 import { RouterLink } from 'vue-router'
+import { watch } from 'vue'
 import usePosts from '@/composables/usePosts'
 import useAuth from '@/composables/useAuth'
 import useRandom from '@/composables/useRandom'
-const { styleDate } = useRandom()
+const { styleDate, turnToParse } = useRandom()
 const { likePost, unlike, save, unsave } = usePosts()
 const { pinPost, unpinPost } = useAuth()
 const props = defineProps({
     postData: Object,
     userData: Object
 })
+
+watch(() => props.postData?.message, (newVal, oldVal) => {
+    setTimeout(turnToParse, 500)
+}, {immediate:true, deep: true});
 
 if (props.postData.username !== undefined) {
     document.title = `@${props.postData.username} on TCBV: "${props.postData.message}"`

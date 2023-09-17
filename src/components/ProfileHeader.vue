@@ -2,11 +2,11 @@
 import useProfile from "@/composables/useProfile";
 import useAuth from '@/composables/useAuth'
 import useRandom from '@/composables/useRandom'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { RouterLink } from 'vue-router' 
 const { follow, unfollow, editProfile, editMessage, editPfp } = useProfile()
 const { userData } = useAuth()
-useRandom()
+const { turnToParse } = useRandom()
 const props = defineProps({
     profileData: Object
 })
@@ -16,6 +16,10 @@ const formData = ref({
     bio: null,
     url: null
 })
+
+watch(() => props.profileData?.bio, (newVal, oldVal) => {
+    setTimeout(turnToParse, 500)
+}, {immediate:true, deep: true});
 
 const widget = window.cloudinary.createUploadWidget(
   {cloud_name: 'dmftho0cx', upload_preset: 'chatterbox-vue', sources: ['local', 'url']},
