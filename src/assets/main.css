@@ -23,7 +23,7 @@ header {
   height: 100%;
 }
 
-nav {
+header nav {
   background: #000;
   text-align: center;
   height: 10dvh;
@@ -49,7 +49,7 @@ main {
   color: #fff;
 }
 
-nav img {
+header nav img {
   width: 50%;
   margin-top: -2rem;
   display: none;
@@ -110,6 +110,7 @@ dialog::backdrop {
   text-align: center;
   margin-inline: 1em;
   padding: 1.5em;
+  padding-bottom: 0.1em;
 }
 
 .profile-header h1 {
@@ -149,19 +150,19 @@ p a:hover {
   text-decoration: underline;
 }
 .login-signup {
-    font-size: 1.3rem;
-    background: none;
-    border: 1px solid green;
-    color: green;
-    margin-inline: 0.3em;
-    padding: 0.5em;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: 300ms;
+  font-size: 1.3rem;
+  background: none;
+  border: 1px solid green;
+  color: green;
+  margin-inline: 0.3em;
+  padding: 0.5em;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 300ms;
 }
 .login-signup:hover, .login-signup:focus {
-    background: green;
-    color: white;
+  background: green;
+  color: white;
 }
 
 .fa-check-circle {
@@ -172,6 +173,22 @@ p a:hover {
 .pfp {
   border-radius: 50%;
   object-fit: cover;
+}
+
+.skip-nav {
+  position: fixed;
+  top: -300px;
+  left: 0;
+  z-index: 100;
+  background: black;
+  padding: 1em;
+  font-size: 1.05rem;
+  color: white;
+  transition: top 300ms;
+}
+
+.skip-nav:focus {
+  top: 0;
 }
 
 @media only screen and (min-width: 800px) {
@@ -199,13 +216,13 @@ p a:hover {
     margin-bottom: 0px;
   }
 
-  nav {
+  header nav {
     flex-direction: column;
     height: 100%;
     width: 8%;
   }
 
-  nav img {
+  header nav img {
     display: inline;
   }
 }

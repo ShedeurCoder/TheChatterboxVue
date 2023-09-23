@@ -13,6 +13,7 @@ const formData = ref({
 </script>
 <template>
     <header>
+        <a href="#main" class="skip-nav">Skip navigation</a>
         <nav>
             <img src="../assets/images/logo.png" alt="TCB Vue">
 
@@ -81,12 +82,12 @@ const formData = ref({
             </div>
             <form class="sign-in-form" @submit.prevent="signUp(formData.email, formData.password, formData.username)">
                 <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" v-model="formData.email" placeholder='Email' required>
+                    <label for="emailSU">Email:</label>
+                    <input type="email" id="emailSU" v-model="formData.email" placeholder='Email' required>
                 </div>
                 <div class="form-group">
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" v-model="formData.password" 
+                    <label for="passwordSU">Password:</label>
+                    <input type="password" id="passwordS" v-model="formData.password" 
                     placeholder='Password' required minlength="6">
                 </div>
                 <div class="form-group">
@@ -114,12 +115,12 @@ const formData = ref({
             </div>
             <form class="sign-in-form" @submit.prevent="login(formData.email, formData.password)">
                 <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" v-model="formData.email" placeholder='Email' required>
+                    <label for="emailLI">Email</label>
+                    <input type="email" id="emailLI" v-model="formData.email" placeholder='Email' required>
                 </div>
                 <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" v-model="formData.password" 
+                    <label for="passwordLI">Password</label>
+                    <input type="password" id="passwordLI" v-model="formData.password" 
                     placeholder='Password' required minlength="6">
                 </div>
                 <button type='submit' class="login-signup">Login</button>

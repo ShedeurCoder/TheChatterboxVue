@@ -11,7 +11,7 @@ import { RouterLink } from 'vue-router'
     <div class="about-body">
       <div class="why">
         <h2>Why The Chatterbox?</h2>
-        <p>The chatterbox is a great way to connect with people. You can say about anything, and you can meet about anyone! In The Chatterbox, we aim to connect us humans, because as technology progresses, so does alone time. We make it easy here at The Chatterbox for everyone to talk! </p>
+        <p>The Chatterbox is a great way to connect with people. You can say about anything, and you can meet about anyone! In The Chatterbox, we aim to connect us humans, because as technology progresses, so does alone time. We make it easy here at The Chatterbox for everyone to talk! </p>
       </div>
 
       <div class="story">
@@ -26,8 +26,9 @@ import { RouterLink } from 'vue-router'
 
       <div class="about-thechatterbox">
         <h2>About The Chatterbox</h2>
-        <p>The Chatterbox Social Media Organization was founded June 13, 2022. The first release was on July 4, 2022. The Chatterbox is owned and managed by Chibs Incorporated with Shedeur Bhatkal as the CEO of The Chatterbox. Currently, there is 1 developer for The Chatterbox and 4 admins on The Chatterbox.</p>
+        <p>The Chatterbox Social Media was founded June 13, 2022. The first release was on July 4, 2022. The Chatterbox is owned and managed by Chibs Incorporated with Shedeur Bhatkal as the CEO of The Chatterbox. Currently, there is 1 developer for The Chatterbox and 4 admins on The Chatterbox.</p>
         <p>The Chatterbox Vue started development on July 23, 2023 and was first released on July 29, 2023. Just like the original The Chatterbox, it is owned and managed by Chibs Incorporated with Shedeur Bhatkal as CEO. It also has only 1 developer.</p>
+        <p>There is no legal separation between The Chatterbox Social Media, Chibs, and Shedeur Bhatkal.</p>
       </div>
 
       <div class="versus">

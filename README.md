@@ -10,17 +10,32 @@ The Chatterbox is a great way to connect with people. You can say about anything
 
 We started when Shedeur B, our founder, just learned how to do back-end code. He didn't know what to make, so he just made a Twitter lite. A bit over a year later, after Shedeur learned Vue, he created The Chatterbox Vue to practice his Vue skills.
 
-The Chatterbox Social Media Organization was founded June 13, 2022. The first release was on July 4, 2022. The Chatterbox is owned and managed by Chibs Incorporated with Shedeur Bhatkal as the CEO of The Chatterbox. Currently, there is 1 developer for The Chatterbox and 4 admins on The Chatterbox.
+The Chatterbox Social Media was founded June 13, 2022. The first release was on July 4, 2022. The Chatterbox is owned and managed by Chibs Incorporated with Shedeur Bhatkal as the CEO of The Chatterbox. Currently, there is 1 developer for The Chatterbox and 4 admins on The Chatterbox.
 
 The Chatterbox Vue started development on July 23, 2023 and was first released on July 29, 2023. Just like the original The Chatterbox, it is owned and managed by Chibs Incorporated with Shedeur Bhatkal as CEO. It also has only 1 developer.
 
 # Change log
 
-## v1.3.01
-- Fixed the @'s bug
+## v1.4.0
+- Added comments tab on profiles
+- Added likes tab on profiles
+- Added post quoting
+- Added "Skip navigation" button
+- Minor bug fixes
 
 <details>
-  <summary><h2>v1.3 (current major version)</h2></summary>
+  <summary><h2>v1.4 (current major version)</h2></summary>
+
+  ### v1.4.0 (current version)
+  - Added comments tab on profiles
+  - Added likes tab on profiles
+  - Added post quoting
+  - Added "Skip navigation" button
+  - Minor bug fixes
+</details>
+
+<details>
+  <summary><h2>v1.3</h2></summary>
 
   ### v1.3.01
   - Fixed the @'s bug
@@ -32,7 +47,6 @@ The Chatterbox Vue started development on July 23, 2023 and was first released o
   - Pinned posts to profile
   - Pinned comments to posts
   - Comic sans font toggle
-
 </details>
 
 <details>

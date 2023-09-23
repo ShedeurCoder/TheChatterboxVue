@@ -84,6 +84,9 @@
                 <br>
                 <span>SOFTWARE.</span>
             </code>
+            <h3>Our logo and name</h3>
+            <p>Our logo is copyrighted by @tash.draws on Instagram. The Chatterbox Social Media has permission to use it. The copyright holder has the right to take down anything that uses the logo without their permission.</p>
+            <p>Our name is NOT copyrighted.</p>
         </div>
         <br>
         <div class="data">
@@ -103,6 +106,9 @@
         </div>
         <br>
         <b>ANY AND ALL INCIDENTS WHERE THE TERMS OF SERVICE ABOVE ARE BROKEN MAY RESULT IN YOUR CONTENT ON THE PLATFORM BEING PERMANENTLY DELETED.</b>
+        <br>
+        <br>
+        <b>WE RESERVE THE RIGHT TO CHANGE THESE TERMS OF SERVICE ANYTIME WE WISH. WE WILL NOTIFY YOU IF SUCH EVENT HAPPENS</b>
     </div>
 </template>
 <style scoped>

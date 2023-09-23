@@ -1,7 +1,7 @@
 import { ref, onUnmounted, onMounted } from 'vue'
 import { query, where, onSnapshot, updateDoc, doc, orderBy, getDocs, addDoc } from 'firebase/firestore'
 import { db, dbUsersRef, dbPostsRef, dbCommentsRef, dbNotifsRef } from '../firebase'
-import { useRoute, onBeforeRouteUpdate } from 'vue-router'
+import { useRoute, onBeforeRouteUpdate, onBeforeRouteLeave } from 'vue-router'
 
 export default function useProfile() {
     const profileData = ref(null)
@@ -10,7 +10,8 @@ export default function useProfile() {
     const unsubscribeFromProfilePosts = ref(() => {})
     const profilePosts = ref([])
     const route = useRoute()
-    const username = route.params.username
+    let username = route.params.username
+    let path = route.path
 
     async function getUserProfile(username) {
         try {
@@ -32,7 +33,14 @@ export default function useProfile() {
 
     async function getUserPosts(username) {
         try {
-            const queryData = query(dbPostsRef, where('username', '==', username), orderBy('createdAt'))
+            let queryData
+            if (path.includes('/likes')) {
+                queryData = query(dbPostsRef, where('likes', 'array-contains', username), orderBy('createdAt'))
+            } else if (path.includes('/comments')) {
+                queryData = query(dbCommentsRef, where('username', '==', username), orderBy('createdAt'))
+            } else {
+                queryData = query(dbPostsRef, where('username', '==', username), orderBy('createdAt'))
+            }
             const unsubscribeFromPosts = onSnapshot(queryData, (docs) => {
                 profilePosts.value = []
                 docs.forEach((doc) => {
@@ -166,11 +174,24 @@ export default function useProfile() {
     })
 
     onBeforeRouteUpdate((to) => {
-        const username = to.params.username
+        username = to.params.username
         unsubscribeFromProfile.value()
         unsubscribeFromProfilePosts.value()
         getUserPosts(username)
         getUserProfile(username)
+    })
+
+    onBeforeRouteLeave((to) => {
+        if (to.params.username) {
+            if (to.params.username !== username) {
+                username = to.params.username
+                unsubscribeFromProfile.value()
+                getUserProfile(username)
+            }
+            path = to.path
+            unsubscribeFromProfilePosts.value()
+            getUserPosts(to.params.username)
+        }
     })
 
     return {

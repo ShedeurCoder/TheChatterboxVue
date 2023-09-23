@@ -23,7 +23,7 @@ const postFormData = ref('')
       </div>
     </div>
     <div class="legal">
-      Copyright Chibs Inc. 2023
+      Copyright Chibs 2023
       <RouterLink to="/about">About The Chatterbox</RouterLink> <br>
       <RouterLink to="/tos">Terms of Service</RouterLink>
       <RouterLink to="/privacy">Privacy Policy</RouterLink>
@@ -111,7 +111,7 @@ h1 {
 }
 .search-results {
   display: none;
-  overflow: scroll;
+  overflow-y: scroll;
   max-height: 80dvh;
 }
 .search-user:focus-within .search-results {

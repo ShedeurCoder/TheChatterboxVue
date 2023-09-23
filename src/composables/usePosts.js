@@ -94,6 +94,7 @@ export default function usePosts() {
 
     async function deletePost(id) {
         try {   
+            // unsave
             const queryUsers = query(dbUsersRef, where('saves', 'array-contains', id))
             const users = await getDocs(queryUsers)
             users.docs.forEach(async document => {
@@ -102,12 +103,26 @@ export default function usePosts() {
                 })
             })
 
+            // delete comments
             const queryData = query(dbCommentsRef, where('postId', '==', id))
             const comments = await getDocs(queryData)
             comments.forEach(async (document) => {
                 const comment = doc(dbCommentsRef, document.id)
                 await deleteDoc(comment)
             })
+
+            // set quotes to "post deleted"
+            const quotePostsQuery = query(dbPostsRef, where('quoted', '==', id))
+            const quotePosts = await getDocs(quotePostsQuery)
+            quotePosts.forEach(async (document) => {
+                await updateDoc(doc(dbPostsRef, document.id), {
+                    quotedMessage: 'Post was deleted',
+                    quotedUsername: '',
+                    quotedPfp: 'defaultProfile_u6mqts',
+                    quoted: 'undefined'
+                })
+            })
+
             const post = doc(dbPostsRef, id)
             await deleteDoc(post)
         } catch(e) {
@@ -150,6 +165,65 @@ export default function usePosts() {
         }
     }
 
+    async function likeComment(comment, username) {
+        try {
+            await updateDoc(doc(db, "comments", comment.id), {
+                likes: [...comment.likes, username]
+            });
+            if (comment.username !== username) {
+                await createNotif(comment.username, username, `/post/${postId}?c=${comment.id}`, `${username} liked your comment!`)
+            }
+        } catch(e) {
+            console.error(e)
+        }
+    }
+
+    async function unlikeComment(comment, username) {
+        try {
+            await updateDoc(doc(db, "comments", comment.id), {
+                likes: comment.likes.filter((ar)=> ar != username)
+            });
+        } catch(e) {
+            console.error(e)
+        }
+    }
+
+    async function quote(quoted, message, user) {
+        try {
+            const post = {
+                username: user.username,
+                verified: user.verified ?? false,
+                createdAt: new Date(),
+                message,
+                likes: [],
+                comments: 0,
+                pfp: user.pfp ?? 'defaultProfile_u6mqts',
+                pinned: null,
+                
+                quoted: quoted.id,
+                quotedUsername: quoted.username,
+                quotedPfp: quoted.pfp,
+                quotedMessage: quoted.message
+            }
+            const finalPost = await addDoc(dbPostsRef, post)
+            const matches = message.match(atPattern)
+
+            if (quoted.username !== user.username) {
+                await createNotif(quoted.username, user.username, `/post/${finalPost.id}`, `@${user.username} quoted your post!`)
+            }
+
+            if (matches) {
+                for (var i = 0; i < matches.length; i++) {
+                    if (matches[i].replace('@', '') !== user.username && checkUserExists(matches[i].replace('@', ''))) {
+                        await createNotif(matches[i].replace('@', ''), user.username, `/post/${finalPost.id}`, `@${user.username} mentioned you in their post!`)
+                    }
+                }
+            }
+        } catch(e) {
+            console.error(e)
+        }
+    }
+
     return {
         makePost,
         postMessage,
@@ -159,6 +233,9 @@ export default function usePosts() {
         unsave,
         save,
         getSaves,
-        savedPosts
+        savedPosts,
+        likeComment,
+        unlikeComment,
+        quote
     }
 }

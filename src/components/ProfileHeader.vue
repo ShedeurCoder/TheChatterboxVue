@@ -8,7 +8,8 @@ const { follow, unfollow, editProfile, editMessage, editPfp } = useProfile()
 const { userData } = useAuth()
 const { turnToParse } = useRandom()
 const props = defineProps({
-    profileData: Object
+    profileData: Object,
+    path: String
 })
 
 const formData = ref({
@@ -19,7 +20,7 @@ const formData = ref({
 
 watch(() => props.profileData?.bio, (newVal, oldVal) => {
     setTimeout(turnToParse, 500)
-}, {immediate:true, deep: true});
+}, {immediate:true, deep: true})
 
 const widget = window.cloudinary.createUploadWidget(
   {cloud_name: 'dmftho0cx', upload_preset: 'chatterbox-vue', sources: ['local', 'url']},
@@ -59,6 +60,17 @@ function openUploadWidget() {
         <button @click='follow(profileData, userData)' v-if="userData && profileData && userData?.username !== profileData?.username && !profileData?.followers.includes(userData?.username)" class="follow-button">Follow</button>
         <button @click="unfollow(profileData, userData)" v-else-if="userData && profileData && userData?.username !== profileData?.username && profileData?.followers.includes(userData?.username)" class="unfollow-button">Unfollow</button>
         <button onclick="document.getElementById('edit-profile-modal').showModal()" v-else-if="userData && userData?.username === profileData?.username" class="edit-profile">Edit profile</button>
+
+        <nav>
+            <RouterLink :to="`/@${profileData?.username}`" 
+            :class="!path.includes('comments') && !path.includes('likes') ? 'active' : ''">Posts</RouterLink>
+
+            <RouterLink :to="`/@${profileData?.username}/comments`"
+            :class="path.includes('comments') ? 'active' : ''">Comments</RouterLink>
+
+            <RouterLink :to="`/@${profileData?.username}/likes`"
+            :class="path.includes('likes') ? 'active' : ''">Likes</RouterLink>
+        </nav>
     </div>
 
     <dialog id="followers-modal">
@@ -122,6 +134,33 @@ function openUploadWidget() {
     </dialog>
 </template>
 <style scoped>
+    nav {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        max-width: 80ch;
+        margin: 0 auto;
+        margin-top: 0.7em;
+    }
+    nav a {
+        display: block;
+        color: white;
+        font-size: 1.5rem;
+        position: relative;
+    }
+    nav a:hover {
+        color: white;
+        text-decoration: none;
+    }
+    .active::after {
+        content: '';
+        height: 3px;
+        width: 100%;
+        background-color: white;
+        display: block;
+        position: absolute;
+        bottom: -15px;
+        left: 0;
+    }
     .user-container h2 {
         font-size: 1.3rem;
     }
@@ -195,9 +234,6 @@ function openUploadWidget() {
     }
     .followers, .following {
         cursor: pointer;
-    }
-    .display-none {
-        display: none;
     }
     .pfp {
         height: 150px;

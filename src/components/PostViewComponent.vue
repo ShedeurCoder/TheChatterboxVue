@@ -1,12 +1,15 @@
 <script setup>
 import { RouterLink } from 'vue-router'
-import { watch } from 'vue'
+import { watch, ref } from 'vue'
 import usePosts from '@/composables/usePosts'
 import useAuth from '@/composables/useAuth'
 import useRandom from '@/composables/useRandom'
 const { styleDate, turnToParse } = useRandom()
-const { likePost, unlike, save, unsave } = usePosts()
+const { likePost, unlike, save, unsave, quote } = usePosts()
 const { pinPost, unpinPost } = useAuth()
+
+const quoteFormData = ref('')
+
 const props = defineProps({
     postData: Object,
     userData: Object
@@ -36,6 +39,13 @@ if (props.postData.username !== undefined) {
         <div class="post-body">
             <p class="post-message" id="post-message" data-onparse="createAt()">{{ postData?.message }}</p>
         </div>
+        <RouterLink class="quote" v-if="postData?.quoted" :to="`/post/${postData?.quoted}`">
+            <div class="quote-header">
+                <img class="pfp quote-pfp" :src="`https://res.cloudinary.com/dmftho0cx/image/upload/${postData?.quotedPfp || 'defaultProfile_u6mqts'}`">
+                <h3>@{{ postData?.quotedUsername }}</h3>
+            </div>
+            <p>{{ postData?.quotedMessage }}</p>
+        </RouterLink>
         <div class="post-footer">
             <button v-if="userData && userData?.username === postData?.username && postData?.id === userData.pinned" 
             class="pin pinned" @click='unpinPost(userData)'>
@@ -55,8 +65,8 @@ if (props.postData.username !== undefined) {
                 <i class="fas fa-bookmark"></i>
             </button>
 
-            <button class="bookmark" v-else>
-                <i class="fas fa-bookmark"></i>
+            <button class="rt" v-if="userData" onclick="document.getElementById('rt-modal').showModal()">
+                <i class="fas fa-retweet"></i>
             </button>
 
             <span class="comments"><i class="fas fa-comment-alt"></i> {{ postData?.comments }}</span>
@@ -83,6 +93,19 @@ if (props.postData.username !== undefined) {
             </span>
         </div>
     </div>
+    <dialog id="rt-modal">
+        <div class="modal-header">
+            <h2>Quote this post</h2>
+            <button class='close-modal' onclick="document.getElementById('rt-modal').close()">&times;</button>
+        </div>
+        <form class="sign-in-form" onsubmit="document.getElementById('rt-modal').close()" @submit.prevent="quote(postData, quoteFormData, userData); postFormData = ''">
+            <div class="form-group">
+                <label for="message">Message:</label>
+                <textarea id="message" v-model="quoteFormData" placeholder="What's up?" required rows="7" maxlength="1000"></textarea>
+            </div>
+            <button type='submit' class='login-signup'>Quote post</button>
+        </form>
+    </dialog>
     <dialog id="likes-modal">
         <div class="modal-header">
             <h2>Likes</h2>
@@ -104,9 +127,16 @@ if (props.postData.username !== undefined) {
         float: right;
         margin-left: 0.5em;
     }
+    .rt {
+        float: right;
+        margin-left: 0.5em;
+    }
     .bookmark {
         float: right;
-        margin-left: 0.75em;
+        margin-left: 0.5em;
+    }
+    .rt:hover {
+        color: rgb(5, 196, 5);
     }
     .comments {
         float: right;
@@ -206,5 +236,29 @@ if (props.postData.username !== undefined) {
     }
     .pin:hover {
         color: white;
+    }
+    .quote-pfp {
+        width: 60px;
+        height: 60px;
+    }
+    .quote {
+        display: block;
+        border: 3px solid black;
+        padding: 1.5em;
+        border-radius: 20px;
+        color: white;
+        text-decoration: none;
+    }
+    .quote p {
+        font-size: 1.4rem;
+        margin-inline: 0.2em;
+    }
+    .quote h3 {
+        display: inline;
+        font-size: 1.5rem;
+    }
+    .quote-header {
+        display: flex;
+        align-items: center;
     }
 </style>

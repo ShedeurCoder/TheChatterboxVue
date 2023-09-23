@@ -3,13 +3,18 @@ import useAuth from '@/composables/useAuth'
 import usePostPage from '@/composables/usePostPage'
 import useRandom from '@/composables/useRandom'
 import { RouterLink } from 'vue-router'
-const { styleDate } = useRandom()
+import { onMounted } from 'vue'
+const { styleDate, onParse } = useRandom()
 const { deleteReply } = usePostPage()
 const { userData } = useAuth()
 const props = defineProps({
     reply: Object,
     comment: Object
 })
+
+onMounted(() => [
+    onParse()
+])
 </script>
 <template>
     <div class='comment-wrapper'>

@@ -47,7 +47,7 @@ const ticketForm = ref({
                 </div>
                 <div class="form-group" v-if="ticketForm.type !== 'Verification request'">
                     <label for="details">Details:</label>
-                    <textarea id="details" rows="3" placeholder="johnsmith@example.com" v-model="ticketForm.details" required></textarea>
+                    <textarea id="details" rows="3" v-model="ticketForm.details" required></textarea>
                 </div>
                 <button type="submit">Submit</button>
                 <div class="display-none" v-if="ticketForm.type === 'Verification request' && ticketForm.details !== ''">

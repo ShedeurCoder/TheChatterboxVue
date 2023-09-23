@@ -2,16 +2,20 @@
 import useAuth from '@/composables/useAuth'
 import usePostPage from '@/composables/usePostPage'
 import useRandom from '@/composables/useRandom'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import Reply from '@/components/Reply.vue'
 const { likeComment, unlikeComment, deleteComment, makeReply, pin, unpin } = usePostPage()
-const { styleDate } = useRandom()
+const { styleDate, onParse } = useRandom()
 const { userData } = useAuth()
 const props = defineProps({
     post: Object,
     postData: Object,
     highlighted: Boolean,
     pinned: Boolean
+})
+
+onMounted(() => {
+    onParse()
 })
 
 const replyFormInput = ref(null)

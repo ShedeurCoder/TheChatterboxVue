@@ -11,7 +11,7 @@ const postFormData = ref('')
 
 <template>
   <AppHeader/>
-  <main>
+  <main id="main">
     <RouterView />
     <button v-if="userData" class="new-post" onclick='document.getElementById("postModal").showModal()'><i class='fas fa-plus-circle'></i></button>
   </main>

@@ -33,6 +33,16 @@ const router = createRouter({
       component: Profile
     },
     {
+      path: '/@:username/comments',
+      name: 'comments',
+      component: Profile
+    },
+    {
+      path: '/@:username/likes',
+      name: 'likes',
+      component: Profile
+    },
+    {
       path: '/post/:post',
       name: 'Post on TCBV',
       component: Post
@@ -72,7 +82,13 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.params?.username) {
-    document.title = `@${to.params.username} on TCBV`
+    if (to.name === 'likes') {
+      document.title = `@${to.params.username}'s likes on TCBV`
+    } else if (to.name === 'comments') {
+      document.title = `@${to.params.username}'s comments on TCBV`
+    } else {
+      document.title = `@${to.params.username} on TCBV`
+    }
     next()
   } else {
     document.title = to.name

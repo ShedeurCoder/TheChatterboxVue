@@ -29,6 +29,13 @@ const props = defineProps({
                 <p>{{ post.message }}</p>
             </div>
         </RouterLink>
+        <RouterLink class="quote" v-if="post?.quoted" :to="`/post/${post?.quoted}`">
+            <div class="quote-header">
+                <img class="pfp quote-pfp" :src="`https://res.cloudinary.com/dmftho0cx/image/upload/${post?.quotedPfp || 'defaultProfile_u6mqts'}`">
+                <h3>@{{ post?.quotedUsername }}</h3>
+            </div>
+            <p>{{ post?.quotedMessage }}</p>
+        </RouterLink>
         <div class="post-footer">
             <button @click="deletePost(post.id)" v-if="userData?.username === post.username || userData?.admin" class="delete"><i class="fas fa-trash"></i></button>
 
@@ -116,5 +123,29 @@ const props = defineProps({
     }
     .fa-thumbtack {
         margin-right: 0.3em;
+    }
+    .quote-pfp {
+        width: 50px;
+        height: 50px;
+    }
+    .quote {
+        display: block;
+        border: 3px solid black;
+        padding: 1em;
+        border-radius: 20px;
+        color: white;
+        text-decoration: none;
+    }
+    .quote p {
+        font-size: 1.3rem;
+        margin-inline: 0.1em;
+    }
+    .quote h3 {
+        display: inline;
+        font-size: 1.4rem;
+    }
+    .quote-header {
+        display: flex;
+        align-items: center;
     }
 </style>
