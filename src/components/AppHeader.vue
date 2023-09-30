@@ -1,6 +1,6 @@
 <script setup>
 import { RouterLink } from 'vue-router'
-import useAuth from "@/composables/useAuth";
+import useAuth from "@/composables/useAuth"
 import { ref } from "vue";
 import useRandom from '@/composables/useRandom'
 const { styleDate } = useRandom()
@@ -19,16 +19,33 @@ const formData = ref({
 
             <RouterLink to="/" class="nav-link"><i class="fas fa-home"></i></RouterLink>
             
-            <button onclick='document.getElementById("notifsModal").showModal()' class="nav-link logout notifs">
+            <button onclick='document.getElementById("notifsModal").showModal()' 
+            v-if='userData' class="nav-link logout notifs">
                 <i class='fas fa-bell'></i>
                 <span class="notif-length" v-if="unreadNotifs.length > 0">{{ unreadNotifs.length }}</span>
             </button>
 
-            <RouterLink :to='`/@${userData?.username}`' class="nav-link"><i class='fas fa-user'></i></RouterLink>
-            
-            <RouterLink to='/saves' class="nav-link"><i class='fas fa-bookmark'></i></RouterLink>
+            <RouterLink to="/explore" class="nav-link"><i class='fas fa-compass'></i></RouterLink>
 
-            <RouterLink to="/help" class="nav-link"><i class='fas fa-question-circle'></i></RouterLink>
+            <RouterLink :to='`/@${userData?.username}`' class="nav-link" v-if='userData' >
+                <i class='fas fa-user'></i>
+            </RouterLink>
+            
+            <RouterLink to='/saves' class="nav-link" v-if='userData'>
+                <i class='fas fa-bookmark'></i>
+            </RouterLink>
+
+            <RouterLink to="/help" class="nav-link" v-if='userData'>
+                <i class='fas fa-question-circle'></i>
+            </RouterLink>
+
+            <RouterLink to="/about" class="nav-link" v-else>
+                <i class="fas fa-info-circle"></i>
+            </RouterLink>
+
+            <a href="https://twitter.com/chatterbox_off" class="nav-link" v-if='!userData' target="_blank">
+                <i class="fab fa-twitter"></i>
+            </a>
 
             <button class='login' 
             onclick='document.getElementById("signInModal").showModal()' v-if="userData == null">Login</button>

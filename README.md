@@ -17,16 +17,27 @@ The Chatterbox Vue started development on July 23, 2023 and was first released o
 # Change log
 
 ## v1.4.0
-- Added comments tab on profiles
-- Added likes tab on profiles
-- Added post quoting
-- Added "Skip navigation" button
+- Added profile color customization
+- Added hashtags
+- Added explore page
+- Added search page
 - Minor bug fixes
 
 <details>
-  <summary><h2>v1.4 (current major version)</h2></summary>
+  <summary><h2>v1.5 (current major version)</h2></summary>
 
-  ### v1.4.0 (current version)
+  ### v1.5.0 (current version)
+  - Added profile color customization
+  - Added hashtags
+  - Added explore page
+  - Added search page
+  - Minor bug fixes
+</details>
+
+<details>
+  <summary><h2>v1.4</h2></summary>
+
+  ### v1.4.0
   - Added comments tab on profiles
   - Added likes tab on profiles
   - Added post quoting

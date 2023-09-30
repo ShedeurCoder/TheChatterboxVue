@@ -3,10 +3,12 @@ import PostComponent from '@/components/PostComponent.vue'
 import useHomePosts from '@/composables/useHomePosts'
 import useAuth from '@/composables/useAuth'
 import usePosts from '@/composables/usePosts'
+import useSearch from '@/composables/useSearch'
 import { RouterLink } from 'vue-router'
 import { ref } from 'vue'
 const { userData } = useAuth()
-const { posts, getPosts, queryUser, searchResult, removePosts } = useHomePosts()
+const { posts, getPosts, removePosts } = useHomePosts()
+const { queryUser, usersResult } = useSearch()
 const searchData = ref('')
 const { makePost } = usePosts()
 const postFormData = ref('')
@@ -14,9 +16,10 @@ const postFormData = ref('')
 <template>
   <div class="right-bar">
     <div class="search-user">
-      <input type="search" v-model='searchData' @keyup="queryUser(searchData)" class="search-input" placeholder="🔍 Search">
+      <input type="search" v-model='searchData' @keyup="event => queryUser(searchData.toLowerCase(), event)" 
+      class="search-input" placeholder="🔍 Search">
       <div class="search-results">
-        <RouterLink :to="`/@${result.username}`" class="search-result" v-for="(result) in searchResult" :key="result.username">
+        <RouterLink :to="`/@${result.username}`" class="search-result" v-for="(result) in usersResult" :key="result.username">
           <img class="pfp" :src="`https://res.cloudinary.com/dmftho0cx/image/upload/${result?.pfp || 'defaultProfile_u6mqts'}`">
           <h2>@{{ result.username }}</h2>
         </RouterLink>
@@ -49,7 +52,7 @@ const postFormData = ref('')
     <h2>Follow people to see posts. Maybe follow <RouterLink to="/@shad" class="nav-link">@shad</RouterLink> or <RouterLink to="/@thechatterbox" class="nav-link">@thechatterbox</RouterLink>.</h2>
   </div>
   <div class="no-user" v-else-if="!userData">
-    <h2>Sign in to see posts from people you're following</h2>
+    <h2>Sign in to see posts from people you're following or go to <RouterLink to="/explore">The Explore Page</RouterLink></h2>
   </div>
 </template>
 

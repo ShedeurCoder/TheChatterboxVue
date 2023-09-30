@@ -82,13 +82,15 @@ export default function useProfile() {
         }
     }
 
-    async function editProfile(displayName, bio, url, id) {
+    async function editProfile(inputs, id) {
         try {
             editMessage.value = ''
             await updateDoc(doc(db, "users", id), {
-                bio: bio,
-                displayName: displayName,
-                url: url
+                bio: inputs.bio,
+                displayName: inputs.displayName,
+                url: inputs.url,
+                color: inputs.color,
+                bg: inputs.bg
             });
             editMessage.value = 'Updated!'
         } catch(e) {

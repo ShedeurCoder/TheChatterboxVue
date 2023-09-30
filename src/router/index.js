@@ -13,6 +13,16 @@ const router = createRouter({
       component: Home
     },
     {
+      path: '/explore',
+      name: 'Explore - TCBV',
+      component: () => import('../views/Explore.vue')
+    },
+    {
+      path: '/search',
+      name: 'Search - TCBV',
+      component: () => import('../views/SearchResults.vue')
+    },
+    {
       path: '/about',
       name: 'About - TCBV',
       component: About

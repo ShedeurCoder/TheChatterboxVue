@@ -6,16 +6,17 @@ const { likeComment, unlikeComment } = usePosts()
 const { styleDate } = useRandom()
 const { userData } = useAuth()
 const props = defineProps({
-    post: Object
+    post: Object,
+    profile: Object
 })
 </script>
 <template>
-    <div class='post-wrapper'>
+    <div class='post-wrapper' :style="profile && profile?.bg ? `background-color: ${profile?.bg}; color: ${profile?.color}` : ''">
         <div class="post-header">
             <small>{{ styleDate(post.createdAt) }}</small>
             <RouterLink :to="`/@${post.username}`" style='text-decoration: none;' class="post-user-link">
                 <img class="pfp" :src="`https://res.cloudinary.com/dmftho0cx/image/upload/${post?.pfp || 'defaultProfile_u6mqts'}`">
-                <h2>
+                <h2 :style="profile && profile?.color ? `color: ${profile?.color}` : ''">
                     @{{ post.username }}
                     <i v-if='post.verified' class='fas fa-check-circle'></i>
                 </h2>
@@ -23,7 +24,7 @@ const props = defineProps({
         </div>
         <div class="post-body">
             <RouterLink :to="`/post/${post.postId}?c=${post.id}`" class="post-body-link">
-                <p>{{ post.message }}</p>
+                <p :style="profile && profile?.color ? `color: ${profile?.color}` : ''">{{ post.message }}</p>
             </RouterLink>
         </div>
         <div class="post-footer">

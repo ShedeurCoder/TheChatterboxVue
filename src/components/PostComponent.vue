@@ -8,17 +8,18 @@ const { styleDate } = useRandom()
 const { userData } = useAuth()
 const props = defineProps({
     post: Object,
-    pinned: Boolean
+    pinned: Boolean,
+    profile: Object
 })
 </script>
 <template>
-    <div class='post-wrapper'>
+    <div class='post-wrapper' :style="profile && profile?.bg ? `background-color: ${profile?.bg}; color: ${profile?.color}` : ''">
         <h1 class="pinned" v-if="pinned"><i class="fas fa-thumbtack"></i> Pinned post</h1>
         <div class="post-header">
             <small>{{ styleDate(post.createdAt) }}</small>
             <RouterLink :to="`/@${post.username}`" style='text-decoration: none;' class="post-user-link">
                 <img class="pfp" :src="`https://res.cloudinary.com/dmftho0cx/image/upload/${post?.pfp || 'defaultProfile_u6mqts'}`">
-                <h2>
+                <h2 :style="profile && profile?.color ? `color: ${profile?.color}` : ''">
                     @{{ post.username }}
                     <i v-if='post.verified' class='fas fa-check-circle'></i>
                 </h2>
@@ -26,15 +27,15 @@ const props = defineProps({
         </div>
         <RouterLink :to="`/post/${post.id}`" class="post-body-link">
             <div class="post-body">
-                <p>{{ post.message }}</p>
+                <p :style="profile && profile?.color ? `color: ${profile?.color}` : ''">{{ post.message }}</p>
             </div>
         </RouterLink>
         <RouterLink class="quote" v-if="post?.quoted" :to="`/post/${post?.quoted}`">
             <div class="quote-header">
                 <img class="pfp quote-pfp" :src="`https://res.cloudinary.com/dmftho0cx/image/upload/${post?.quotedPfp || 'defaultProfile_u6mqts'}`">
-                <h3>@{{ post?.quotedUsername }}</h3>
+                <h3 :style="profile && profile?.color ? `color: ${profile?.color}` : ''">@{{ post?.quotedUsername }}</h3>
             </div>
-            <p>{{ post?.quotedMessage }}</p>
+            <p :style="profile && profile?.color ? `color: ${profile?.color}` : ''">{{ post?.quotedMessage }}</p>
         </RouterLink>
         <div class="post-footer">
             <button @click="deletePost(post.id)" v-if="userData?.username === post.username || userData?.admin" class="delete"><i class="fas fa-trash"></i></button>

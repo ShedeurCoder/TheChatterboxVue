@@ -15,7 +15,9 @@ const props = defineProps({
 const formData = ref({
     displayName: null,
     bio: null,
-    url: null
+    url: null,
+    bg: null,
+    color: null
 })
 
 watch(() => props.profileData?.bio, (newVal, oldVal) => {
@@ -36,7 +38,7 @@ function openUploadWidget() {
 }
 </script>
 <template>
-    <div class="profile-header">
+    <div class="profile-header" :style="profileData?.bg ? `background-color: ${profileData?.bg}; color: ${profileData?.color}` : ''">
         <button v-if="userData && userData?.username === profileData?.username" @click="openUploadWidget()" class="edit-pfp">
             <img class="pfp" :src="`https://res.cloudinary.com/dmftho0cx/image/upload/${profileData?.pfp || 'defaultProfile_u6mqts'}`">
             <i class='fas fa-edit'></i>
@@ -111,12 +113,15 @@ function openUploadWidget() {
             {{ formData.displayName = formData.displayName ?? profileData?.displayName }}
             {{ formData.bio = formData.bio ?? profileData?.bio }}
             {{ formData.url = formData.url ?? profileData?.url }}
+            {{ formData.bg = formData.bg ?? (profileData.bg ?? '#303030') }}
+            {{ formData.color = formData.color ?? (profileData.color ?? '#FFFFFF') }}
         </div>
         <div class="modal-header">
             <h2>Edit profile</h2>
             <button class='close-modal' onclick="document.getElementById('edit-profile-modal').close()">&times;</button>
         </div>
-        <form class="sign-in-form" @submit.prevent="editProfile(formData.displayName, formData.bio, formData.url, userData.id)">
+        <button @click="formData.displayName = profileData.username; formData.bio = ''; formData.url = ''; formData.bg = '#303030'; formData.color = '#ffffff'">Restore defaults</button>
+        <form class="sign-in-form" onsubmit="document.getElementById('edit-profile-modal').close()" @submit.prevent="editProfile(formData, userData.id)">
                 <div class="form-group">
                     <label for="displayName">Display name</label>
                     <input type="text" id="displayName" v-model="formData.displayName" placeholder='Display name' required>
@@ -129,8 +134,27 @@ function openUploadWidget() {
                     <label for="url">URL</label>
                     <input name="url" type='url' id="url" v-model="formData.url" placeholder='Link'>
                 </div>
-                <button type='submit' class="submit">Submit</button>
+                <div class="form-group">
+                    <label for="bg">Profile Background</label>
+                    <input type="color" name="bg" id="bg" v-model="formData.bg">
+                </div>
+                <div class="form-group">
+                    <label for="color">Font Color</label>
+                    <input type="color" name="color" id="color" v-model="formData.color">
+                </div>
+                <button type='submit' class="submit">Save</button>
             </form>
+            <h2>Preview</h2>
+            <div class="preview profile-header" :style="`color: ${formData.color}; background-color: ${formData.bg}`">
+                <img class="pfp" :src="`https://res.cloudinary.com/dmftho0cx/image/upload/${profileData?.pfp || 'defaultProfile_u6mqts'}`">
+                <h1 class="profile-name">{{ formData.displayName }}</h1>
+                <h2 class="profile-username">
+                    @{{ profileData?.username }}
+                    <i v-if='profileData?.verified' class='fas fa-check-circle'></i>
+                </h2>
+                <p class="profile-bio" id="profile-bio">{{ formData?.bio }}</p>
+                <a :href='formData?.url' target='_blank' v-if="formData?.url"><i class="fas fa-link"></i> {{ profileData?.url }}</a>
+            </div>
     </dialog>
 </template>
 <style scoped>
@@ -240,6 +264,10 @@ function openUploadWidget() {
         width: 150px;
         border-radius: 50%;
         object-fit: cover;
+    }
+    .preview .pfp {
+        width: 100px;
+        height: 100px;
     }
     .edit-pfp {
         border-radius: 50%;

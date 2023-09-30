@@ -4,6 +4,7 @@ import { dbPostsRef, db, dbCommentsRef, dbNotifsRef, dbUsersRef } from '../fireb
 
 export default function usePosts() {
     const atPattern = /(@)+[A-Za-z0-9_]{1,}/gim
+    const hashtagPattern = /(#)+[A-Za-z0-9_]{1,}/gim
     const postMessage = ref('')
     const savedPosts = ref([])
 
@@ -40,6 +41,16 @@ export default function usePosts() {
     async function makePost(message, username, pfp, verified) {
         try {
             if (username) {
+                let hashtags = []
+                const hashtagMatches = message.match(hashtagPattern)
+                if (hashtagMatches) {
+                    hashtagMatches.forEach((tag) => {
+                        if (!hashtags.includes(tag.replace('#', ''))) {
+                            hashtags.push(tag.replace('#', ''))
+                        }
+                    })
+                }
+
                 const post = {
                     username,
                     verified: verified ?? false,
@@ -48,10 +59,12 @@ export default function usePosts() {
                     likes: [],
                     comments: 0,
                     pfp: pfp ?? 'defaultProfile_u6mqts',
-                    pinned: null
+                    pinned: null,
+                    tags: hashtags
                 }
                 const finalPost = await addDoc(dbPostsRef, post)
                 postMessage.value = 'Sent!'
+
                 const matches = message.match(atPattern)
                 if (matches) {
                     for (var i = 0; i < matches.length; i++) {
@@ -60,6 +73,7 @@ export default function usePosts() {
                         }
                     }
                 }
+
             } else {
                 postMessage.value = 'Sign in to make a post'
             }
