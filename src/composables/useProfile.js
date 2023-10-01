@@ -90,7 +90,8 @@ export default function useProfile() {
                 displayName: inputs.displayName,
                 url: inputs.url,
                 color: inputs.color,
-                bg: inputs.bg
+                bg: inputs.bg,
+                secondaryBg: inputs.secondaryBg
             });
             editMessage.value = 'Updated!'
         } catch(e) {

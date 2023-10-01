@@ -17,11 +17,12 @@ const formData = ref({
     bio: null,
     url: null,
     bg: null,
+    secondaryBg: null,
     color: null
 })
 
-watch(() => props.profileData?.bio, (newVal, oldVal) => {
-    setTimeout(turnToParse, 500)
+watch(() => props.profileData?.bio, () => {
+    setTimeout(turnToParse, 750)
 }, {immediate:true, deep: true})
 
 const widget = window.cloudinary.createUploadWidget(
@@ -65,13 +66,19 @@ function openUploadWidget() {
 
         <nav>
             <RouterLink :to="`/@${profileData?.username}`" 
-            :class="!path.includes('comments') && !path.includes('likes') ? 'active' : ''">Posts</RouterLink>
+            :class="!path.includes('comments') && !path.includes('likes') ? 'active' : ''"
+            :style="profileData?.color ? `color: ${profileData?.color}; --color: ${profileData?.color}`
+            : '--color: #fff'">Posts</RouterLink>
 
             <RouterLink :to="`/@${profileData?.username}/comments`"
-            :class="path.includes('comments') ? 'active' : ''">Comments</RouterLink>
+            :class="path.includes('comments') ? 'active' : ''"
+            :style="profileData?.color ? `color: ${profileData?.color}; --color: ${profileData?.color}`
+            : '--color: #fff'">Comments</RouterLink>
 
             <RouterLink :to="`/@${profileData?.username}/likes`"
-            :class="path.includes('likes') ? 'active' : ''">Likes</RouterLink>
+            :class="path.includes('likes') ? 'active' : ''"
+            :style="profileData?.color ? `color: ${profileData?.color}; --color: ${profileData?.color}`
+            : '--color: #fff'">Likes</RouterLink>
         </nav>
     </div>
 
@@ -115,28 +122,36 @@ function openUploadWidget() {
             {{ formData.url = formData.url ?? profileData?.url }}
             {{ formData.bg = formData.bg ?? (profileData.bg ?? '#303030') }}
             {{ formData.color = formData.color ?? (profileData.color ?? '#FFFFFF') }}
+            {{ formData.secondaryBg = formData.secondaryBg ?? (profileData.secondaryBg ?? '##343A40') }}
         </div>
         <div class="modal-header">
             <h2>Edit profile</h2>
             <button class='close-modal' onclick="document.getElementById('edit-profile-modal').close()">&times;</button>
         </div>
-        <button @click="formData.displayName = profileData.username; formData.bio = ''; formData.url = ''; formData.bg = '#303030'; formData.color = '#ffffff'">Restore defaults</button>
-        <form class="sign-in-form" onsubmit="document.getElementById('edit-profile-modal').close()" @submit.prevent="editProfile(formData, userData.id)">
+        <div class="modal-body">
+            <form class="sign-in-form" onsubmit="document.getElementById('edit-profile-modal').close()" @submit.prevent="editProfile(formData, userData.id)">
                 <div class="form-group">
                     <label for="displayName">Display name</label>
                     <input type="text" id="displayName" v-model="formData.displayName" placeholder='Display name' required>
                 </div>
                 <div class="form-group">
                     <label for="bio">Bio</label>
-                    <textarea name="bio" id="bio" rows="10" v-model="formData.bio" placeholder='bio'></textarea>
+                    <textarea name="bio" id="bio" rows="5" v-model="formData.bio" placeholder='bio'></textarea>
                 </div>
                 <div class="form-group">
                     <label for="url">URL</label>
                     <input name="url" type='url' id="url" v-model="formData.url" placeholder='Link'>
                 </div>
+                <hr>
+                <button @click="formData.bg = '#303030'; formData.color = '#ffffff'; formData.secondaryBg = '#343a40'"
+                type="button" class="restore">Restore default colors</button>
                 <div class="form-group">
                     <label for="bg">Profile Background</label>
                     <input type="color" name="bg" id="bg" v-model="formData.bg">
+                </div>
+                <div class="form-group">
+                    <label for="secondary-bg">Profile Secondary Background</label>
+                    <input type="color" name="secondary-bg" id="secondary-bg" v-model="formData.secondaryBg">
                 </div>
                 <div class="form-group">
                     <label for="color">Font Color</label>
@@ -144,7 +159,6 @@ function openUploadWidget() {
                 </div>
                 <button type='submit' class="submit">Save</button>
             </form>
-            <h2>Preview</h2>
             <div class="preview profile-header" :style="`color: ${formData.color}; background-color: ${formData.bg}`">
                 <img class="pfp" :src="`https://res.cloudinary.com/dmftho0cx/image/upload/${profileData?.pfp || 'defaultProfile_u6mqts'}`">
                 <h1 class="profile-name">{{ formData.displayName }}</h1>
@@ -155,6 +169,7 @@ function openUploadWidget() {
                 <p class="profile-bio" id="profile-bio">{{ formData?.bio }}</p>
                 <a :href='formData?.url' target='_blank' v-if="formData?.url"><i class="fas fa-link"></i> {{ profileData?.url }}</a>
             </div>
+        </div>
     </dialog>
 </template>
 <style scoped>
@@ -179,7 +194,7 @@ function openUploadWidget() {
         content: '';
         height: 3px;
         width: 100%;
-        background-color: white;
+        background-color: var(--color);
         display: block;
         position: absolute;
         bottom: -15px;
@@ -304,5 +319,25 @@ function openUploadWidget() {
     a i {
         text-decoration: none;
         color: white;
+    }
+    #edit-profile-modal:modal {
+        max-width: 80dvw;
+    }
+    .restore {
+        background: #026ee1;
+        border: none;
+        color: white;
+        margin-top: 0.7em;
+        padding: 0.5em;
+    }
+    @media only screen and (min-width: 1000px) {
+        #edit-profile-modal:modal .modal-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+        #edit-profile-modal form {
+            max-height: 70dvh;
+            overflow-y: scroll;
+        }
     }
 </style>

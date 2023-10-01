@@ -3,18 +3,25 @@ export default function useRandom() {
     function turnToParse() {
         const parsedElement = document.querySelector('[data-onparse]')
         if (parsedElement) {
-            const atPattern = /(@)+[A-Za-z0-9_]{1,}/gim
+            const atPattern = /[ \n](@)+[A-Za-z0-9_]{1,}/gim
             const hashtagPattern = /(#)+[A-Za-z0-9_]{1,}/gim
+            const urlPattern = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/gim
 
-            let replacedText = parsedElement.innerText.replace(atPattern, (c) => {
-                return `<a href="/${c.toLowerCase()}" class='at-link'>${c}</a>`
+            parsedElement.innerText = ' ' + parsedElement.innerText
+
+            let replacedText = parsedElement.innerText.replace(urlPattern, (c) => {
+                return `<a href="${c.toLowerCase()}" target="_blank" class="at-link">${c}</a>`
+            })
+
+            replacedText = replacedText.replace(atPattern, (c) => {
+                return ` <a href="/${c.toLowerCase().replace(' ', '')}" class='at-link'>${c.replace(' ', '')}</a>`
             })
 
             replacedText = replacedText.replace(hashtagPattern, (c) => {
                 return `<a href="/search?q=${c.replace('#', '').toLowerCase()}" class='at-link'>${c}</a>`
             })
 
-            parsedElement.innerHTML = replacedText
+            parsedElement.innerHTML = replacedText.replace(' ', '')
         }
     }
 
