@@ -1,6 +1,6 @@
 import { ref, onUnmounted, onMounted } from 'vue'
 import { query, where, onSnapshot, updateDoc, doc, orderBy, getDocs, addDoc } from 'firebase/firestore'
-import { db, dbUsersRef, dbPostsRef, dbCommentsRef, dbNotifsRef } from '../firebase'
+import { db, dbUsersRef, dbPostsRef, dbCommentsRef, dbNotifsRef, dbMessagesRef } from '../firebase'
 import { useRoute, onBeforeRouteUpdate, onBeforeRouteLeave } from 'vue-router'
 
 export default function useProfile() {
@@ -145,6 +145,15 @@ export default function useProfile() {
                 })
                 updateDoc(doc(db, "comments", document.id), {
                     replies: finalReplies
+                })
+            })
+
+            // change messages
+            const queryData4 = query(dbMessagesRef, where('user', '==', username))
+            const messages = await getDocs(queryData4)
+            messages.docs.forEach((document) => {
+                updateDoc(doc(dbMessagesRef, document.id), {
+                    pfp: public_id
                 })
             })
         } catch(e) {

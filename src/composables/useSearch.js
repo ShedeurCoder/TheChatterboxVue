@@ -1,4 +1,4 @@
-import { useRouter, onBeforeRouteUpdate, useRoute } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { onSnapshot, query, where, orderBy, getDocs } from 'firebase/firestore'
 import { dbUsersRef, dbPostsRef } from '../firebase'
 import { ref } from 'vue'

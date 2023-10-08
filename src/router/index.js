@@ -86,6 +86,18 @@ const router = createRouter({
       path: '/:pathName(.*)',
       name: '404!',
       component: () => import('../views/PageNotFound.vue')
+    },
+
+    // CHAT ROUTES
+    {
+      path: '/chat',
+      name: 'The Chatterbox Chat',
+      component: () => import('../views/Chat.vue')
+    },
+    {
+      path: '/chat/:chatId',
+      name: 'Chat on TCBV',
+      component: () => import('../views/ChatPage.vue')
     }
   ]
 })

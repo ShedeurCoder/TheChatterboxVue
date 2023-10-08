@@ -10,6 +10,12 @@ const formData = ref({
     password: '',
     username: ''
 })
+
+const more = ref(false)
+
+function toggleMore() {
+    more.value = !more.value
+}
 </script>
 <template>
     <header>
@@ -24,22 +30,10 @@ const formData = ref({
                 <i class='fas fa-bell'></i>
                 <span class="notif-length" v-if="unreadNotifs.length > 0">{{ unreadNotifs.length }}</span>
             </button>
-
-            <RouterLink to="/explore" class="nav-link"><i class='fas fa-compass'></i></RouterLink>
-
-            <RouterLink :to='`/@${userData?.username}`' class="nav-link" v-if='userData' >
-                <i class='fas fa-user'></i>
-            </RouterLink>
             
-            <RouterLink to='/saves' class="nav-link" v-if='userData'>
-                <i class='fas fa-bookmark'></i>
-            </RouterLink>
-
-            <RouterLink to="/help" class="nav-link" v-if='userData'>
-                <i class='fas fa-question-circle'></i>
-            </RouterLink>
-
-            <RouterLink to="/about" class="nav-link" v-else>
+            <RouterLink to="/explore" class="nav-link"><i class='fas fa-compass'></i></RouterLink>
+            
+            <RouterLink to="/about" class="nav-link" v-if="!userData">
                 <i class="fas fa-info-circle"></i>
             </RouterLink>
 
@@ -47,17 +41,43 @@ const formData = ref({
                 <i class="fab fa-twitter"></i>
             </a>
 
+            <RouterLink :to='`/@${userData?.username}`' class="nav-link" v-if='userData' >
+                <i class='fas fa-user'></i>
+            </RouterLink>
+
+            <RouterLink to="/help" class="nav-link" v-if="userData">
+                <i class="fas fa-question-circle"></i>
+            </RouterLink>
+
             <button class='login' 
             onclick='document.getElementById("signInModal").showModal()' v-if="userData == null">Login</button>
 
-            <button class="nav-link logout" v-else @click="logOut()">
-                <i class="fas fa-sign-out-alt"></i>
+            <button class="nav-link logout" v-else @click="toggleMore()">
+                <i class="fas fa-ellipsis-h"></i>
             </button>
             
             <RouterLink v-if='userData' class="nav-link nav-pfp" :to="`/@${userData.username}`">
                 <img class='pfp' 
                 :src="`https://res.cloudinary.com/dmftho0cx/image/upload/${userData?.pfp || 'defaultProfile_u6mqts'}`">
             </RouterLink>
+
+            <div class="more" v-if="more && userData">
+                <RouterLink to='/saves' class="nav-link" @click="toggleMore()">
+                    <i class='fas fa-bookmark'> Saves</i>
+                </RouterLink>
+                
+                <RouterLink to="/about" class="nav-link" @click="toggleMore()">
+                    <i class='fas fa-info-circle'> About</i>
+                </RouterLink>
+                
+                <button class="nav-link logout" @click="logOut(); toggleMore()">
+                    <i class="fas fa-sign-out-alt"> Logout</i>
+                </button>
+                
+                <RouterLink to="/chat" class="nav-link" @click="toggleMore()">
+                    <i class='fas fa-comment-dots'> Chat (beta)</i>
+                </RouterLink>
+            </div>
         </nav>
 
         <dialog id="notifsModal">
@@ -147,6 +167,26 @@ const formData = ref({
 </template>
 
 <style scoped>
+    .more {
+        position: fixed;
+        background: black;
+        right: 5%;
+        bottom: 10dvh;
+        padding: 1em;
+        z-index: 105;
+    }
+    .more .nav-link {
+        display: block;
+        font-size: 1.3rem;
+        margin: 0.5em;
+    }
+    @media only screen and (min-width: 800px) {
+        .more {
+            left: 8%;
+            bottom: 10%;
+            right: initial;
+        }
+    }
     .login {
         background: rgb(3, 105, 136);
         border: none;

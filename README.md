@@ -16,15 +16,24 @@ The Chatterbox Vue started development on July 23, 2023 and was first released o
 
 # Change log
 
-## v1.5.1
-- Added secondary profile color customization
-- Links now turn into functioning links
+## v1.5.2
+- Improved navigation layout
 - Minor bug fixes
+**Experimental features**
+- Added "The Chatterbox Chat" beta
 
 <details>
   <summary><h2>v1.5 (current major version)</h2></summary>
 
-  ### 1.5.1 (current version)
+  ### v1.5.2 (current version)
+  - Improved navigation layout
+  - Minor bug fixes
+  **Experimental features**
+  - Added "The Chatterbox Chat" beta
+
+  <hr>
+
+  ### v1.5.1
   - Added secondary profile color customization
   - Links now turn into functioning links
   - Minor bug fixes

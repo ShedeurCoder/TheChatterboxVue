@@ -2,11 +2,13 @@
 import useProfile from "@/composables/useProfile";
 import useAuth from '@/composables/useAuth'
 import useRandom from '@/composables/useRandom'
+import useChats from '@/composables/useChats'
 import { ref, watch } from 'vue'
 import { RouterLink } from 'vue-router' 
 const { follow, unfollow, editProfile, editMessage, editPfp } = useProfile()
 const { userData } = useAuth()
 const { turnToParse } = useRandom()
+const { makeChat } = useChats()
 const props = defineProps({
     profileData: Object,
     path: String
@@ -40,6 +42,9 @@ function openUploadWidget() {
 </script>
 <template>
     <div class="profile-header" :style="profileData?.bg ? `background-color: ${profileData?.bg}; color: ${profileData?.color}` : ''">
+        <button class='message' v-if='userData && userData?.username !== profileData?.username' @click="makeChat(userData, profileData?.username)">
+            <i class='fas fa-envelope'></i>
+        </button>
         <button v-if="userData && userData?.username === profileData?.username" @click="openUploadWidget()" class="edit-pfp">
             <img class="pfp" :src="`https://res.cloudinary.com/dmftho0cx/image/upload/${profileData?.pfp || 'defaultProfile_u6mqts'}`">
             <i class='fas fa-edit'></i>
@@ -329,6 +334,20 @@ function openUploadWidget() {
         color: white;
         margin-top: 0.7em;
         padding: 0.5em;
+    }
+    .profile-header {
+        position: relative;
+    }
+    .message {
+        position: absolute;
+        top: 1em;
+        right: 1em;
+        color: white;
+        border: none;
+        background: #1b1b1b;
+        padding: 0.7em;
+        font-size: 1.3rem;
+        border-radius: 50%;
     }
     @media only screen and (min-width: 1000px) {
         #edit-profile-modal:modal .modal-body {

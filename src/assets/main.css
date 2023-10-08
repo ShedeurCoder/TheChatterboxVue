@@ -6,6 +6,10 @@ body {
   font-size: 10px;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 a {
   color: #007bff;
 }
@@ -33,6 +37,7 @@ header nav {
   position: fixed;
   bottom: 0;
   width: 100dvw;
+  z-index: 100;
 }
 
 main {

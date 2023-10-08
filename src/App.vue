@@ -4,16 +4,18 @@ import AppHeader from './components/AppHeader.vue';
 import useAuth from '@/composables/useAuth'
 import usePosts from '@/composables/usePosts'
 import { ref } from "vue";
+import { useRoute } from 'vue-router'
 const { userData } = useAuth()
 const { makePost, postMessage } = usePosts()
 const postFormData = ref('')
+const route = useRoute()
 </script>
 
 <template>
   <AppHeader/>
   <main id="main">
     <RouterView />
-    <button v-if="userData" class="new-post" onclick='document.getElementById("postModal").showModal()'><i class='fas fa-plus-circle'></i></button>
+    <button v-if="userData && !route.path.startsWith('/chat')" class="new-post" onclick='document.getElementById("postModal").showModal()'><i class='fas fa-plus-circle'></i></button>
   </main>
 
   <dialog id="postModal" v-if='userData'>
