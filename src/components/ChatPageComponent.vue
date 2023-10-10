@@ -13,7 +13,7 @@ const messageInput = ref('')
         <div v-if="chatData.users && chatData.users.includes(user.username)">
             <button class="delete" @click="deleteChat(chatData.id)">Delete chat</button>
             <Message :user="user" :message="message" v-for="message in messagesArray" v-if="messagesArray" :key="message.id"/>
-            <form class="message-form" @submit.prevent="newMessage(user, messageInput, chatData.id); messageInput = ''"
+            <form class="message-form" @submit.prevent="newMessage(user, messageInput, chatData.id, chatData.users.filter(u => u !== user.username)[0]); messageInput = ''"
             onsubmit="">
                 <a class="scroll-down" href="#scrollTo"><i class="fas fa-caret-down"></i></a>
                 <input type="text" v-model="messageInput" autocomplete="off" placeholder="Message..." required>

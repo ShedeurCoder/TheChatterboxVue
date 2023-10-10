@@ -1,7 +1,7 @@
 import { ref, onUnmounted, onMounted } from 'vue'
 import { useRoute, onBeforeRouteUpdate } from 'vue-router'
 import { onSnapshot, doc, addDoc, orderBy, query, where, deleteDoc, getDocs } from 'firebase/firestore'
-import { dbChatsRef, dbMessagesRef } from '../firebase'
+import { dbChatsRef, dbMessagesRef, dbMessageNotifsRef } from '../firebase'
 
 export default function useChatPage() {
     const route = useRoute()
@@ -10,6 +10,18 @@ export default function useChatPage() {
     const messagesArray = ref([])
     const unsubscribeFromChat = ref(() => {})
     const unsubscribeFromMessages = ref(() => {})
+
+    async function createNotif(to, chat) {
+        try {
+            const notif = {
+                to,
+                chat
+            }
+            await addDoc(dbMessageNotifsRef, notif)
+        } catch(e) {
+            console.error(e)
+        }
+    }
 
     function getChat(id) {
         try {
@@ -27,15 +39,21 @@ export default function useChatPage() {
         }
     }
 
-    async function newMessage(user, text, chatId) {
-        const message = {
-            user: user.username,
-            createdAt: new Date(),
-            text,
-            chatId,
-            pfp: user.pfp ?? 'defaultProfile_u6mqts'
+    async function newMessage(user, text, chatId, user2) {
+        try {
+            const message = {
+                user: user.username,
+                createdAt: new Date(),
+                text,
+                chatId,
+                pfp: user.pfp ?? 'defaultProfile_u6mqts'
+            }
+            await addDoc(dbMessagesRef, message)
+            console.log(user2)
+            await createNotif(user2, chatId)
+        } catch(e) {
+            console.error(e)
         }
-        await addDoc(dbMessagesRef, message)
     }
 
     async function getMessages(chatId) {

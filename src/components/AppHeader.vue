@@ -4,7 +4,7 @@ import useAuth from "@/composables/useAuth"
 import { ref } from "vue";
 import useRandom from '@/composables/useRandom'
 const { styleDate } = useRandom()
-const { signUp, errorMessage, login, logOut, userData, readNotifs, unreadNotifs, readNotif, deleteNotif } = useAuth()
+const { signUp, errorMessage, login, logOut, userData, readNotifs, unreadNotifs, readNotif, deleteNotif, chatNotifs } = useAuth()
 const formData = ref({
     email: '',
     password: '',
@@ -45,8 +45,9 @@ function toggleMore() {
                 <i class='fas fa-user'></i>
             </RouterLink>
 
-            <RouterLink to="/help" class="nav-link" v-if="userData">
-                <i class="fas fa-question-circle"></i>
+            <RouterLink to="/chat" class="nav-link notifs" v-if="userData">
+                <i class="fas fa-comment-dots"></i>
+                <span class="notif-length chat-notif" v-if="chatNotifs.length > 0">{{ chatNotifs.length }}</span>
             </RouterLink>
 
             <button class='login' 
@@ -65,18 +66,18 @@ function toggleMore() {
                 <RouterLink to='/saves' class="nav-link" @click="toggleMore()">
                     <i class='fas fa-bookmark'> Saves</i>
                 </RouterLink>
+
+                <RouterLink to="/help" class="nav-link" @click="toggleMore()">
+                    <i class='fas fa-question-circle'> Help</i>
+                </RouterLink>
                 
                 <RouterLink to="/about" class="nav-link" @click="toggleMore()">
                     <i class='fas fa-info-circle'> About</i>
                 </RouterLink>
-                
+
                 <button class="nav-link logout" @click="logOut(); toggleMore()">
                     <i class="fas fa-sign-out-alt"> Logout</i>
                 </button>
-                
-                <RouterLink to="/chat" class="nav-link" @click="toggleMore()">
-                    <i class='fas fa-comment-dots'> Chat (beta)</i>
-                </RouterLink>
             </div>
         </nav>
 
@@ -239,6 +240,9 @@ function toggleMore() {
         background: red;
         font-size: 1rem;
         color: white;
+    }
+    .chat-notif {
+        top: -5px;
     }
     #notifsModal h3 {
         text-align: center;

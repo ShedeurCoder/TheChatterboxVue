@@ -23,7 +23,7 @@ const props = defineProps({
             <h3>@{{ message.user }}&nbsp;</h3>
             <img class="pfp" :src="`https://res.cloudinary.com/dmftho0cx/image/upload/${message?.pfp || 'defaultProfile_u6mqts'}`">
         </div>
-        <p>{{ message.text }}</p>
+        <p >{{ message.text }}</p>
         <button class="delete-message" @click='deleteMessage(message.id)'><i class="fas fa-trash"></i></button>
     </div>
 </template>

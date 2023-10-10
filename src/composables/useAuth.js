@@ -1,7 +1,7 @@
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'firebase/auth'
 import { ref } from 'vue'
 import { doc, setDoc, query, where, getDocs, onSnapshot, orderBy, updateDoc, deleteDoc } from 'firebase/firestore'
-import { db, dbUsersRef, dbNotifsRef } from '../firebase'
+import { db, dbUsersRef, dbNotifsRef, dbMessageNotifsRef } from '../firebase'
 
 export default function useAuth() {
     const auth = getAuth()
@@ -10,8 +10,10 @@ export default function useAuth() {
     const unsubscribeFromUser = ref(() => {})
     const readNotifs = ref([])
     const unreadNotifs = ref([])
+    const chatNotifs = ref([])
     const unsubscribeFromReadNotifs = ref(() => {})
     const unsubscribeFromUnreadNotifs = ref(() => {})
+    const unsubscribeFromChatNotifs = ref(() => {})
 
     function getNotifs(username) {
         try {
@@ -44,6 +46,25 @@ export default function useAuth() {
             unsubscribeFromReadNotifs.value = read
         } catch(err) {
             console.error(err)
+        }
+    }
+
+    async function getChatNotifs(username) {
+        try {
+            const queryData = query(dbMessageNotifsRef, where('to', '==', username))
+            const unsubscribe = onSnapshot(queryData, (docs) => {
+                chatNotifs.value = []
+                docs.forEach(async (document) => {
+                    const notif = {
+                        id: document.id,
+                        ...document.data()
+                    }
+                    chatNotifs.value.push(notif)
+                })
+            })
+            unsubscribeFromChatNotifs.value = unsubscribe
+        } catch(e) {
+            console.error(e)
         }
     }
 
@@ -93,6 +114,7 @@ export default function useAuth() {
                     }
                     userData.value = user
                     getNotifs(doc.data().username)
+                    getChatNotifs(doc.data().username)
                 })
             })
             unsubscribeFromUser.value = unsubscribe
@@ -197,6 +219,26 @@ export default function useAuth() {
         }
     }
 
+    async function closeDm(user) {
+        try {
+            await updateDoc(doc(db, 'users', user.id), {
+                dm: false
+            })
+        } catch(e) {
+            console.error(e)
+        }
+    }
+
+    async function openDm(user) {
+        try {
+            await updateDoc(doc(db, 'users', user.id), {
+                dm: true
+            })
+        } catch(e) {
+            console.error(e)
+        }
+    }
+
     onAuthStateChanged(auth, (user) => {
         if (user) {
             findUser(user.email)
@@ -204,6 +246,7 @@ export default function useAuth() {
             unsubscribeFromUser.value()
             unsubscribeFromReadNotifs.value()
             unsubscribeFromUnreadNotifs.value()
+            unsubscribeFromChatNotifs.value()
 
             userData.value = null
             readNotifs.value = []
@@ -213,6 +256,9 @@ export default function useAuth() {
     return {
         signUp, errorMessage, login, logOut, userData, readNotifs, unreadNotifs, readNotif, deleteNotif,
         pinPost,
-        unpinPost
+        unpinPost,
+        chatNotifs,
+        closeDm,
+        openDm
     }
 }

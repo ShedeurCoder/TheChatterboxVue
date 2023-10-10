@@ -2,7 +2,7 @@
 import useChats from '@/composables/useChats'
 import { onMounted, ref } from 'vue'
 import { RouterLink } from 'vue-router'
-const { getChats, chatsList, makeChat } = useChats()
+const { getChats, chatsList, makeChat, getNotifs, notifs } = useChats()
 const props = defineProps({
     user: Object
 })
@@ -10,6 +10,7 @@ const usernameInput = ref('')
 
 onMounted(() => {
   getChats(props.user)
+  getNotifs(props.user.username)
 })
 </script>
 <template>
@@ -25,6 +26,9 @@ onMounted(() => {
     <div class="chats-list">
       <RouterLink v-for="chat in chatsList" class="chat-link" :key="chat.id" :to="`/chat/${chat.id}`">
         <h3>{{ chat.users.filter(u => u !== user.username)[0] }}</h3>
+        <div class="notif" v-if="notifs.filter((n) => n.chat === chat.id).length > 0">
+          {{ notifs.filter((n) => n.chat === chat.id).length }}
+        </div>
       </RouterLink>
     </div>
   </div>
@@ -46,9 +50,22 @@ onMounted(() => {
   text-align: center;
   background: #303030;
   border-radius: 10px;
+  position: relative;
 }
 .chat-link:hover {
   background: #494949;
+}
+.notif {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  color: white;
+  background: red;
+  display: grid;
+  align-items: center;
+  bottom: 0;
+  right: 0;
+  border-radius: 50%;
 }
 @media only screen and (min-width: 800px) {
   .chats-list {

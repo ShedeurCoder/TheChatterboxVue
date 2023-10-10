@@ -2,8 +2,8 @@
 import useChats from '@/composables/useChats'
 import useChatPage from '@/composables/useChatPage'
 import { onMounted } from 'vue'
-import { RouterLink } from 'vue-router'
-const { getChats, chatsList } = useChats()
+import { RouterLink, onBeforeRouteUpdate } from 'vue-router'
+const { getChats, chatsList, getNotifs, notifs, unsubscribeFromNotifs } = useChats()
 const { chatId } = useChatPage()
 const props = defineProps({
     user: Object
@@ -11,6 +11,12 @@ const props = defineProps({
 
 onMounted(() => {
   getChats(props.user)
+  getNotifs(props.user.username)
+})
+
+onBeforeRouteUpdate(() => {
+    unsubscribeFromNotifs.value()
+    getNotifs(props.user.username)
 })
 </script>
 <template>
@@ -18,6 +24,9 @@ onMounted(() => {
         <RouterLink v-for="chat in chatsList"
         :class="chat.id == chatId ? 'current-chat chat-link' : 'chat-link '" :key="chat.id" :to="`/chat/${chat.id}`">
             <h3>{{ chat.users.filter(u => u !== user.username)[0] }}</h3>
+            <div class="notif" v-if="notifs.filter((n) => n.chat === chat.id).length > 0">
+                {{ notifs.filter((n) => n.chat === chat.id).length }}
+            </div>
         </RouterLink>
     </div>
 </template>
@@ -49,6 +58,19 @@ onMounted(() => {
     text-align: center;
     background: #1d1d1d;
     border-radius: 10px;
+    position: relative;
+}
+.notif {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    color: white;
+    background: red;
+    display: grid;
+    align-items: center;
+    bottom: 0;
+    right: 0;
+    border-radius: 50%;
 }
 .chat-link:hover {
     background: #494949;

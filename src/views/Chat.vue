@@ -1,9 +1,15 @@
 <script setup>
 import ChatHome from '../components/ChatHome.vue'
 import useAuth from '@/composables/useAuth'
-const { userData } = useAuth()
+const { userData, closeDm, openDm } = useAuth()
 </script>
 <template>
+    <button v-if="userData && userData?.dm === false" class="dm-switch" @click="openDm(userData)">
+        Open DM's
+    </button>
+    <button v-else-if="userData && (userData?.dm ?? true)" class="dm-switch" @click="closeDm(userData)">
+        Close DM's
+    </button>
     <h1>
         <span>
             <img src="../assets/images/logo.png" alt="TCB Vue">&nbsp;The Chatterbox Chat
@@ -28,5 +34,10 @@ h1 {
 small {
     display: block;
     text-align: center;
+}
+.dm-switch {
+    position: absolute;
+    top: 0;
+    right: 0;
 }
 </style>

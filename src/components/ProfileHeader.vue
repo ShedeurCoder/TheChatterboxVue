@@ -42,7 +42,7 @@ function openUploadWidget() {
 </script>
 <template>
     <div class="profile-header" :style="profileData?.bg ? `background-color: ${profileData?.bg}; color: ${profileData?.color}` : ''">
-        <button class='message' v-if='userData && userData?.username !== profileData?.username' @click="makeChat(userData, profileData?.username)">
+        <button class='message' v-if='userData && !(profileData?.dm === false) && userData?.username !== profileData?.username' @click="makeChat(userData, profileData?.username)">
             <i class='fas fa-envelope'></i>
         </button>
         <button v-if="userData && userData?.username === profileData?.username" @click="openUploadWidget()" class="edit-pfp">

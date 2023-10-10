@@ -184,7 +184,7 @@ p a:hover {
   position: fixed;
   top: -300px;
   left: 0;
-  z-index: 100;
+  z-index: 200;
   background: black;
   padding: 1em;
   font-size: 1.05rem;
