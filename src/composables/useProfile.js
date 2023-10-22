@@ -86,9 +86,9 @@ export default function useProfile() {
         try {
             editMessage.value = ''
             await updateDoc(doc(db, "users", id), {
-                bio: inputs.bio,
-                displayName: inputs.displayName,
-                url: inputs.url,
+                bio: inputs.bio ?? '',
+                displayName: inputs.displayName ?? '',
+                url: inputs.url ?? '',
                 color: inputs.color,
                 bg: inputs.bg,
                 secondaryBg: inputs.secondaryBg

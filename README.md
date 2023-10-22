@@ -16,12 +16,16 @@ The Chatterbox Vue started development on July 23, 2023 and was first released o
 
 # Change log
 
-## v1.6.0
-- Added The Chatterbox Chat: a private chat app
+## v1.6.01
 - Minor bug fixes
+- Removed outdated beta tag for The Chatterbox Chat
 
 <details>
   <summary><h2>v1.6 (current major version)</h2></summary>
+
+  ### v1.6.01
+  - Minor bug fixes
+  - Removed outdated beta tag for The Chatterbox Chat
 
   ### v1.6.0
   - Added The Chatterbox Chat: a private chat app

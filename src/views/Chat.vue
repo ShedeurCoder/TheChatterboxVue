@@ -15,7 +15,6 @@ const { userData, closeDm, openDm } = useAuth()
             <img src="../assets/images/logo.png" alt="TCB Vue">&nbsp;The Chatterbox Chat
         </span>
     </h1>
-    <small>This feature is in the beta stage of development. The app may break and changes may happen. Please submit feedback as a ticket.</small>
     <ChatHome v-if="userData" :user="userData"/>
 </template>
 <style scoped>

@@ -150,7 +150,10 @@ export default function useAuth() {
                 followers: [],
                 following: [],
                 admin: false,
-                saves: []
+                saves: [],
+                bg: '#303030',
+                color: 'f1f1f1',
+                secondaryBg: '#343a40'
             }
 
             const newDoc = doc(db, "users", user.uid)
