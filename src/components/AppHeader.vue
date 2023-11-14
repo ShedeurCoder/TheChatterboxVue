@@ -4,7 +4,7 @@ import useAuth from "@/composables/useAuth"
 import { ref } from "vue";
 import useRandom from '@/composables/useRandom'
 const { styleDate } = useRandom()
-const { signUp, errorMessage, login, logOut, userData, readNotifs, unreadNotifs, readNotif, deleteNotif, chatNotifs } = useAuth()
+const { signUp, errorMessage, login, logOut, userData, readNotifs, unreadNotifs, readNotif, deleteNotif, chatNotifs, forgor } = useAuth()
 const formData = ref({
     email: '',
     password: '',
@@ -73,6 +73,10 @@ function toggleMore() {
                 
                 <RouterLink to="/about" class="nav-link" @click="toggleMore()">
                     <i class='fas fa-info-circle'> About</i>
+                </RouterLink>
+
+                <RouterLink to="/settings" class="nav-link" @click="toggleMore()">
+                    <i class='fas fa-cog'> Settings</i>
                 </RouterLink>
 
                 <button class="nav-link logout" @click="logOut(); toggleMore()">
@@ -162,6 +166,27 @@ function toggleMore() {
                     placeholder='Password' required minlength="6">
                 </div>
                 <button type='submit' class="login-signup">Login</button>
+            </form>
+            <br>
+            <button 
+            onclick="document.getElementById('signInModal').close(); 
+            document.getElementById('forgotPassword').showModal()" class="already-have-account forgor">
+                Forgot password?
+            </button>
+        </dialog>
+
+        <dialog id="forgotPassword">
+            <p v-if="errorMessage">{{ errorMessage }}</p>
+            <div class='modal-header'>
+                <h2>Password reset</h2>
+                <button class='close-modal' onclick="document.getElementById('forgotPassword').close()">&times;</button>
+            </div>
+            <form class="sign-in-form" @submit.prevent="forgor(formData.email)">
+                <div class="form-group">
+                    <label for="emailLI">Email</label>
+                    <input type="email" id="emailLI" v-model="formData.email" placeholder='Email' required>
+                </div>
+                <button type='submit' class="login-signup">Send reset email</button>
             </form>
         </dialog>
     </header>
@@ -272,5 +297,8 @@ function toggleMore() {
     }
     .notif button:hover {
         color: red;
+    }
+    .forgor {
+        font-size: 1.3rem;
     }
 </style>

@@ -109,8 +109,17 @@ export default function useProfile() {
             // change posts
             const queryData = query(dbPostsRef, where('username', '==', username))
             const posts = await getDocs(queryData)
-            posts.docs.forEach((document) => {
-                updateDoc(doc(db, "posts", document.id), {
+            posts.docs.forEach(async (document) => {
+                // set quotes to "post deleted"
+                const quotePostsQuery = query(dbPostsRef, where('quoted', '==', document.id))
+                const quotePosts = await getDocs(quotePostsQuery)
+                quotePosts.forEach(async (document) => {
+                    await updateDoc(doc(dbPostsRef, document.id), {
+                        quotedPfp: 'public_id'
+                    })
+                })
+
+                await updateDoc(doc(db, "posts", document.id), {
                     pfp: public_id
                 })
             })

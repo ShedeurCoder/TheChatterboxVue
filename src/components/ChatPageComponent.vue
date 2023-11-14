@@ -1,12 +1,18 @@
 <script setup>
 import useChatPage from '@/composables/useChatPage'
 import Message from '@/components/Message.vue'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 const { chatData, newMessage, messagesArray, deleteChat } = useChatPage()
 const props = defineProps({
     user: Object
 })
 const messageInput = ref('')
+
+watch(() => chatData.value?.users, (newVal) => {
+    if (newVal) {
+        document.title = `Chat with @${newVal.filter(u => u !== props.user.username)[0]}`
+    }
+})
 </script>
 <template>
     <div class="chat" v-if="chatData">

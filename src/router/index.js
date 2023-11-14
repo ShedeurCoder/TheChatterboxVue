@@ -68,6 +68,11 @@ const router = createRouter({
       component: () => import('../views/HelpView.vue')
     },
     {
+      path: '/settings',
+      name: 'Settings - TCBV',
+      component: () => import('../views/SettingsView.vue')
+    },
+    {
       path: '/your-tickets',
       name: 'Your Tickets - TCBV',
       component: () => import('../views/YourTickets.vue')
