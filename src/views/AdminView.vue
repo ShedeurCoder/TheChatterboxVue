@@ -5,11 +5,21 @@ import useAdmin from '@/composables/useAdmin'
 import TicketComponent from '@/components/TicketComponent.vue'
 
 const { userData } = useAuth()
-const { tickets, closedTickets, verifyRequests, verify, rejectVerify, addAdmin, removeAdmin, unverify } = useAdmin()
+const { tickets, closedTickets, verifyRequests, verify, rejectVerify, addAdmin, removeAdmin, unverify, deleteUser } = useAdmin()
 
 const addAdminInput = ref('')
 const removeAdminInput = ref('')
 const unverifyInput = ref('')
+const deleteUserInput = ref('')
+
+function confirmIfDelete(username) {
+    const yesOrNo = confirm("Are you sure you want to DELETE this user? This action is IRREVERSIBLE!")
+    if (yesOrNo) {
+        deleteUser(username)
+    } else {
+        console.log('ok, will not delete')
+    }
+}
 </script>
 <template>
     <h1>Admin dashboard</h1>
@@ -60,15 +70,7 @@ const unverifyInput = ref('')
                 </details>
             </section>
         </div>
-
         <section class="owner" v-if="userData?.owner">
-            <br>
-            <hr>
-            <h2>Unverify a user</h2>
-            <div class='form-group'>
-                <input type='text' placeholder='username' v-model='unverifyInput'>
-                <button type="button" class="unverify-button" @click="unverify(unverifyInput)">Unverify</button>
-            </div>
             <hr>
             <h2>Add an admin</h2>
             <div class='form-group'>
@@ -82,10 +84,34 @@ const unverifyInput = ref('')
                 <button type="button" class="unverify-button" @click="removeAdmin(removeAdminInput)">Remove admin</button>
             </div>
         </section>
+        <br>
+        <hr>
+        <h2>Unverify a user</h2>
+        <div class='form-group'>
+            <input type='text' placeholder='username' v-model='unverifyInput'>
+            <button type="button" class="unverify-button" @click="unverify(unverifyInput)">Unverify</button>
+        </div>
+        <br>
+        <hr>
+        <form @submit.prevent="confirmIfDelete(deleteUserInput)">
+            <h2>Delete a user</h2>
+            <p class="warning">⚠️ THIS IS IRREVERSIBLE AND SHOULD ONLY BE USED AFTER MUCH CONSIDERATION ⚠️</p>
+            <div class="form-group">
+                <input type='text' placeholder='username' v-model='deleteUserInput'>
+                <button type="submit" class="unverify-button">Delete User</button>
+            </div>
+        </form>
     </div>
     <h2 v-else>You are not an admin. Go back <a href='/'>home</a></h2>
 </template>
 <style scoped>
+p.warning {
+    text-align: center;
+    color: white;
+    background: #dc3545;
+    padding: 0.3em;
+    font-size: 1.3rem;
+}
 .form-group {
     text-align: center;
 }

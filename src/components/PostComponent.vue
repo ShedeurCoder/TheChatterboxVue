@@ -28,6 +28,7 @@ const props = defineProps({
         <RouterLink :to="`/post/${post.id}`" class="post-body-link">
             <div class="post-body">
                 <p :style="profile && profile?.color ? `color: ${profile?.color}` : ''">{{ post.message }}</p>
+                <img v-if="post?.image" class="post-image" :src="`https://res.cloudinary.com/dmftho0cx/image/upload/${post?.image}`">
             </div>
         </RouterLink>
         <RouterLink class="quote" v-if="post?.quoted" :to="`/post/${post?.quoted}`">
@@ -54,6 +55,10 @@ const props = defineProps({
         font-weight: bold;
         color: rgb(218, 218, 218);
         margin-left: 0.75em;
+    }
+
+    .post-image {
+        height: 350px;
     }
     .post-user-link {
         display: flex;

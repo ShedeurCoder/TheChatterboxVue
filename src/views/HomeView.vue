@@ -4,6 +4,7 @@ import useHomePosts from '@/composables/useHomePosts'
 import useAuth from '@/composables/useAuth'
 import usePosts from '@/composables/usePosts'
 import useSearch from '@/composables/useSearch'
+import Explore from '@/views/Explore.vue'
 import { RouterLink } from 'vue-router'
 import { ref } from 'vue'
 const { userData } = useAuth()
@@ -40,7 +41,7 @@ const postFormData = ref('')
   </div>
   <h1>Home</h1>
   <div class="new-post" v-if='userData'>
-    <form @submit.prevent="makePost(postFormData, userData.username, userData.pfp, userData.verified); postFormData = ''">
+    <form @submit.prevent="makePost(postFormData, userData.username, userData.pfp, userData.verified, ''); postFormData = ''">
       <input type="text" id="home-post-input" placeholder="Talk about something" v-model="postFormData" autocomplete='off' required maxlength="1000">
       <button type="submit">Post</button>
     </form>
@@ -52,7 +53,9 @@ const postFormData = ref('')
     <h2>Follow people to see posts. Maybe follow <RouterLink to="/@shad" class="nav-link">@shad</RouterLink> or <RouterLink to="/@thechatterbox" class="nav-link">@thechatterbox</RouterLink>.</h2>
   </div>
   <div class="no-user" v-else-if="!userData">
-    <h2>Sign in to see posts from people you're following or go to <RouterLink to="/explore">The Explore Page</RouterLink></h2>
+    <h2>Sign in to see posts from people you're following.</h2>
+    <h2>Recommended Posts</h2>
+    <Explore />
   </div>
 </template>
 

@@ -38,6 +38,10 @@ if (props.postData.username !== undefined) {
         </div>
         <div class="post-body">
             <p class="post-message" id="post-message" data-onparse="createAt()">{{ postData?.message }}</p>
+            <a :href="`https://res.cloudinary.com/dmftho0cx/image/upload/${postData?.image}`" target='_blank'>
+                <img v-if="postData?.image" class="post-image"
+                :src="`https://res.cloudinary.com/dmftho0cx/image/upload/${postData?.image}`">
+            </a>
         </div>
         <RouterLink class="quote" v-if="postData?.quoted" :to="`/post/${postData?.quoted}`">
             <div class="quote-header">
@@ -123,6 +127,10 @@ if (props.postData.username !== undefined) {
     </dialog>
 </template>
 <style scoped>
+    .post-image {
+        max-height: 500px;
+    }
+
     .pin {
         float: right;
         margin-left: 0.5em;

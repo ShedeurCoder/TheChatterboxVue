@@ -16,15 +16,22 @@ The Chatterbox Vue started development on July 23, 2023 and was first released o
 
 # Change log
 
-## v1.7.0
-- Added "Forgot password" option when signing in
-- Added ability to change email
-- Added ability to change password
-- Added ability to delete account
-- Minor bug fixes
+## v1.8.0
+- Added ability to upload images with posts
+- Added explore posts to the home page of signed out users
+- Added admin ability to suspend a user
 
 <details>
-  <summary><h2>v1.7 (current major version)</h2></summary>
+  <summary><h2>v1.8 (current major version)</h2></summary>
+
+  ### v1.8.0 (current version)
+  - Added ability to upload images with posts
+  - Added explore posts to the home page of signed out users
+  - Added admin ability to suspend a user
+</details>
+
+<details>
+  <summary><h2>v1.7</h2></summary>
 
   ### v1.7.0
   - Added "Forgot password" option when signing in
@@ -53,7 +60,7 @@ The Chatterbox Vue started development on July 23, 2023 and was first released o
   - Improved navigation layout
   - Minor bug fixes
   
-  **Experimental features**
+  **Beta features**
   - Added "The Chatterbox Chat" beta
 
   <hr>

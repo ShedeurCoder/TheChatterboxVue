@@ -2,6 +2,8 @@
 import PostComponent from '@/components/PostComponent.vue'
 import useHomePosts from '@/composables/useHomePosts'
 import { onMounted, onUnmounted } from 'vue'
+import { useRoute } from 'vue-router'
+const route = useRoute()
 const { posts, explore, removePosts } = useHomePosts()
 onMounted(() => {
     explore()
@@ -11,8 +13,8 @@ onUnmounted(() => {
 })
 </script>
 <template>
-  <h1>Explore</h1>
-  <button @click="removePosts(); explore()">Refresh</button>
+  <h1 v-if="route.path === '/explore'">Explore</h1>
+  <button @click="removePosts(); explore()">Refresh posts</button>
   <div class='home-posts'>
     <PostComponent :post="post" v-for='post in posts' :key='post.id'/>
   </div>
@@ -24,13 +26,13 @@ h1 {
   font-size: 2.5rem;
 }
 button {
-    position: fixed;
-    top: 0;
-    right: 0;
-    background-color: #006fe6;
-    color: white;
-    border: none;
-    font-size: 1.1rem;
-    padding: 0.3em;
+  position: fixed;
+  top: 0;
+  right: 0;
+  background-color: #006fe6;
+  color: white;
+  border: none;
+  font-size: 1.1rem;
+  padding: 0.3em;
 }
 </style>

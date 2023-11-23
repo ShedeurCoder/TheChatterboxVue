@@ -10,20 +10,16 @@
             <ul>
                 <li>No cyberbullying </li>
                 <li>No promotion/selling/encouragement of illegal activities/goods</li>
-                <li>Be civil</li>
-                <li>No leaking of personal information</li>
+                <li>No leaking of personal information / No doxxing</li>
             </ul>
             <h3>No bullying </h3>
-            <p>Mild bullying, like teasing is okay. However, severe bullying, as in danger to one's mental health, will get one immediately removed from the platform.</p>
+            <p>Mild bullying, like teasing is okay. However, severe bullying, as in danger to one's mental health, will get one removed from the platform.</p>
             
             <h3>No promotion/selling/encouragement of illegal activities/goods</h3>
             <p>Any promotion, selling, encouragement, or anything that can cause a user to do or buy something illegal will be removed immediately upon finding.</p>
             
-            <h3>Be Civil </h3>
-            <p>DO NOT TURN THIS THING INTO TWITTER. Just because we may be competing with Twitter, does not mean that this place accepts toxic, uncivil, and bad behavior.</p>
-            
-            <h3>No leaking of personal information </h3>
-            <p>Any leaking of personal information of you or any user is strictly not allowed. You will be removed off the platform if caught.</p>
+            <h3>No leaking of personal information / No doxxing</h3>
+            <p>Any leaking of personal information of any user or any person without their consent is strictly not allowed. You will be removed off the platform if caught.</p>
         </div>
         <br>
         <div class="terms-of-service">
@@ -35,7 +31,7 @@
                 <li>Admins have the right to remove all content they may deem hurtful or against the terms of service.</li>
             </ul>
             <h3>No impersonation of other users to trick/deceive</h3>
-            <p>Impersonation to trick/deceive users is strictly not allowed. If you are caught doing this, your account will be deleted </p>
+            <p>Impersonation to trick/deceive users is strictly not allowed. If you are caught doing this, your account will be deleted. If you are a parody account, you must have "parody" somewhere in your bio.</p>
             
             <h3>All users must be at least 13 years of age</h3>
             <p>To comply with the Children's Online Privacy Protection Act (COPPA), all users must be at least 13 years of age.</p>
@@ -84,9 +80,8 @@
                 <br>
                 <span>SOFTWARE.</span>
             </code>
-            <h3>Our logo and name</h3>
+            <h3>Our logo</h3>
             <p>Our logo is copyrighted by @tash.draws on Instagram. The Chatterbox Social Media has permission to use it. The copyright holder has the right to take down anything that uses the logo without their permission.</p>
-            <p>Our name is NOT copyrighted.</p>
         </div>
         <br>
         <div class="data">

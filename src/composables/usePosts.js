@@ -38,7 +38,7 @@ export default function usePosts() {
         }
     }
 
-    async function makePost(message, username, pfp, verified) {
+    async function makePost(message, username, pfp, verified, image) {
         try {
             if (username) {
                 let hashtags = []
@@ -60,7 +60,8 @@ export default function usePosts() {
                     comments: 0,
                     pfp: pfp ?? 'defaultProfile_u6mqts',
                     pinned: null,
-                    tags: hashtags
+                    tags: hashtags,
+                    image
                 }
                 const finalPost = await addDoc(dbPostsRef, post)
                 postMessage.value = 'Sent!'

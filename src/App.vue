@@ -7,8 +7,32 @@ import { ref } from "vue";
 import { useRoute } from 'vue-router'
 const { userData } = useAuth()
 const { makePost, postMessage } = usePosts()
-const postFormData = ref('')
+const postFormData = ref({
+  message: '',
+  image: '',
+  imageName: ''
+})
 const route = useRoute()
+
+const widget = window.cloudinary.createUploadWidget(
+  {cloud_name: 'dmftho0cx', upload_preset: 'chatterbox-vue', sources: ['local', 'url']},
+  (err, result) => {
+    if (!err && result && result.event === 'success') {
+      postFormData.value.image = result.info.public_id
+      postFormData.value.imageName = `${result.info.original_filename}.${result.info.format}`
+      document.getElementById("postModal").showModal()
+      closeUploadWidget()
+    }
+  }
+)
+
+function openUploadWidget() {
+  widget.open()
+}
+
+function closeUploadWidget() {
+  widget.close()
+}
 </script>
 
 <template>
@@ -24,16 +48,26 @@ const route = useRoute()
           <h2>Create post</h2>
           <button class='close-modal' onclick="document.getElementById('postModal').close()">&times;</button>
       </div>
-      <form class="sign-in-form" onsubmit="document.getElementById('postModal').close()" @submit.prevent="makePost(postFormData, userData.username, userData.pfp, userData.verified); postFormData = ''">
+      <form class="sign-in-form" onsubmit="document.getElementById('postModal').close()" 
+      @submit.prevent="makePost(postFormData.message, userData.username, userData.pfp, userData.verified, postFormData.image);
+      postFormData.message = ''; postFormData.image = ''; postFormData.imageName = ''">
           <div class="form-group">
               <label for="message">Message:</label>
-              <textarea id="message" v-model="postFormData" placeholder="What's up?" required rows="7" maxlength="1000"></textarea>
+              <textarea id="message" v-model="postFormData.message" placeholder="What's up?" required rows="7" maxlength="1000"></textarea>
+          </div>
+          <div class="upload">
+            <button type="button" class="add-image" @click="openUploadWidget()"
+            onclick="document.getElementById('postModal').close()">Upload image</button>
+            <span>&nbsp;{{ postFormData.imageName }}</span>
           </div>
           <button type='submit' class='login-signup'>Post</button>
       </form>
   </dialog>
 </template>
 <style scoped>
+  .upload {
+    padding: 1em;
+  }
   .new-post {
     position: fixed;
     bottom: 10dvh;
