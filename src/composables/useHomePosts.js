@@ -1,14 +1,14 @@
 import { ref, onUnmounted } from 'vue'
-import { onSnapshot, query, where, orderBy, getDocs } from 'firebase/firestore'
+import { onSnapshot, query, where, orderBy, getDocs, limitToLast } from 'firebase/firestore'
 import { dbPostsRef } from '../firebase'
 
 export default function useProfile() {
     const posts = ref([])
     const unsubscribeFromPosts = ref(() => {})
 
-    async function getPosts(following) {
+    async function getPosts(following, postAmount) {
         try {
-            const queryData = query(dbPostsRef, where('username', 'in', following), orderBy('createdAt'))
+            const queryData = query(dbPostsRef, where('username', 'in', following), orderBy('createdAt'), limitToLast(postAmount))
             const unsubscribe = onSnapshot(queryData, (docs) => {
                 posts.value = []
                 docs.forEach((doc) => {

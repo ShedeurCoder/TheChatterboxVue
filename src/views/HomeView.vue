@@ -13,6 +13,7 @@ const { queryUser, usersResult } = useSearch()
 const searchData = ref('')
 const { makePost } = usePosts()
 const postFormData = ref('')
+let postsAmountLoad = 50
 </script>
 <template>
   <div class="right-bar">
@@ -34,7 +35,7 @@ const postFormData = ref('')
     </div>
   </div>
   <div class="display-none" v-if="userData && userData?.following.length > 0 && posts?.length === 0">
-    {{ getPosts(userData?.following) }}
+    {{ getPosts(userData?.following, postsAmountLoad) }}
   </div>
   <div class="display-none" v-if="!userData && posts?.length > 0">
     {{ removePosts() }}
@@ -48,6 +49,9 @@ const postFormData = ref('')
   </div>
   <div class='home-posts' v-if="userData && userData.following.length > 0">
     <PostComponent :post="post" v-for='post in posts' :key='post.id'/>
+    <div class="load-div">
+      <button @click="postsAmountLoad+=50; getPosts(userData?.following, postsAmountLoad)" class="load-more">Load more</button>
+    </div>
   </div>
   <div class="no-user" v-else-if="userData && !(userData.following.length > 0)">
     <h2>Follow people to see posts. Maybe follow <RouterLink to="/@shad" class="nav-link">@shad</RouterLink> or <RouterLink to="/@thechatterbox" class="nav-link">@thechatterbox</RouterLink>.</h2>
@@ -60,6 +64,18 @@ const postFormData = ref('')
 </template>
 
 <style scoped>
+.load-div {
+  text-align: center;
+  margin-bottom: 0.5em;
+}
+.load-more {
+  background: rgb(0, 110, 255);
+  color: white;
+  border: none;
+  padding: 0.7em;
+  font-size: 1.2em;
+  border-radius: 10px;
+}
 .display-none {
   display: none;
 }

@@ -16,15 +16,16 @@ The Chatterbox Vue started development on July 23, 2023 and was first released o
 
 # Change log
 
-## v1.8.0
-- Added ability to upload images with posts
-- Added explore posts to the home page of signed out users
-- Added admin ability to suspend a user
+## v1.8.1
+- Added a "load more" button for more efficient loading
 
 <details>
   <summary><h2>v1.8 (current major version)</h2></summary>
 
-  ### v1.8.0 (current version)
+  ### v1.8.1 (current version)
+  - Added a "load more" button for more efficient loading
+
+  ### v1.8.0
   - Added ability to upload images with posts
   - Added explore posts to the home page of signed out users
   - Added admin ability to suspend a user

@@ -1,5 +1,5 @@
 import { ref, onUnmounted, onMounted } from 'vue'
-import { query, where, onSnapshot, updateDoc, doc, orderBy, getDocs, addDoc } from 'firebase/firestore'
+import { query, where, onSnapshot, updateDoc, doc, orderBy, getDocs, addDoc, limitToLast } from 'firebase/firestore'
 import { db, dbUsersRef, dbPostsRef, dbCommentsRef, dbNotifsRef, dbMessagesRef } from '../firebase'
 import { useRoute, onBeforeRouteUpdate, onBeforeRouteLeave } from 'vue-router'
 
@@ -31,15 +31,15 @@ export default function useProfile() {
         }
     }
 
-    async function getUserPosts(username) {
+    async function getUserPosts(username, limit) {
         try {
             let queryData
             if (path.includes('/likes')) {
-                queryData = query(dbPostsRef, where('likes', 'array-contains', username), orderBy('createdAt'))
+                queryData = query(dbPostsRef, where('likes', 'array-contains', username), orderBy('createdAt'), limitToLast(limit))
             } else if (path.includes('/comments')) {
-                queryData = query(dbCommentsRef, where('username', '==', username), orderBy('createdAt'))
+                queryData = query(dbCommentsRef, where('username', '==', username), orderBy('createdAt'), limitToLast(limit))
             } else {
-                queryData = query(dbPostsRef, where('username', '==', username), orderBy('createdAt'))
+                queryData = query(dbPostsRef, where('username', '==', username), orderBy('createdAt'), limitToLast(limit))
             }
             const unsubscribeFromPosts = onSnapshot(queryData, (docs) => {
                 profilePosts.value = []
@@ -184,6 +184,10 @@ export default function useProfile() {
         }
     }
 
+    function updateAmount(amount) {
+        getUserPosts(username, amount)
+    }
+
     onUnmounted(() => {
         unsubscribeFromProfile.value()
         unsubscribeFromProfilePosts.value()
@@ -191,7 +195,7 @@ export default function useProfile() {
 
     onMounted(() => {
         getUserProfile(username)
-        getUserPosts(username)
+        getUserPosts(username, 50)
     })
 
     onBeforeRouteUpdate((to) => {
@@ -222,6 +226,7 @@ export default function useProfile() {
         editProfile,
         editMessage,
         profilePosts,
-        editPfp
+        editPfp,
+        updateAmount
     }
 }
