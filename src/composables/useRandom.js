@@ -10,7 +10,7 @@ export default function useRandom() {
             parsedElement.innerText = ' ' + parsedElement.innerText
 
             let replacedText = parsedElement.innerText.replace(urlPattern, (c) => {
-                return `<a href="${c.toLowerCase()}" target="_blank" class="at-link">${c}</a>`
+                return `<a href="${c}" target="_blank" class="at-link">${c}</a>`
             })
 
             replacedText = replacedText.replace(atPattern, (c) => {

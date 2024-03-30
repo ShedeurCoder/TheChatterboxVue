@@ -4,7 +4,7 @@ import useAuth from "@/composables/useAuth"
 import { ref } from "vue";
 import useRandom from '@/composables/useRandom'
 const { styleDate } = useRandom()
-const { signUp, errorMessage, login, logOut, userData, readNotifs, unreadNotifs, readNotif, deleteNotif, chatNotifs, forgor } = useAuth()
+const { signUp, errorMessage, login, logOut, userData, readNotifs, unreadNotifs, readNotif, deleteNotif, chatNotifs, forgor, deleteAllNotifs } = useAuth()
 const formData = ref({
     email: '',
     password: '',
@@ -50,6 +50,10 @@ function toggleMore() {
                 <span class="notif-length chat-notif" v-if="chatNotifs.length > 0">{{ chatNotifs.length }}</span>
             </RouterLink>
 
+            <RouterLink to="/link" class="nav-link" v-if="userData">
+                <i class="fas fa-link"></i>
+            </RouterLink>
+
             <button class='login' 
             onclick='document.getElementById("signInModal").showModal()' v-if="userData == null">Login</button>
 
@@ -85,12 +89,15 @@ function toggleMore() {
             </div>
         </nav>
 
-        <dialog id="notifsModal">
+        <dialog id="notifsModal" v-if="userData">
             <div class='modal-header'>
                 <h2>Notifications</h2>
                 <button class='close-modal' onclick="document.getElementById('notifsModal').close()">&times;</button>
             </div>
             <hr>
+            <div class="deleteNotifs" v-if='unreadNotifs.length || readNotifs.length'>
+                <button @click="deleteAllNotifs(userData.username)">Delete all</button>
+            </div>
             <div class="notifs-container" v-if="unreadNotifs">
                 <div v-for="notif in unreadNotifs" class="notif">
                     <RouterLink :to="notif.url" class="notif-link"
@@ -300,5 +307,11 @@ function toggleMore() {
     }
     .forgor {
         font-size: 1.3rem;
+    }
+    .deleteNotifs button {
+        border: none;
+        color: white;
+        background: #dc3545;
+        padding: 0.3em;
     }
 </style>

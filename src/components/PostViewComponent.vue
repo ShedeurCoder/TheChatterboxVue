@@ -129,6 +129,7 @@ if (props.postData.username !== undefined) {
 <style scoped>
     .post-image {
         max-height: 500px;
+        max-width: 100%;
     }
 
     .pin {

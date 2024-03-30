@@ -14,7 +14,7 @@ function createAt(id) {
     getId(id).innerHTML = ' ' + getId(id).innerHTML
 
     let replacedText = getId(id).innerHTML.replace(urlPattern, (c) => {
-        return `<a href="${c.toLowerCase()}" target="_blank" class="at-link">${c}</a>`
+        return `<a href="${c}" target="_blank" class="at-link">${c}</a>`
     })
 
     replacedText = replacedText.replace(atPattern, (c) => {
@@ -32,7 +32,7 @@ function checkComicSans() {
     if (JSON.parse(localStorage.comicsans)) {
         document.body.style.fontFamily = 'Comic Sans MS'
     } else {
-        document.body.style.fontFamily = 'Arial, Helvetica, sans-serif'
+        document.body.style.fontFamily = 'system-ui, sans-serif'
     }
 }
 

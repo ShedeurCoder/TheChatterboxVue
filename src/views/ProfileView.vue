@@ -8,7 +8,6 @@
     const { profilePosts, profileData, updateAmount } = useProfile()
     const route = useRoute()
     const path = ref(route.path)
-    let loadPosts = 50
     let loadComments = 50
     let loadLikes = 50
 
@@ -38,9 +37,6 @@
             <PostComponent :post="post" v-for="post in profilePosts.filter((c) => c.id === profileData.pinned)" 
                 :key='post.id' :pinned='true' :profile="profileData"/>
             <PostComponent :post="post" v-for='post in profilePosts.filter((c) => c.id !== profileData.pinned)' :key='post.id' :profile="profileData"/>
-            <div class="load-div">
-                <button @click="loadPosts+=50; updateAmount(loadPosts)" class="load-more">Load more</button>
-            </div>
         </div>
     </div>
 </template>

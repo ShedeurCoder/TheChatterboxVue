@@ -28,10 +28,11 @@ watch(() => props.profileData?.bio, () => {
 }, {immediate:true, deep: true})
 
 const widget = window.cloudinary.createUploadWidget(
-  {cloud_name: 'dmftho0cx', upload_preset: 'chatterbox-vue', sources: ['local', 'url']},
+  {cloud_name: 'dmftho0cx', upload_preset: 'chatterbox-vue', sources: ['local', 'url', 'camera']},
   (err, result) => {
     if (!err && result && result.event === 'success') {
       editPfp(userData.value.id, result.info.public_id, userData.value.username)
+      closeUploadWidget()
     }
   }
 )
@@ -39,12 +40,17 @@ const widget = window.cloudinary.createUploadWidget(
 function openUploadWidget() {
   widget.open()
 }
+
+function closeUploadWidget() {
+  widget.close()
+}
 </script>
 <template>
     <div class="profile-header" :style="profileData?.bg ? `background-color: ${profileData?.bg}; color: ${profileData?.color}` : ''">
         <button class='message' v-if='userData && !(profileData?.dm === false) && userData?.username !== profileData?.username' @click="makeChat(userData, profileData?.username)">
             <i class='fas fa-envelope'></i>
         </button>
+        <RouterLink v-if="profileData?.tcblink" :to="`/t/${profileData?.username}`" class="tcb-link"><i class="fas fa-link"></i></RouterLink>
         <button v-if="userData && userData?.username === profileData?.username" @click="openUploadWidget()" class="edit-pfp">
             <img class="pfp" :src="`https://res.cloudinary.com/dmftho0cx/image/upload/${profileData?.pfp || 'defaultProfile_u6mqts'}`">
             <i class='fas fa-edit'></i>
@@ -338,16 +344,21 @@ function openUploadWidget() {
     .profile-header {
         position: relative;
     }
-    .message {
+    .message, .tcb-link {
         position: absolute;
         top: 1em;
         right: 1em;
         color: white;
-        border: none;
         background: #1b1b1b;
         padding: 0.7em;
         font-size: 1.3rem;
         border-radius: 50%;
+        border: none;
+        margin: 0;
+    }
+    .tcb-link {
+        left: 1em;
+        right: initial;
     }
     @media only screen and (min-width: 1000px) {
         #edit-profile-modal:modal .modal-body {

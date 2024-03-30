@@ -1,6 +1,6 @@
 import { ref, onUnmounted, onMounted } from 'vue'
 import { query, where, onSnapshot, updateDoc, doc, orderBy, getDocs, addDoc, limitToLast } from 'firebase/firestore'
-import { db, dbUsersRef, dbPostsRef, dbCommentsRef, dbNotifsRef, dbMessagesRef } from '../firebase'
+import { db, dbUsersRef, dbPostsRef, dbCommentsRef, dbNotifsRef, dbMessagesRef, dbTreesRef } from '../firebase'
 import { useRoute, onBeforeRouteUpdate, onBeforeRouteLeave } from 'vue-router'
 
 export default function useProfile() {
@@ -31,15 +31,15 @@ export default function useProfile() {
         }
     }
 
-    async function getUserPosts(username, limit) {
+    async function getUserPosts(username) {
         try {
             let queryData
             if (path.includes('/likes')) {
-                queryData = query(dbPostsRef, where('likes', 'array-contains', username), orderBy('createdAt'), limitToLast(limit))
+                queryData = query(dbPostsRef, where('likes', 'array-contains', username), orderBy('createdAt'))
             } else if (path.includes('/comments')) {
-                queryData = query(dbCommentsRef, where('username', '==', username), orderBy('createdAt'), limitToLast(limit))
+                queryData = query(dbCommentsRef, where('username', '==', username), orderBy('createdAt'))
             } else {
-                queryData = query(dbPostsRef, where('username', '==', username), orderBy('createdAt'), limitToLast(limit))
+                queryData = query(dbPostsRef, where('username', '==', username), orderBy('createdAt'))
             }
             const unsubscribeFromPosts = onSnapshot(queryData, (docs) => {
                 profilePosts.value = []
@@ -165,6 +165,15 @@ export default function useProfile() {
                     pfp: public_id
                 })
             })
+
+            // change tree
+            const queryData5 = query(dbTreesRef, where('username', '==', username))
+            const tree = await getDocs(queryData5)
+            tree.docs.forEach((document) => {
+                updateDoc(doc(dbTreesRef, document.id), {
+                    pfp: public_id
+                })
+            })
         } catch(e) {
             console.error(e)
         }
@@ -195,7 +204,7 @@ export default function useProfile() {
 
     onMounted(() => {
         getUserProfile(username)
-        getUserPosts(username, 50)
+        getUserPosts(username)
     })
 
     onBeforeRouteUpdate((to) => {

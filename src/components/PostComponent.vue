@@ -58,7 +58,8 @@ const props = defineProps({
     }
 
     .post-image {
-        height: 350px;
+        max-height: 350px;
+        max-width: 100%;
     }
     .post-user-link {
         display: flex;

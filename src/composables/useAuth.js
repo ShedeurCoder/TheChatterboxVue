@@ -87,6 +87,18 @@ export default function useAuth() {
         }
     }
 
+    async function deleteAllNotifs(username) {
+        try {
+            const queryData = query(dbNotifsRef, where('to', '==', username))
+            const notifs = await getDocs(queryData)
+            notifs.docs.forEach(async (document) => {
+                await deleteDoc(doc(dbNotifsRef, document.id))
+            })
+        } catch(err) {
+            console.error(error)
+        }
+    }
+
     async function checkUserExists(username) {
         try {
             const queryData = query(dbUsersRef, where('username', '==', username))
@@ -153,7 +165,8 @@ export default function useAuth() {
                 saves: [],
                 bg: '#303030',
                 color: 'f1f1f1',
-                secondaryBg: '#343a40'
+                secondaryBg: '#343a40',
+                tcblink: false
             }
 
             const newDoc = doc(db, "users", user.uid)
@@ -197,6 +210,9 @@ export default function useAuth() {
     function logOut() {
         try {
             signOut(auth)
+            unsubscribeFromReadNotifs.value()
+            unsubscribeFromUnreadNotifs.value()
+            unsubscribeFromChatNotifs.value()
         } catch(e) {
             errorMessage.value = e.message
         }
@@ -439,6 +455,7 @@ export default function useAuth() {
         forgor,
         changePassword,
         changeEmail,
-        deleteAccount
+        deleteAccount,
+        deleteAllNotifs
     }
 }

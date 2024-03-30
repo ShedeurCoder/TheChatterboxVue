@@ -36,10 +36,10 @@ function closeUploadWidget() {
 </script>
 
 <template>
-  <AppHeader/>
+  <AppHeader v-if="!route.path.startsWith('/t/')"/>
   <main id="main">
     <RouterView />
-    <button v-if="userData && !route.path.startsWith('/chat')" class="new-post" onclick='document.getElementById("postModal").showModal()'><i class='fas fa-plus-circle'></i></button>
+    <button v-if="userData && !route.path.startsWith('/chat') && !route.path.startsWith('/t/')" class="new-post" onclick='document.getElementById("postModal").showModal()'><i class='fas fa-plus-circle'></i></button>
   </main>
 
   <dialog id="postModal" v-if='userData'>

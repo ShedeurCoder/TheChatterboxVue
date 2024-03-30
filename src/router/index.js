@@ -9,32 +9,32 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'The Chatterbox Vue',
+      name: 'The Chatterbox',
       component: Home
     },
     {
       path: '/explore',
-      name: 'Explore - TCBV',
+      name: 'Explore - TCB',
       component: () => import('../views/Explore.vue')
     },
     {
       path: '/search',
-      name: 'Search - TCBV',
+      name: 'Search - TCB',
       component: () => import('../views/SearchResults.vue')
     },
     {
       path: '/about',
-      name: 'About - TCBV',
+      name: 'About - TCB',
       component: About
     },
     {
       path: '/tos',
-      name: 'Terms of Service - TCBV',
+      name: 'Terms of Service - TCB',
       component: () => import('../views/TOS.vue')
     },
     {
       path: '/privacy',
-      name: 'Privacy - TCBV',
+      name: 'Privacy - TCB',
       component: () => import('../views/Privacy.vue')
     },
     {
@@ -54,43 +54,38 @@ const router = createRouter({
     },
     {
       path: '/post/:post',
-      name: 'Post on TCBV',
+      name: 'Post on TCB',
       component: Post
     },
     {
       path: '/saves',
-      name: 'Your saves - TCBV',
+      name: 'Your saves - TCB',
       component: () => import('../views/SavesView.vue')
     },
     {
       path: '/help',
-      name: 'Help - TCBV',
+      name: 'Help - TCB',
       component: () => import('../views/HelpView.vue')
     },
     {
       path: '/settings',
-      name: 'Settings - TCBV',
+      name: 'Settings - TCB',
       component: () => import('../views/SettingsView.vue')
     },
     {
       path: '/your-tickets',
-      name: 'Your Tickets - TCBV',
+      name: 'Your Tickets - TCB',
       component: () => import('../views/YourTickets.vue')
     },
     {
       path: '/ticket/:ticket',
-      name: 'Ticket on TCBV',
+      name: 'Ticket on TCB',
       component: () => import('../views/TicketView.vue')
     },
     {
       path: '/admin',
-      name: 'Admin Dashboard - TCBV',
+      name: 'Admin Dashboard - TCB',
       component: () => import('../views/AdminView.vue')
-    },
-    {
-      path: '/:pathName(.*)',
-      name: '404!',
-      component: () => import('../views/PageNotFound.vue')
     },
 
     // CHAT ROUTES
@@ -103,6 +98,25 @@ const router = createRouter({
       path: '/chat/:chatId',
       name: 'Chat on TCBV',
       component: () => import('../views/ChatPage.vue')
+    },
+
+    // TCB LINK ROUTES
+    {
+      path: '/link',
+      name: 'The Chatterbox Tree',
+      component: () => import('../views/TCBLinkVue.vue')
+    },
+    {
+      path: '/t/:user',
+      name: 'The Chatterbox Tree Profile',
+      component: () => import('../views/TCBLinkUser.vue')
+    },
+
+    // 404
+    {
+      path: '/:pathName(.*)',
+      name: '404!',
+      component: () => import('../views/PageNotFound.vue')
     }
   ]
 })

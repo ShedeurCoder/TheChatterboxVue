@@ -16,13 +16,26 @@ The Chatterbox Vue started development on July 23, 2023 and was first released o
 
 # Change log
 
-## v1.8.1
-- Added a "load more" button for more efficient loading
+## v1.4.0 (current version)
+- Added TCB Link
+- Added "Remove all notifications" button
+- Removed "load more" button for profiles
+- Minor bug fixes
 
 <details>
-  <summary><h2>v1.8 (current major version)</h2></summary>
+  <summary><h2>v1.9 (current)</h2></summary>
 
-  ### v1.8.1 (current version)
+  ### v1.4.0 (current version)
+  - Added TCB Link
+  - Added "Remove all notifications" button
+  - Removed "load more" button for profiles
+  - Minor bug fixes
+</details>
+
+<details>
+  <summary><h2>v1.8</h2></summary>
+
+  ### v1.8.1
   - Added a "load more" button for more efficient loading
 
   ### v1.8.0
