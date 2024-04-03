@@ -45,8 +45,8 @@ export default function usePosts() {
                 const hashtagMatches = message.match(hashtagPattern)
                 if (hashtagMatches) {
                     hashtagMatches.forEach((tag) => {
-                        if (!hashtags.includes(tag.replace('#', ''))) {
-                            hashtags.push(tag.replace('#', ''))
+                        if (!hashtags.includes(tag.toLowerCase().replace('#', ''))) {
+                            hashtags.push(tag.toLowerCase().replace('#', ''))
                         }
                     })
                 }
@@ -68,9 +68,11 @@ export default function usePosts() {
 
                 const matches = message.match(atPattern)
                 if (matches) {
+                    let matched = []
                     for (var i = 0; i < matches.length; i++) {
-                        if (matches[i].replace('@', '') !== username && checkUserExists(matches[i].replace('@', ''))) {
+                        if (matches[i].replace('@', '') !== username && checkUserExists(matches[i].replace('@', '')) && !matched.includes(matches[i].replace('@', ''))) {
                             await createNotif(matches[i].replace('@', ''), username, `/post/${finalPost.id}`, `@${username} mentioned you in their post!`)
+                            matched.push(matches[i].replace('@', ''))
                         }
                     }
                 }
