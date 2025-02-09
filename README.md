@@ -76,9 +76,6 @@ The Chatterbox Vue started development on July 23, 2023 and was first released o
   ### v1.5.2
   - Improved navigation layout
   - Minor bug fixes
-  
-  **Beta features**
-  - Added "The Chatterbox Chat" beta
 
   <hr>
 
