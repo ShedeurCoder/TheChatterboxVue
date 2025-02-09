@@ -16,13 +16,16 @@ The Chatterbox Vue started development on July 23, 2023 and was first released o
 
 # Change log
 
-## v1.9.01 (current version)
-- Minor bug fixes
+## v1.9.1 (current version)
+- Added notification count in tab title
 
 <details>
   <summary><h2>v1.9 (current)</h2></summary>
 
-  ### v1.9.01 (current version)
+  ### v1.9.1 (current version)
+  - Added notification count in tab title
+
+  ### v1.9.01
   - Minor bug fixes
 
   ### v1.9.0

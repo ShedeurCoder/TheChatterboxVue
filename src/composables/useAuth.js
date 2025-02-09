@@ -14,6 +14,7 @@ export default function useAuth() {
     const unsubscribeFromReadNotifs = ref(() => {})
     const unsubscribeFromUnreadNotifs = ref(() => {})
     const unsubscribeFromChatNotifs = ref(() => {})
+    const notifsNumber = ref(0)
 
     function getNotifs(username) {
         try {
@@ -28,6 +29,7 @@ export default function useAuth() {
                     unreadNotifs.value.push(notif)
                 })
                 unreadNotifs.value.reverse()
+                notifsNumber.value = unreadNotifs.value.length + chatNotifs.value.length
             })
             unsubscribeFromUnreadNotifs.value = unread
 
@@ -61,6 +63,7 @@ export default function useAuth() {
                     }
                     chatNotifs.value.push(notif)
                 })
+                notifsNumber.value = unreadNotifs.value.length + chatNotifs.value.length
             })
             unsubscribeFromChatNotifs.value = unsubscribe
         } catch(e) {
@@ -207,12 +210,13 @@ export default function useAuth() {
         }
     }
 
-    function logOut() {
+    async function logOut() {
         try {
-            signOut(auth)
+            await signOut(auth)
             unsubscribeFromReadNotifs.value()
             unsubscribeFromUnreadNotifs.value()
             unsubscribeFromChatNotifs.value()
+            notifsNumber.value = 0
         } catch(e) {
             errorMessage.value = e.message
         }
@@ -443,6 +447,7 @@ export default function useAuth() {
             userData.value = null
             readNotifs.value = []
             unreadNotifs.value = []
+            notifsNumber.value = 0
         }
     })
     return {
@@ -456,6 +461,7 @@ export default function useAuth() {
         changePassword,
         changeEmail,
         deleteAccount,
-        deleteAllNotifs
+        deleteAllNotifs,
+        notifsNumber
     }
 }

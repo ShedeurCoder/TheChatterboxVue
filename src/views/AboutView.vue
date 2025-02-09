@@ -1,7 +1,13 @@
 <script setup>
 import { RouterLink } from 'vue-router'
+import { Head } from '@unhead/vue/components'
+import useAuth from '@/composables/useAuth'
+const { notifsNumber } = useAuth()
 </script>
 <template>
+  <Head>
+    <title>{{ (notifsNumber > 0) ? (`(${notifsNumber}) `) : ('') }}About - TCB</title>
+  </Head>
   <div class="about">
     <RouterLink style="float: right; color: white;" to='/tos'>Terms of Service</RouterLink>
     <div class="about-header">

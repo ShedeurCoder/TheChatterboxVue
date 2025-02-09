@@ -2,19 +2,19 @@
 import useChatPage from '@/composables/useChatPage'
 import Message from '@/components/Message.vue'
 import { ref, watch } from 'vue'
+import { Head } from '@unhead/vue/components'
+import useAuth from '@/composables/useAuth'
+const { notifsNumber } = useAuth()
 const { chatData, newMessage, messagesArray, deleteChat } = useChatPage()
 const props = defineProps({
     user: Object
 })
 const messageInput = ref('')
-
-watch(() => chatData.value?.users, (newVal) => {
-    if (newVal) {
-        document.title = `Chat with @${newVal.filter(u => u !== props.user.username)[0]}`
-    }
-})
 </script>
 <template>
+    <Head>
+        <title>{{ (notifsNumber > 0) ? (`(${notifsNumber}) `) : ('') }}Chat {{ chatData?.users ? `with @${chatData.users.filter(u => u !== user.username)[0]}` : 'on TCB'}}</title>
+    </Head>
     <div class="chat" v-if="chatData">
         <div v-if="chatData.users && chatData.users.includes(user.username)">
             <button class="delete" @click="deleteChat(chatData.id)">Delete chat</button>

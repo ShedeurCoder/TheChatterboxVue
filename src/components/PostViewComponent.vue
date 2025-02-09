@@ -18,13 +18,10 @@ const props = defineProps({
 watch(() => props.postData?.message, (newVal, oldVal) => {
     setTimeout(turnToParse, 500)
 }, {immediate:true, deep: true});
-
-if (props.postData.username !== undefined) {
-    document.title = `@${props.postData.username} on TCBV: "${props.postData.message}"`
-}
 </script>
 
 <template>
+    
     <div class="post">
         <div class="post-header">
             <small>{{ styleDate(postData?.createdAt) }}</small>

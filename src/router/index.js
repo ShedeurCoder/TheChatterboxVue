@@ -121,20 +121,4 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach((to, from, next) => {
-  if (to.params?.username) {
-    if (to.name === 'likes') {
-      document.title = `@${to.params.username}'s likes on TCBV`
-    } else if (to.name === 'comments') {
-      document.title = `@${to.params.username}'s comments on TCBV`
-    } else {
-      document.title = `@${to.params.username} on TCBV`
-    }
-    next()
-  } else {
-    document.title = to.name
-    next()
-  }
-});
-
 export default router

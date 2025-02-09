@@ -1,9 +1,10 @@
 <script setup>
+import { Head } from '@unhead/vue/components'
 import { ref, onMounted } from 'vue'
 import { useRoute, onBeforeRouteUpdate } from 'vue-router'
 import useTickets from '@/composables/useTickets'
 import useAuth from '@/composables/useAuth'
-const { userData } = useAuth()
+const { userData, notifsNumber } = useAuth()
 const { ticketData, createComment, getTicket, unsubscribeFromTicket, closeTicket } = useTickets()
 const route = useRoute()
 
@@ -19,6 +20,9 @@ onBeforeRouteUpdate((to) => {
 })
 </script>
 <template>
+    <Head>
+        <title>{{ (notifsNumber > 0) ? (`(${notifsNumber}) `) : ('') }}Ticket on TCB</title>
+    </Head>
     <div v-if="ticketData?.username === userData?.username || userData?.admin">
         <section class="ticket">
             <div class="ticket-header">

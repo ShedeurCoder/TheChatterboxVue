@@ -1,9 +1,13 @@
 <script setup>
 import ChatHome from '../components/ChatHome.vue'
 import useAuth from '@/composables/useAuth'
-const { userData, closeDm, openDm } = useAuth()
+import { Head } from '@unhead/vue/components'
+const { userData, closeDm, openDm, notifsNumber } = useAuth()
 </script>
 <template>
+    <Head>
+        <title>{{ (notifsNumber > 0) ? (`(${notifsNumber}) `) : ('') }}The Chatterbox Chat</title>
+    </Head>
     <button v-if="userData && userData?.dm === false" class="dm-switch" @click="openDm(userData)">
         Open DM's
     </button>

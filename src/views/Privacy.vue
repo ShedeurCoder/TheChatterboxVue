@@ -1,4 +1,12 @@
+<script setup>
+import { Head } from '@unhead/vue/components'
+import useAuth from '@/composables/useAuth'
+const { notifsNumber } = useAuth()
+</script>
 <template>
+    <Head>
+        <title>{{ (notifsNumber > 0) ? (`(${notifsNumber}) `) : ('') }}Privacy - TCB</title>
+    </Head>
     <div class="main">
         <h2>Privacy Policy</h2>
         <p>Shedeur Bhatkal built The Chatterbox Vue as an open source app. There is no legal separation between the company "Chibs" and Shedeur Bhatkal. This SERVICE is provided by Shedeur Bhatkal at no cost and is intended for use as is. This page is used to inform visitors regarding my policies with the collection, use, and disclosure of Personal Information if anyone decided to use this service. If you choose to use this service, then you agree to the collection and use of information in relation to this policy. The personal information that we collect is used for providing and improving the service. We will not use or share your information with anyone except as described in this Privacy Policy.</p>

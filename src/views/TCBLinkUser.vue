@@ -2,6 +2,8 @@
 import { onMounted } from 'vue'
 import { useRoute, RouterLink } from 'vue-router'
 import useLink from '@/composables/useLink'
+import { Head } from '@unhead/vue/components'
+import useAuth from '@/composables/useAuth'
 const { getTree, userTree } = useLink()
 const route = useRoute()
 let username = route.params.user
@@ -11,6 +13,9 @@ onMounted(() => {
 })
 </script>
 <template>
+    <Head>
+        <title>@{{ username }} - TCB Tree</title>
+    </Head>
     <section v-if="userTree" :style="`background: ${userTree.bg}; color: ${userTree.color}`">
         <div class="tcb-link" v-if="userTree.username">
             <RouterLink :to="`/@${userTree.username}`" class="tcb-link-link" :style="`color: ${userTree.color}`">

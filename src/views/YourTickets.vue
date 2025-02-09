@@ -1,11 +1,15 @@
 <script setup>
 import useTickets from '@/composables/useTickets'
 import useAuth from '@/composables/useAuth'
-import TicketComponent from '../components/TicketComponent.vue';
+import TicketComponent from '../components/TicketComponent.vue'
+import { Head } from '@unhead/vue/components'
 const { userTickets, getUserTickets } = useTickets()
-const { userData } = useAuth()
+const { userData, notifsNumber } = useAuth()
 </script>
 <template>
+    <Head>
+        <title>{{ (notifsNumber > 0) ? (`(${notifsNumber}) `) : ('') }}Your Tickets - TCB</title>
+    </Head>
     <div class="display-none" v-if="userTickets === null && userData">
         {{ getUserTickets(userData.username) }}
     </div>

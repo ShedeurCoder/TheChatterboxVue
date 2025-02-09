@@ -7,7 +7,8 @@ import useSearch from '@/composables/useSearch'
 import Explore from '@/views/Explore.vue'
 import { RouterLink } from 'vue-router'
 import { ref } from 'vue'
-const { userData } = useAuth()
+import { Head } from '@unhead/vue/components'
+const { userData, notifsNumber } = useAuth()
 const { posts, getPosts, removePosts } = useHomePosts()
 const { queryUser, usersResult } = useSearch()
 const searchData = ref('')
@@ -16,6 +17,9 @@ const postFormData = ref('')
 let postsAmountLoad = 50
 </script>
 <template>
+  <Head>
+    <title>{{ (notifsNumber > 0) ? (`(${notifsNumber}) `) : ('') }}The Chatterbox</title>
+  </Head>
   <div class="right-bar">
     <div class="search-user">
       <input type="search" v-model='searchData' @keyup="event => queryUser(searchData.toLowerCase(), event)" 
@@ -28,7 +32,7 @@ let postsAmountLoad = 50
       </div>
     </div>
     <div class="legal">
-      Copyright Chibs 2023
+      Copyright Chibs 2025
       <RouterLink to="/about">About The Chatterbox</RouterLink> <br>
       <RouterLink to="/tos">Terms of Service</RouterLink>
       <RouterLink to="/privacy">Privacy Policy</RouterLink>

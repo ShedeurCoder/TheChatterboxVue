@@ -4,12 +4,17 @@ import { ref } from 'vue'
 import usePostPage from '@/composables/usePostPage'
 import useAuth from '@/composables/useAuth'
 import PostViewComponent from '@/components/PostViewComponent.vue'
-const { userData } = useAuth()
+import { Head } from '@unhead/vue/components'
+const { userData, notifsNumber } = useAuth()
 const { postData, createComment, comments, highlightedComment } = usePostPage()
 
 const replyInput = ref('')
 </script>
 <template>
+    <Head>
+        <title>{{ (notifsNumber > 0) ? (`(${notifsNumber}) `) : ('') }}{{ postData ? `@${postData.username}` : 'Post' }} on TCB{{ postData ? `: "${postData.message}"` : '' }}</title>
+    </Head>
+
     <PostViewComponent :postData="postData" :userData="userData" v-if="postData"/>
 
     <form class="reply-form" @submit.prevent="createComment(replyInput, userData.username, postData?.id, postData?.comments, userData.pfp, postData?.username, userData?.verified); replyInput = ''">

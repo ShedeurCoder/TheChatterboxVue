@@ -3,6 +3,9 @@ import useSearch from '@/composables/useSearch'
 import PostComponent from '@/components/PostComponent.vue'
 import { onMounted, ref, watch } from 'vue'
 import { RouterLink, useRouter, useRoute } from 'vue-router'
+import { Head } from '@unhead/vue/components'
+import useAuth from '@/composables/useAuth'
+const { notifsNumber } = useAuth()
 const { usersResult, postsResult, queryBoth, unsubscribe } = useSearch()
 const route = useRoute()
 const searchFormData = ref(route.query.q)
@@ -18,6 +21,9 @@ onMounted(() => {
 })
 </script>
 <template>
+    <Head>
+        <title>{{ (notifsNumber > 0) ? (`(${notifsNumber}) `) : ('') }}Search - TCB</title>
+    </Head>
     <h1>Search results</h1>
     <input type="text" id="search-input" placeholder="Search" v-model="searchFormData" 
     autocomplete='off' required maxlength="1000" @keyup="router.push({ path: '/search', query: { q: searchFormData } })">

@@ -1,7 +1,8 @@
 <script setup>
 import { ref } from 'vue'
 import useAuth from '@/composables/useAuth'
-const { errorMessage, changePassword, changeEmail, userData, deleteAccount } = useAuth()
+import { Head } from '@unhead/vue/components'
+const { errorMessage, changePassword, changeEmail, userData, deleteAccount, notifsNumber } = useAuth()
 
 const formData = ref({
     email: '',
@@ -20,6 +21,9 @@ function confirmIfDelete(username) {
 }
 </script>
 <template>
+    <Head>
+        <title>{{ (notifsNumber > 0) ? (`(${notifsNumber}) `) : ('') }}Settings - TCB</title>
+    </Head>
     <div class="help-links" v-if="userData">
         <button class="help-link" to="/settings/email"
         onclick="document.getElementById('changeEmail').showModal()">Change Email</button>

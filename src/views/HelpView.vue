@@ -3,7 +3,8 @@ import useAuth from '@/composables/useAuth';
 import { ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import useTickets from '@/composables/useTickets'
-const { userData } = useAuth()
+import { Head } from '@unhead/vue/components'
+const { userData, notifsNumber } = useAuth()
 const { ticketMessage, makeTicket } = useTickets()
 const ticketForm = ref({
     type: '',
@@ -13,6 +14,9 @@ const ticketForm = ref({
 })
 </script>
 <template>
+    <Head>
+        <title>{{ (notifsNumber > 0) ? (`(${notifsNumber}) `) : ('') }}Help - TCB</title>
+    </Head>
     <section class="help-header">
         <h1>The Chatterbox Support</h1>
         <p class="signed-in-as">

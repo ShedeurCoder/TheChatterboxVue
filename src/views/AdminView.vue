@@ -1,10 +1,11 @@
 <script setup>
 import { ref } from 'vue'
+import { Head } from '@unhead/vue/components'
 import useAuth from '@/composables/useAuth'
 import useAdmin from '@/composables/useAdmin'
 import TicketComponent from '@/components/TicketComponent.vue'
 
-const { userData } = useAuth()
+const { userData, notifsNumber } = useAuth()
 const { tickets, closedTickets, verifyRequests, verify, rejectVerify, addAdmin, removeAdmin, unverify, deleteUser } = useAdmin()
 
 const addAdminInput = ref('')
@@ -22,6 +23,9 @@ function confirmIfDelete(username) {
 }
 </script>
 <template>
+    <Head>
+        <title>{{ (notifsNumber > 0) ? (`(${notifsNumber}) `) : ('') }}Admin Dashboard - TCB</title>
+    </Head>
     <h1>Admin dashboard</h1>
     <div class="admin" v-if="userData?.admin">
         <div class="tickets">

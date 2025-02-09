@@ -5,6 +5,9 @@
     import ProfileComment from '@/components/ProfileComment.vue'
     import { useRoute, onBeforeRouteUpdate, onBeforeRouteLeave } from 'vue-router'
     import { ref } from 'vue'
+    import { Head } from '@unhead/vue/components'
+    import useAuth from '@/composables/useAuth'
+    const { notifsNumber } = useAuth()
     const { profilePosts, profileData, updateAmount } = useProfile()
     const route = useRoute()
     const path = ref(route.path)
@@ -19,6 +22,9 @@
     })
 </script>
 <template>
+    <Head>
+        <title>{{ (notifsNumber > 0) ? (`(${notifsNumber}) `) : ('') }}@{{ route.params.username }}{{ (path.includes('comments') || path.includes('likes')) ? (path.includes('comments') ? "'s comments" : "'s likes") : '' }} on TCB</title>
+    </Head>
     <div :style="profileData?.secondaryBg ? `background-color: ${profileData?.secondaryBg}` : ''" class="container">
         <ProfileHeader :profileData="profileData" :path="path"/>
         <div class="profile-posts" v-if="path.includes('comments')">

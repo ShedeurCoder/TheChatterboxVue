@@ -2,10 +2,14 @@
 import useAuth from '@/composables/useAuth'
 import useLink from '@/composables/useLink'
 import TCBLinkEditor from '@/components/TCBLinkEditor.vue'
-const { userData } = useAuth()
+import { Head } from '@unhead/vue/components'
+const { userData, notifsNumber } = useAuth()
 const { createTree } = useLink()
 </script>
 <template>
+    <Head>
+        <title>{{ (notifsNumber > 0) ? (`(${notifsNumber}) `) : ('') }} The Chatterbox Tree</title>
+    </Head>
     <h1>The Chatterbox Tree</h1>
     <div v-if="userData">
         <div class="create-link-button-container" v-if="!userData.tcblink">

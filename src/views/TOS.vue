@@ -1,5 +1,13 @@
-<script setup>import { RouterLink } from 'vue-router'</script>
+<script setup>
+import { RouterLink } from 'vue-router'
+import { Head } from '@unhead/vue/components'
+import useAuth from '@/composables/useAuth'
+const { notifsNumber } = useAuth()
+</script>
 <template>
+    <Head>
+        <title>{{ (notifsNumber > 0) ? (`(${notifsNumber}) `) : ('') }}Terms of Service - TCB</title>
+    </Head>
     <div id="main-content">
         <h1>Terms of Service for The Chatterbox Vue</h1>
         <b>BY JOINING THE CHATTERBOX VUE, YOU HAVE READ, AGREED TO, AND WILL FOLLOW THE FOLLOWING.</b>

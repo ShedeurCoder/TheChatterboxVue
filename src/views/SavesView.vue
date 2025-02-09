@@ -2,10 +2,14 @@
 import PostComponent from '@/components/PostComponent.vue'
 import useAuth from '@/composables/useAuth'
 import usePosts from '@/composables/usePosts'
-const { userData } = useAuth()
+import { Head } from '@unhead/vue/components'
+const { userData, notifsNumber } = useAuth()
 const { getSaves, savedPosts } = usePosts()
 </script>
 <template>
+    <Head>
+        <title>{{ (notifsNumber > 0) ? (`(${notifsNumber}) `) : ('') }}Your Saves - TCB</title>
+    </Head>
     <div class="display-none" v-if="userData && savedPosts.length === 0">
         {{ getSaves(userData?.saves) }}
     </div>

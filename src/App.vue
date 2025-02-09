@@ -36,6 +36,8 @@ function closeUploadWidget() {
 </script>
 
 <template>
+
+
   <AppHeader v-if="!route.path.startsWith('/t/')"/>
   <main id="main">
     <RouterView />
