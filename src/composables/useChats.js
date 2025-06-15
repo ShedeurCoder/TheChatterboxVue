@@ -70,15 +70,30 @@ export default function useChats() {
 
     async function makeChat(user, username) {
         try {
-            const reqUser = await checkUserExists(username)
-            if (!reqUser) return alert('User not found')
-            if (reqUser.data().dm === false) return alert('User has closed their DMs')
-            const chat = {
-                users: [user.username, reqUser.data().username],
-                createdAt: new Date()
+            const checkChat = await getDocs(query(dbChatsRef, where('users', 'array-contains', user.username)))
+            const checkChat2 = await getDocs(query(dbChatsRef, where('users', 'array-contains', username)))
+            const user2Chats = []
+            const userChats = []
+            checkChat.forEach((chat) => {
+                userChats.push(chat.id)
+            })
+            checkChat2.forEach((chat) => {
+                user2Chats.push(chat.id)
+            })
+            const chatTogether = userChats.filter(element => user2Chats.includes(element))
+            if (chatTogether.length == 0) {
+                const reqUser = await checkUserExists(username)
+                if (!reqUser) return alert('User not found')
+                if (reqUser.data().dm === false) return alert('User has closed their DMs')
+                const chat = {
+                    users: [user.username, reqUser.data().username],
+                    createdAt: new Date()
+                }
+                const chatDoc = await addDoc(dbChatsRef, chat)
+                router.push({ path: `/chat/${chatDoc.id}` })
+            } else {
+                router.push({ path: `/chat/${chatTogether[0]}` })
             }
-            const chatDoc = await addDoc(dbChatsRef, chat)
-            router.push({ path: `/chat/${chatDoc.id}` })
         } catch(e) {
             console.error(e)
         }

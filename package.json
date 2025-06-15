@@ -1,6 +1,6 @@
 {
   "name": "chatterbox-vue",
-  "version": "1.9.01",
+  "version": "1.9.11",
   "private": true,
   "scripts": {
     "dev": "vite",

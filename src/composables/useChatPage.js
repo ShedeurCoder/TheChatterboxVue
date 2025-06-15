@@ -84,24 +84,24 @@ export default function useChatPage() {
         }
     }
 
-    async function deleteChat(id) {
-        try {
-            const deleteConfirm = confirm('Are you sure you want to delete this chat? Messages will be unable to recover!!')
+    // async function deleteChat(id) {
+    //     try {
+    //         const deleteConfirm = confirm('Are you sure you want to delete this chat? Messages will be unable to recover!!')
 
-            if (deleteConfirm) {
-                // delete messages
-                const queryData = query(dbMessagesRef, where('chatId', '==', id))
-                const messages = await getDocs(queryData)
-                messages.forEach(async (document) => {
-                    await deleteDoc(doc(dbMessagesRef, document.id))
-                })
+    //         if (deleteConfirm) {
+    //             // delete messages
+    //             const queryData = query(dbMessagesRef, where('chatId', '==', id))
+    //             const messages = await getDocs(queryData)
+    //             messages.forEach(async (document) => {
+    //                 await deleteDoc(doc(dbMessagesRef, document.id))
+    //             })
     
-                await deleteDoc(doc(dbChatsRef, id))
-            }
-        } catch(e) {
-            console.error(e)
-        }
-    }
+    //             await deleteDoc(doc(dbChatsRef, id))
+    //         }
+    //     } catch(e) {
+    //         console.error(e)
+    //     }
+    // }
 
     onUnmounted(() => {
         unsubscribeFromChat.value()
@@ -126,7 +126,6 @@ export default function useChatPage() {
         chatData,
         newMessage,
         messagesArray,
-        deleteMessage,
-        deleteChat
+        deleteMessage
     }
 }
