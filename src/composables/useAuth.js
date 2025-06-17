@@ -167,7 +167,7 @@ export default function useAuth() {
                 admin: false,
                 saves: [],
                 bg: '#303030',
-                color: 'f1f1f1',
+                color: '#f1f1f1',
                 secondaryBg: '#343a40',
                 tcblink: false
             }
