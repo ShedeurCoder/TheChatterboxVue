@@ -5,7 +5,7 @@ import { ref, watch } from 'vue'
 import { Head } from '@unhead/vue/components'
 import useAuth from '@/composables/useAuth'
 const { notifsNumber } = useAuth()
-const { chatData, newMessage, messagesArray } = useChatPage()
+const { chatData, newMessage, messagesArray, deleteChat } = useChatPage()
 const props = defineProps({
     user: Object
 })
@@ -17,12 +17,14 @@ const messageInput = ref('')
     </Head>
     <div class="chat" v-if="chatData">
         <div v-if="chatData.users && chatData.users.includes(user.username)">
+            <button class="delete" @click="deleteChat(chatData.id)">Delete chat</button>
             <Message :user="user" :message="message" v-for="message in messagesArray" v-if="messagesArray" :key="message.id"/>
             <form class="message-form" @submit.prevent="newMessage(user, messageInput, chatData.id, chatData.users.filter(u => u !== user.username)[0]); messageInput = ''"
             onsubmit="">
                 <a class="scroll-down" href="#scrollTo"><i class="fas fa-caret-down"></i></a>
-                <input type="text" v-model="messageInput" autocomplete="off" placeholder="Message..." required>
-                <button type="submit">Send</button>
+                <input type="text" v-model="messageInput" autocomplete="off" placeholder="Message..." required v-if="!user.blockedBy?.includes(chatData.users.filter(u => u !== user.username)[0])">
+                <input type="text" v-else disabled value="You have been blocked by this user.">
+                <button type="submit" v-if="!user.blockedBy?.includes(chatData.users.filter(u => u !== user.username)[0])">Send</button>
             </form>
             <div id="scrollTo"></div>
         </div>
@@ -66,6 +68,14 @@ button {
     margin-left: 10px;
     padding: .4em;
     width: 12%;
+}
+.delete {
+    position: fixed;
+    top: 0;
+    right: 15%;
+    font-size: 1rem;
+    z-index: 2;
+    padding: none;
 }
 @media only screen and (max-width: 799px) {
     form {

@@ -18,6 +18,10 @@ const props = defineProps({
 watch(() => props.postData?.message, (newVal, oldVal) => {
     setTimeout(turnToParse, 500)
 }, {immediate:true, deep: true});
+
+function alert(message) {
+    window.alert(message)
+}
 </script>
 
 <template>
@@ -62,24 +66,24 @@ watch(() => props.postData?.message, (newVal, oldVal) => {
                 <i class="fas fa-bookmark saved"></i>
             </button>
 
-            <button class="bookmark" v-else-if="userData" @click="save(postData?.id, userData)">
+            <button class="bookmark" v-else-if="userData && !userData?.blockedBy?.includes(postData?.username)" @click="save(postData?.id, userData)">
                 <i class="fas fa-bookmark"></i>
             </button>
 
-            <button class="rt" v-if="userData" onclick="document.getElementById('rt-modal').showModal()">
+            <button class="rt" v-if="userData && !userData?.blockedBy?.includes(postData?.username)" onclick="document.getElementById('rt-modal').showModal()">
                 <i class="fas fa-retweet"></i>
             </button>
 
             <span class="comments"><i class="fas fa-comment-alt"></i> {{ postData?.comments }}</span>
 
-            <span class="like-button" v-if="userData && postData.likes.includes(userData?.username)">
+            <span class="like-button" v-if="userData && postData.likes.includes(userData?.username) && !userData?.blockedBy?.includes(postData?.username)">
                 <button class="like" @click="unlike(postData, userData.username)">
                     <i class="fas fa-heart liked"></i>
                 </button>
                 <span onclick="document.getElementById('likes-modal').showModal()">{{ postData.likes.length }}</span>
             </span>
 
-            <span class="like-button" v-else-if="userData && !postData.likes.includes(userData?.username)">
+            <span class="like-button" v-else-if="userData && !postData.likes.includes(userData?.username) && !userData?.blockedBy?.includes(postData?.username)">
                 <button class="like" @click="likePost(postData, userData.username)">
                     <i class="fas fa-heart"></i>
                 </button>
@@ -87,7 +91,7 @@ watch(() => props.postData?.message, (newVal, oldVal) => {
             </span>
 
             <span class="like-button" v-else>
-                <button class="like">
+                <button class="like" @click="userData?.blockedBy?.includes(postData?.username) ? alert('You have been blocked by this user. You may not interact with them') : alert('Make an account to start liking posts!')">
                     <i class="fas fa-heart"></i>
                 </button>
                 <span onclick="document.getElementById('likes-modal').showModal()">{{ postData.likes.length }}</span>

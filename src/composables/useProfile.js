@@ -1,5 +1,5 @@
 import { ref, onUnmounted, onMounted } from 'vue'
-import { query, where, onSnapshot, updateDoc, doc, orderBy, getDocs, addDoc, limitToLast } from 'firebase/firestore'
+import { query, where, onSnapshot, updateDoc, doc, orderBy, getDocs, addDoc } from 'firebase/firestore'
 import { db, dbUsersRef, dbPostsRef, dbCommentsRef, dbNotifsRef, dbMessagesRef, dbTreesRef } from '../firebase'
 import { useRoute, onBeforeRouteUpdate, onBeforeRouteLeave } from 'vue-router'
 
@@ -77,6 +77,43 @@ export default function useProfile() {
                 read: false
             }
             await addDoc(dbNotifsRef, notif)
+        } catch(e) {
+            console.error(e)
+        }
+    }
+
+    async function block(blocked, user) {
+        try {
+            const blockConfirm = confirm('Are you sure you want to block this user? They will not be notified that you blocked them')
+            if (blockConfirm) {
+                await updateDoc(doc(db, "users", blocked.id), {
+                    blockedBy: [...(blocked.blockedBy == undefined ? [] : blocked.blockedBy), user.username]
+                });
+    
+                await updateDoc(doc(db, "users", user.id), {
+                    blocked: [...user.blocked, blocked.username]
+                });
+
+                unfollow(blocked, user)
+                unfollow(user, blocked)
+            }
+        } catch(e) {
+            console.error(e)
+        }
+    }
+
+    async function unblock(blocked, user) {
+        try {
+            const blockConfirm = confirm('Are you sure you want to unblock this user? They will not be notified you unblocked them')
+            if (blockConfirm) {
+                await updateDoc(doc(db, "users", blocked.id), {
+                    blockedBy: blocked.blockedBy.filter((ar)=> ar != user.username)
+                });
+        
+                await updateDoc(doc(db, "users", user.id), {
+                    blocked: user.blocked.filter((ar)=> ar != blocked.username)
+                });
+            }
         } catch(e) {
             console.error(e)
         }
@@ -193,10 +230,6 @@ export default function useProfile() {
         }
     }
 
-    function updateAmount(amount) {
-        getUserPosts(username, amount)
-    }
-
     onUnmounted(() => {
         unsubscribeFromProfile.value()
         unsubscribeFromProfilePosts.value()
@@ -236,6 +269,7 @@ export default function useProfile() {
         editMessage,
         profilePosts,
         editPfp,
-        updateAmount
+        block,
+        unblock
     }
 }

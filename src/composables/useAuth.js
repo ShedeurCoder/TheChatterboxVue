@@ -169,7 +169,9 @@ export default function useAuth() {
                 bg: '#303030',
                 color: '#f1f1f1',
                 secondaryBg: '#343a40',
-                tcblink: false
+                tcblink: false,
+                blocked: [],
+                blockedBy: []
             }
 
             const newDoc = doc(db, "users", user.uid)

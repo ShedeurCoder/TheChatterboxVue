@@ -39,7 +39,7 @@ let postsAmountLoad = 50
     </div>
   </div>
   <div class="display-none" v-if="userData && userData?.following.length > 0 && posts?.length === 0">
-    {{ getPosts(userData?.following, postsAmountLoad) }}
+    {{ getPosts(userData?.following, postsAmountLoad) }} 
   </div>
   <div class="display-none" v-if="!userData && posts?.length > 0">
     {{ removePosts() }}
@@ -52,7 +52,7 @@ let postsAmountLoad = 50
     </form>
   </div>
   <div class='home-posts' v-if="userData && userData.following.length > 0">
-    <PostComponent :post="post" v-for='post in posts' :key='post.id'/>
+    <PostComponent :post="post" v-for='post in posts' :key='post.id' :blockedQuote="userData?.blocked?.includes(post?.quotedUsername)"/>
     <div class="load-div">
       <button @click="postsAmountLoad+=50; getPosts(userData?.following, postsAmountLoad)" class="load-more">Load more</button>
     </div>

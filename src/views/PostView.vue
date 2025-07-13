@@ -18,16 +18,17 @@ const replyInput = ref('')
     <PostViewComponent :postData="postData" :userData="userData" v-if="postData"/>
 
     <form class="reply-form" @submit.prevent="createComment(replyInput, userData.username, postData?.id, postData?.comments, userData.pfp, postData?.username, userData?.verified); replyInput = ''">
-        <input type="text" v-model="replyInput" placeholder="Create a comment" v-if="userData" required maxlength="500">
+        <input type="text" v-model="replyInput" placeholder="Create a comment" v-if="userData && !userData?.blockedBy?.includes(postData?.username)" required maxlength="500">
+        <input type="text" value="You have been blocked by this user. You may not comment." disabled v-else-if="userData?.blockedBy?.includes(postData?.username)">
         <input type="text" value="Login to comment" disabled v-else>
-        <button type="submit" v-if="userData && postData">Comment</button>
+        <button type="submit" v-if="userData && postData && !userData?.blockedBy?.includes(postData?.username)">Comment</button>
         <button type="button" v-else>Comment</button>
     </form>
 
     <div class='profile-posts'>
-        <Comment :post="comment" v-for='comment in comments.filter((c) => c.id === postData?.pinned)' :postData="postData" :key='comment.id' :pinned="true"/>
-        <Comment :post="comment" v-for='comment in comments.filter((c) => c.id === highlightedComment && c.id !== postData?.pinned)' :postData="postData" :key='comment.id' :highlighted="true"/>
-        <Comment :post="comment" v-for='comment in comments.filter((c) => c.id !== highlightedComment && c.id !== postData?.pinned)' :postData="postData" :key='comment.id' />
+        <Comment :post="comment" v-for='comment in comments.filter((c) => c.id === postData?.pinned)' :postData="postData" :key='comment.id' :pinned="true" :blockedBy="userData?.blockedBy?.includes(comment.username)"/>
+        <Comment :post="comment" v-for='comment in comments.filter((c) => c.id === highlightedComment && c.id !== postData?.pinned)' :postData="postData" :key='comment.id' :highlighted="true" :blockedBy="userData?.blockedBy?.includes(comment.username)"/>
+        <Comment :post="comment" v-for='comment in comments.filter((c) => c.id !== highlightedComment && c.id !== postData?.pinned)' :postData="postData" :key='comment.id' :blockedBy="userData?.blockedBy?.includes(comment.username)"/>
     </div>
 </template>
 <style scoped>

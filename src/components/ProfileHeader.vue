@@ -5,7 +5,7 @@ import useRandom from '@/composables/useRandom'
 import useChats from '@/composables/useChats'
 import { ref, watch } from 'vue'
 import { RouterLink } from 'vue-router' 
-const { follow, unfollow, editProfile, editMessage, editPfp } = useProfile()
+const { follow, unfollow, editProfile, editMessage, editPfp, block, unblock } = useProfile()
 const { userData } = useAuth()
 const { turnToParse } = useRandom()
 const { makeChat } = useChats()
@@ -47,10 +47,15 @@ function closeUploadWidget() {
 </script>
 <template>
     <div class="profile-header" :style="profileData?.bg ? `background-color: ${profileData?.bg}; color: ${profileData?.color}` : ''">
-        <button class='message' v-if='userData && !(profileData?.dm === false) && userData?.username !== profileData?.username' @click="makeChat(userData, profileData?.username)">
+        <button class='message' v-if='userData && !(profileData?.dm === false) && userData?.username !== profileData?.username && !userData?.blocked?.includes(profileData?.username) && !userData?.blockedBy?.includes(profileData?.username)' @click="makeChat(userData, profileData?.username)">
             <i class='fas fa-envelope'></i>
         </button>
         <RouterLink v-if="profileData?.tcblink" :to="`/t/${profileData?.username}`" class="tcb-link"><i class="fas fa-link"></i></RouterLink>
+        <abbr title="Block user">
+            <button v-if="userData?.username !== profileData?.username && !userData?.blocked?.includes(profileData?.username)" class="block" @click="block(profileData, userData)">
+                <i class="fas fa-ban"></i>
+            </button>
+        </abbr>
         <button v-if="userData && userData?.username === profileData?.username" @click="openUploadWidget()" class="edit-pfp">
             <img class="pfp" :src="`https://res.cloudinary.com/dmftho0cx/image/upload/${profileData?.pfp || 'defaultProfile_u6mqts'}`">
             <i class='fas fa-edit'></i>
@@ -71,10 +76,15 @@ function closeUploadWidget() {
             <span class="divider">|</span>
             <span class="following" onclick="document.getElementById('following-modal').showModal()">{{ profileData?.following.length }} following</span>
         </div>
-        <button @click='follow(profileData, userData)' v-if="userData && profileData && userData?.username !== profileData?.username && !profileData?.followers.includes(userData?.username)" class="follow-button">Follow</button>
+        <button @click='follow(profileData, userData)' v-if="userData && profileData && userData?.username !== profileData?.username && !profileData?.followers.includes(userData?.username) && !userData?.blocked?.includes(profileData?.username) && !userData?.blockedBy?.includes(profileData?.username)" class="follow-button">Follow</button>
         <button @click="unfollow(profileData, userData)" v-else-if="userData && profileData && userData?.username !== profileData?.username && profileData?.followers.includes(userData?.username)" class="unfollow-button">Unfollow</button>
         <button onclick="document.getElementById('edit-profile-modal').showModal()" v-else-if="userData && userData?.username === profileData?.username" class="edit-profile">Edit profile</button>
-
+        <br>
+        <div class="you-blocked" v-if="userData?.blocked?.includes(profileData?.username)">
+            <span class="unfollow-button blocked">You've blocked this user</span>
+            <br>
+            <button @click="unblock(profileData, userData)">Unblock</button>
+        </div>
         <nav>
             <RouterLink :to="`/@${profileData?.username}`" 
             :class="!path.includes('comments') && !path.includes('likes') ? 'active' : ''"
@@ -344,7 +354,7 @@ function closeUploadWidget() {
     .profile-header {
         position: relative;
     }
-    .message, .tcb-link {
+    .message, .tcb-link, .block {
         position: absolute;
         top: 1em;
         right: 1em;
@@ -357,8 +367,18 @@ function closeUploadWidget() {
         margin: 0;
     }
     .tcb-link {
+        right: 4em;
+    }
+    .block {
         left: 1em;
         right: initial;
+    }
+    .you-blocked button {
+        margin-top: 20px;
+        border: none;
+        background: none;
+        color: white;
+        text-decoration: underline;
     }
     @media only screen and (min-width: 1000px) {
         #edit-profile-modal:modal .modal-body {

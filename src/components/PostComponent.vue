@@ -1,5 +1,6 @@
 <script setup>
 import { RouterLink } from 'vue-router'
+import { ref } from 'vue'
 import useAuth from '@/composables/useAuth'
 import usePosts from '@/composables/usePosts'
 import useRandom from '@/composables/useRandom'
@@ -9,43 +10,64 @@ const { userData } = useAuth()
 const props = defineProps({
     post: Object,
     pinned: Boolean,
-    profile: Object
+    profile: Object,
+    blockedQuote: Boolean,
+    blocked: Boolean,
+    blockedBy: Boolean
 })
+const showBlockedQuote = ref(props.blockedQuote !== undefined ? !props.blockedQuote : true)
+const showBlocked = ref(props.blocked !== undefined ? !props.blocked : true)
+
+function alert(message) {
+    window.alert(message)
+}
 </script>
 <template>
     <div class='post-wrapper' :style="profile && profile?.bg ? `background-color: ${profile?.bg}; color: ${profile?.color}` : ''">
         <h1 class="pinned" v-if="pinned"><i class="fas fa-thumbtack"></i> Pinned post</h1>
-        <div class="post-header">
-            <small>{{ styleDate(post.createdAt) }}</small>
-            <RouterLink :to="`/@${post.username}`" style='text-decoration: none;' class="post-user-link">
-                <img class="pfp" :src="`https://res.cloudinary.com/dmftho0cx/image/upload/${post?.pfp || 'defaultProfile_u6mqts'}`">
-                <h2 :style="profile && profile?.color ? `color: ${profile?.color}` : ''">
-                    @{{ post.username }}
-                    <i v-if='post.verified' class='fas fa-check-circle'></i>
-                </h2>
+        <span class="blocked" v-if="blocked" :style="profile && profile?.color ? `color: ${profile?.color}` : ''">
+            <b>This post is from a user you blocked. </b>
+            <button @click="showBlocked = !showBlocked" :style="profile && profile?.color ? `color: ${profile?.color}` : ''"><span>{{ showBlocked ? `hide` : `view` }}</span> post</button>
+        </span>
+        <span v-if="showBlocked">
+            <div class="post-header">
+                <small>{{ styleDate(post.createdAt) }}</small>
+                <RouterLink :to="`/@${post.username}`" style='text-decoration: none;' class="post-user-link">
+                    <img class="pfp" :src="`https://res.cloudinary.com/dmftho0cx/image/upload/${post?.pfp || 'defaultProfile_u6mqts'}`">
+                    <h2 :style="profile && profile?.color ? `color: ${profile?.color}` : ''">
+                        @{{ post.username }}
+                        <i v-if='post.verified' class='fas fa-check-circle'></i>
+                    </h2>
+                </RouterLink>
+            </div>
+            <RouterLink :to="`/post/${post.id}`" class="post-body-link">
+                <div class="post-body">
+                    <p :style="profile && profile?.color ? `color: ${profile?.color}` : ''">{{ post.message }}</p>
+                    <img v-if="post?.image" class="post-image" :src="`https://res.cloudinary.com/dmftho0cx/image/upload/${post?.image}`">
+                </div>
             </RouterLink>
-        </div>
-        <RouterLink :to="`/post/${post.id}`" class="post-body-link">
-            <div class="post-body">
-                <p :style="profile && profile?.color ? `color: ${profile?.color}` : ''">{{ post.message }}</p>
-                <img v-if="post?.image" class="post-image" :src="`https://res.cloudinary.com/dmftho0cx/image/upload/${post?.image}`">
-            </div>
-        </RouterLink>
-        <RouterLink class="quote" v-if="post?.quoted" :to="`/post/${post?.quoted}`">
-            <div class="quote-header">
-                <img class="pfp quote-pfp" :src="`https://res.cloudinary.com/dmftho0cx/image/upload/${post?.quotedPfp || 'defaultProfile_u6mqts'}`">
-                <h3 :style="profile && profile?.color ? `color: ${profile?.color}` : ''">@{{ post?.quotedUsername }}</h3>
-            </div>
-            <p :style="profile && profile?.color ? `color: ${profile?.color}` : ''">{{ post?.quotedMessage }}</p>
-        </RouterLink>
-        <div class="post-footer">
-            <button @click="deletePost(post.id)" v-if="userData?.username === post.username || userData?.admin" class="delete"><i class="fas fa-trash"></i></button>
+            <span v-if="blockedQuote" class="blockedQuote"><b :style="profile && profile?.color ? `color: ${profile?.color}` : ''">This is quoting a post from someone you blocked.</b> <button @click="showBlockedQuote = !showBlockedQuote" :style="profile && profile?.color ? `color: ${profile?.color}` : ''"><span>{{ showBlockedQuote ? `hide` : `view` }}</span> post</button></span>
+            <RouterLink class="quote" v-if="post?.quoted && showBlockedQuote" :to="`/post/${post?.quoted}`">
+                <div class="quote-header">
+                    <img class="pfp quote-pfp" :src="`https://res.cloudinary.com/dmftho0cx/image/upload/${post?.quotedPfp || 'defaultProfile_u6mqts'}`">
+                    <h3 :style="profile && profile?.color ? `color: ${profile?.color}` : ''">@{{ post?.quotedUsername }}</h3>
+                </div>
+                <p :style="profile && profile?.color ? `color: ${profile?.color}` : ''">{{ post?.quotedMessage }}</p>
+            </RouterLink>
+            <div class="post-footer">
+                <button @click="deletePost(post.id)" v-if="userData?.username === post.username || userData?.admin" class="delete"><i class="fas fa-trash"></i></button>
+    
+                <span class="comments"><i class="fas fa-comment-alt"></i> {{ post?.comments }}</span>
 
-            <span class="comments"><i class="fas fa-comment-alt"></i> {{ post?.comments }}</span>
-            <button v-if="userData && post.likes.includes(userData?.username)" class="like" @click="unlike(post, userData.username)"><i class="fas fa-heart liked"></i>&nbsp;{{ post.likes.length }}</button>
-            <button v-else-if="userData && !post.likes.includes(userData?.username)" class="like" @click="likePost(post, userData.username)"><i class="fas fa-heart"></i>&nbsp;{{ post.likes.length }}</button>
-            <button v-else class="like"><i class="fas fa-heart"></i>&nbsp;{{ post.likes.length }}</button>
-        </div>
+                <button v-if="userData && post.likes.includes(userData?.username) && !userData?.blockedBy?.includes(profileData?.username) &&blockedBy==false" class="like" @click="unlike(post, userData.username)">
+                    <i class="fas fa-heart liked"></i>&nbsp;{{ post.likes.length }}
+                </button>
+
+                <button v-else-if="userData && blockedBy==false" class="like" @click="likePost(post, userData.username)"><i class="fas fa-heart"></i>&nbsp;{{ post.likes.length }}</button>
+
+                <button v-else class="like" @click="blockedBy ? alert('You have been blocked by this user. You may not interact with them.') : alert('Make an account to start liking posts!')"><i class="fas fa-heart"></i>&nbsp;{{ post.likes.length }}</button>
+            </div>
+        </span>
     </div>
 </template>
 <style scoped>
@@ -135,7 +157,7 @@ const props = defineProps({
         width: 50px;
         height: 50px;
     }
-    .quote {
+    .quote, .blockedQuote {
         display: block;
         border: 3px solid black;
         padding: 1em;
@@ -154,5 +176,11 @@ const props = defineProps({
     .quote-header {
         display: flex;
         align-items: center;
+    }
+    .blockedQuote button, .blocked button {
+        border: none;
+        background: none;
+        color: white;
+        text-decoration: underline;
     }
 </style>

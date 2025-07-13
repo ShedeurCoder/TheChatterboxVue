@@ -5,11 +5,11 @@ import { onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { Head } from '@unhead/vue/components'
 import useAuth from '@/composables/useAuth'
-const { notifsNumber } = useAuth()
+const { notifsNumber, userData } = useAuth()
 const route = useRoute()
 const { posts, explore, removePosts } = useHomePosts()
 onMounted(() => {
-    explore()
+  explore()
 })
 onUnmounted(() => {
     removePosts()
@@ -22,7 +22,9 @@ onUnmounted(() => {
   <h1 v-if="route.path === '/explore'">Explore</h1>
   <button @click="removePosts(); explore()">Refresh posts</button>
   <div class='home-posts'>
-    <PostComponent :post="post" v-for='post in posts' :key='post.id'/>
+    <span v-for='post in posts' :key='post.id'>
+      <PostComponent :post="post" v-if='!userData?.blocked?.includes(post?.username) && !userData.blockedBy?.includes(post?.username)' :blockedQuote="userData?.blocked?.includes(post?.quotedUsername)"/>
+    </span>
   </div>
 </template>
 

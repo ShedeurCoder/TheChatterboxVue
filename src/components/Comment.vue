@@ -11,12 +11,17 @@ const props = defineProps({
     post: Object,
     postData: Object,
     highlighted: Boolean,
-    pinned: Boolean
+    pinned: Boolean,
+    blockedBy: Boolean
 })
 
 onMounted(() => {
     onParse()
 })
+
+function alert(message) {
+    window.alert(message)
+}
 
 const replyFormInput = ref(null)
 const showReplies = ref(false)
@@ -50,7 +55,7 @@ const showReplies = ref(false)
                     <i class="fas fa-thumbtack"></i>
                 </button>
 
-                <button class="show-replies" v-if="userData"
+                <button class="show-replies" v-if="userData && !blockedBy"
                 :onclick="`document.getElementById('${post.id}ReplyForm').style.display == 'grid' ? 
                 document.getElementById('${post.id}ReplyForm').style.display = 'none' : 
                 document.getElementById('${post.id}ReplyForm').style.display = 'grid'`">
@@ -58,19 +63,19 @@ const showReplies = ref(false)
                     <span>&nbsp;{{ post.replies?.length ?? 0 }}</span>
                 </button>
 
-                <button v-else class="show-replies">
+                <button v-else class="show-replies" @click="blockedBy ? alert('You have been blocked by this user. You may not interact with them.') : alert('Make an account to make a reply!')">
                     <i class='fas fa-comment-alt'></i>
                     <span>&nbsp;{{ post.replies?.length ?? 0 }}</span>
                 </button>
 
-                <span class="like-button" v-if="userData && post.likes.includes(userData?.username)">
+                <span class="like-button" v-if="userData && post.likes.includes(userData?.username) && !blockedBy">
                     <button class="like" @click="unlikeComment(post, userData.username)">
                         <i class="fas fa-heart liked"></i>
                     </button>
                     <span :onclick="`document.getElementById('likes-modal${post.id}').showModal()`">{{ post.likes.length }}</span>
                 </span>
 
-                <span class="like-button" v-else-if="userData && !post.likes.includes(userData?.username)">
+                <span class="like-button" v-else-if="userData && !post.likes.includes(userData?.username) && !blockedBy">
                     <button class="like" @click="likeComment(post, userData.username)">
                         <i class="fas fa-heart"></i>
                     </button>
@@ -78,7 +83,7 @@ const showReplies = ref(false)
                 </span>
 
                 <span class="like-button" v-else>
-                    <button class="like">
+                    <button class="like" @click="blockedBy ? alert('You have been blocked by this user. You may not interact with them.') : alert('Make an account to start liking posts!')">
                         <i class="fas fa-heart"></i>
                     </button>
                     <span :onclick="`document.getElementById('likes-modal${post.id}').showModal()`">{{ post.likes.length }}</span>
