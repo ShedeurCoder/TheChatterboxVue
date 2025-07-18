@@ -91,7 +91,7 @@ export default function useProfile() {
                 });
     
                 await updateDoc(doc(db, "users", user.id), {
-                    blocked: [...user.blocked, blocked.username]
+                    blocked: [...(user.blocked == undefined ? [] : blocked.blocked), blocked.username]
                 });
 
                 unfollow(blocked, user)

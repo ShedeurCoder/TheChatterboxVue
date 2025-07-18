@@ -16,13 +16,16 @@ The Chatterbox Vue started development on July 23, 2023 and was first released o
 
 # Change log
 
-## v1.9.2 (current version)
-- Added blocking ability
+## v1.9.21 (current version)
+- Bug fix
 
 <details>
   <summary><h2>v1.9 (current)</h2></summary>
 
-  ### v1.9.2 (current version)
+  ### v1.9.21 (current version)
+  - Bug fix
+
+  ### v1.9.2
   - Added blocking ability
 
   ### v1.9.12
