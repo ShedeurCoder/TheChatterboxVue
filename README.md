@@ -10,20 +10,22 @@ The Chatterbox is a great way to connect with people. You can say about anything
 
 We started when Shedeur B, our founder, just learned how to do back-end code. He didn't know what to make, so he just made a Twitter lite. A bit over a year later, after Shedeur learned Vue, he created The Chatterbox Vue to practice his Vue skills.
 
-The Chatterbox Social Media was founded June 13, 2022. The first release was on July 4, 2022. The Chatterbox is owned and managed by Chibs Incorporated with Shedeur Bhatkal as the CEO of The Chatterbox. Currently, there is 1 developer for The Chatterbox and 4 admins on The Chatterbox.
+The Chatterbox Social Media was founded June 13, 2022. The first release was on July 4, 2022. The Chatterbox is owned and managed by Chibs Incorporated with Shedeur Bhatkal as the CEO of The Chatterbox.
 
-The Chatterbox Vue started development on July 23, 2023 and was first released on July 29, 2023. Just like the original The Chatterbox, it is owned and managed by Chibs Incorporated with Shedeur Bhatkal as CEO. It also has only 1 developer.
+The Chatterbox started development of a new version based on Vue on July 23, 2023, and was first released on July 29, 2023. Just like the original The Chatterbox, it is owned and managed by Chibs Incorporated with Shedeur Bhatkal as CEO. It also has only 1 developer.
+
+After May 31, 2024, this version of The Chatterbox is the only version being actively worked on and online. To view the source code of our old version made with Express.js, visit https://github.com/ShedeurCoder/thechatterbox
 
 # Change log
 
 ## v1.9.21 (current version)
-- Bug fix
+- Bug fixes
 
 <details>
   <summary><h2>v1.9 (current)</h2></summary>
 
   ### v1.9.21 (current version)
-  - Bug fix
+  - Bug fixes
 
   ### v1.9.2
   - Added blocking ability
